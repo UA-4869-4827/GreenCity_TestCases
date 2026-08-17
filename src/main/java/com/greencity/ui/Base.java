@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -153,7 +154,7 @@ public abstract class Base {
     }
 
     public void waitForPageToLoad(long timeoutInSeconds) {
-        wait.until(wd -> ((JavascriptExecutor) wd)
+        new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds)).until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd)
                 .executeScript("return document.readyState")
                 .equals("complete"));
     }

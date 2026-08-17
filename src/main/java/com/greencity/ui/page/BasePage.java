@@ -26,8 +26,4 @@ public abstract class BasePage extends Base {
         header = new HeaderComponent(driver, headerRoot);
         footer = new FooterComponent(driver, footerRoot);
     }
-
-
-
-
 }
