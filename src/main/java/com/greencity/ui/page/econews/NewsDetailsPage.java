@@ -10,9 +10,9 @@ import org.openqa.selenium.WebDriver;
 public class NewsDetailsPage extends BasePage {
 
  
-    private By likeButton = By.xpath(""); 
+    private By likeButton = By.cssSelector("img.news_like"); 
     private By backToNewsButton = By.cssSelector("div.button-text"); 
-    private By relatedNewsList = By.xpath(""); 
+    private By relatedNewsList = By.cssSelector("app-news-list-gallery-view.recommended-item"); 
 
     private CommentsComponent comments;
     private SocialShareComponent socialShare;

@@ -6,8 +6,8 @@ import org.openqa.selenium.WebDriver;
 
 public class ViewModeToggleComponent extends BasePage {
 
-    private By tableViewButton = By.xpath(""); // TODO
-    private By listViewButton = By.xpath(""); // TODO
+    private By tableViewButton = By.cssSelector("span[aria-label='table view']"); 
+    private By listViewButton = By.cssSelector("span[aria-label='list view']");
 
     public ViewModeToggleComponent(WebDriver driver) {
         super(driver);
