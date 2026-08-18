@@ -2,10 +2,7 @@ package com.greencity.ui;
 
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -14,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public abstract class Base {
@@ -45,13 +43,21 @@ public abstract class Base {
     }
 
     protected boolean isElementDisplayed(WebElement element) {
-        return element.isDisplayed();
+        try {
+            return element.isDisplayed();
+        } catch (NoSuchElementException | StaleElementReferenceException e) {
+            return false;
+        }
 
     }
 
     protected boolean isElementInvisible(WebElement element) {
-        return new WebDriverWait(driver, Duration.ofSeconds(2))
-            .until(ExpectedConditions.invisibilityOf(element));
+        try {
+            return new WebDriverWait(driver, Duration.ofSeconds(2))
+                    .until(ExpectedConditions.invisibilityOf(element));
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     @Step("Type text into the field")
@@ -63,14 +69,19 @@ public abstract class Base {
 
     @Step("Check if content is truncated or overflows")
     protected boolean isContentTruncatedOrOverflow(WebElement element) {
-        String script = "var element = arguments[0];" + "var computedStyle = window.getComputedStyle(element);" + "var isOverflowing = element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;" + "var isTextOverflowing = computedStyle.overflow === 'hidden' || computedStyle.textOverflow === 'ellipsis' || computedStyle.whiteSpace === 'nowrap';" + "return isOverflowing && !isTextOverflowing;";
+        String script = "var element = arguments[0];"
+                + "var computedStyle = window.getComputedStyle(element);"
+                + "var isOverflowing = element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;"
+                + "var isTextOverflowing = computedStyle.overflow === 'hidden' || computedStyle.textOverflow === 'ellipsis' || computedStyle.whiteSpace === 'nowrap';"
+                + "return isOverflowing && !isTextOverflowing;";
 
         Boolean isOverflowing;
         isOverflowing = (Boolean) js.executeScript(script, element);
 
         return isOverflowing != null && isOverflowing;
     }
-//    Gets
+
+    //    Gets
     protected String getElementText(WebElement element) {
         waitUntilElementVisible(element);
         return element.getText().trim();
@@ -79,15 +90,16 @@ public abstract class Base {
     protected String getElementAttribute(WebElement element, String attribute) {
         return element.getDomAttribute(attribute);
     }
-    protected String getTitle(){
+
+    protected String getTitle() {
         return driver.getTitle();
     }
 
-    protected String getCurrentUrl(){
+    protected String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
 
-//    Scrolls
+    //    Scrolls
     @Step("Scroll to the element")
     public void scrollToElementWithActions(WebElement element) {
         actions.moveToElement(element).perform();
@@ -115,11 +127,12 @@ public abstract class Base {
     public void scrollToEndOfPage() {
         js.executeScript("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });");
     }
+
     protected int getContentHeight() {
         return ((Number) Objects.requireNonNull(js.executeScript("return document.body.scrollHeight;"))).intValue();
     }
 
-//    Clicks
+    //    Clicks
     @Step("Click on the element")
     protected void clickElementWithJs(WebElement element) {
         waitUntilElementVisible(element);
@@ -132,7 +145,7 @@ public abstract class Base {
         element.click();
     }
 
-//    Waits
+    //    Waits
     protected void waitUntilElementVisible(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
@@ -158,6 +171,7 @@ public abstract class Base {
                 .executeScript("return document.readyState")
                 .equals("complete"));
     }
+
     public void waitForBodyToBePresent() {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
     }
