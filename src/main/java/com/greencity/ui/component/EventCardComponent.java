@@ -1,20 +1,17 @@
 package com.greencity.ui.page.events;
 
-import com.greencity.ui.component.BaseComponent;
+import com.greencity.ui.elements.BaseElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-public class EventCardComponent extends BaseComponent {
+public class EventCardComponent extends BaseElement {
 
-    private final WebElement root;
     private final WebDriver driver;
 
     public EventCardComponent(WebElement root, WebDriver driver) {
-        this.root = root;
+        super(driver, root);
         this.driver = driver;
-        PageFactory.initElements(root, this);
     }
 
     @FindBy(xpath = ".//button[contains(text(),'Більше')]")
@@ -32,25 +29,29 @@ public class EventCardComponent extends BaseComponent {
     @FindBy(xpath = ".//button[contains(@class, 'flaf')]")
     private WebElement bookmarkButton;
 
-
     public EventDetailsPage openEventDetails() {
+        waitUntilElementClickable(moreButton);
         moreButton.click();
         return new EventDetailsPage(driver);
     }
 
     public void joinEvent() {
+        waitUntilElementClickable(joinButton);
         joinButton.click();
     }
 
     public void likeEvent() {
+        waitUntilElementClickable(likeButton);
         likeButton.click();
     }
 
     public void dislikeEvent() {
+        waitUntilElementClickable(dislikeButton);
         dislikeButton.click();
     }
 
     public void bookmarkEvent() {
+        waitUntilElementClickable(bookmarkButton);
         bookmarkButton.click();
     }
 }

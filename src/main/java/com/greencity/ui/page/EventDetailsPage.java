@@ -4,15 +4,12 @@ import com.greencity.ui.page.modal.SignInModal;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class EventDetailsPage extends BasePage {
 
     public EventDetailsPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
     }
-
 
     @FindBy(xpath = "//img[@class='event-like']")
     private WebElement likeButton;
@@ -27,22 +24,25 @@ public class EventDetailsPage extends BasePage {
     private WebElement backButton;
 
 
-
     public void likeEvent() {
+        waitUntilElementClickable(likeButton);
         likeButton.click();
     }
 
     public SignInModal saveEvent() {
-        saveButton.click();
+        waitUntilElementClickable(saveEventButton);
+        saveEventButton.click();
         return new SignInModal(driver);
     }
 
     public SignInModal joinEvent() {
+        waitUntilElementClickable(joinButton);
         joinButton.click();
         return new SignInModal(driver);
     }
 
     public EventsPage goBackToEvents() {
+        waitUntilElementClickable(backButton);
         backButton.click();
         return new EventsPage(driver);
     }
