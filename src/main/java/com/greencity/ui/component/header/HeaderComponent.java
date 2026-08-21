@@ -3,6 +3,7 @@ package com.greencity.ui.component.header;
 import com.greencity.ui.component.BaseComponent;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.modal.SignUpModal;
+import com.greencity.ui.page.econews.EcoNewsPage;
 import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -48,9 +49,9 @@ public class HeaderComponent extends BaseComponent {
         return this;
     }
 
-    public HeaderComponent openEcoNews() {
+    public EcoNewsPage openEcoNews() {
         clickElement(ecoNewsLink);
-        return this;
+        return new EcoNewsPage(driver);
     }
 
     public HeaderComponent openEvents() {
