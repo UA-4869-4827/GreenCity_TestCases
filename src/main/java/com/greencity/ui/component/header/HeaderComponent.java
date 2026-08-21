@@ -4,6 +4,7 @@ import com.greencity.ui.component.BaseComponent;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.modal.SignUpModal;
 import com.greencity.ui.page.econews.EcoNewsPage;
+import com.greencity.ui.page.places.PlacesPage;
 import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -59,9 +60,9 @@ public class HeaderComponent extends BaseComponent {
         return this;
     }
 
-    public HeaderComponent openPlaces() {
+    public PlacesPage openPlaces() {
         clickElement(placesLink);
-        return this;
+        return new PlacesPage(driver);
     }
 
     public HeaderComponent openAboutUs() {
