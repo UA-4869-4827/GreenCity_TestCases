@@ -1,6 +1,9 @@
 package com.greencity.ui.page.homepage;
 
+import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
+import com.greencity.ui.page.econews.EcoNewsPage;
+import com.greencity.ui.page.places.PlacesPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,7 +14,7 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
-    private static final String HOME_PAGE_URL = "https://www.greencity.cx.ua/";
+    private static final String GREEN_CITY_HOME_HASH = "/#/greenCity";
 
 //    Main Section
 
@@ -94,7 +97,13 @@ public class HomePage extends BasePage {
 //    Methods
 
     public HomePage open() {
-        driver.get(HOME_PAGE_URL);
+        String currentUrl = driver.getCurrentUrl();
+        String origin = currentUrl.contains("#")
+                ? currentUrl.substring(0, currentUrl.indexOf('#'))
+                : currentUrl;
+        origin = origin.replaceAll("/$", "");
+        driver.get(origin + GREEN_CITY_HOME_HASH);
+        waitForPageToLoad(10);
         return this;
     }
 
@@ -149,12 +158,12 @@ public class HomePage extends BasePage {
         return new SignInModal(driver);
     }
 
-    public HomePage openEcoBagsPlaces() {
+    public PlacesPage openEcoBagsPlaces() {
         clickElement(buyEcoBagsLink);
         return new PlacesPage(driver);
     }
 
-    public HomePage openCupDiscountPlaces() {
+    public PlacesPage openCupDiscountPlaces() {
         clickElement(cupDiscountPlacesLink);
         return new PlacesPage(driver);
     }
