@@ -3,6 +3,7 @@ package com.greencity.ui.component.header;
 import com.greencity.ui.component.BaseComponent;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.modal.SignUpModal;
+import com.greencity.ui.page.aboutus.AboutUsPage;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.places.PlacesPage;
 import lombok.Getter;
@@ -65,9 +66,9 @@ public class HeaderComponent extends BaseComponent {
         return new PlacesPage(driver);
     }
 
-    public HeaderComponent openAboutUs() {
+    public AboutUsPage openAboutUs() {
         clickElement(aboutUsLink);
-        return this;
+        return new AboutUsPage(driver);
     }
 
     public SignInModal clickSignIn() {
