@@ -6,10 +6,10 @@ import org.openqa.selenium.support.FindBy;
 
 public class ViewModeToggleComponent extends BaseComponent {
 
-    @FindBy(xpath = ".//span[@aria-label='table view']")
+    @FindBy(xpath = ".//*[@aria-label='table view']")
     private WebElement tableViewButton;
 
-    @FindBy(xpath = ".//span[@aria-label='list view']")
+    @FindBy(xpath = ".//*[@aria-label='list view']")
     private WebElement listViewButton;
 
     public ViewModeToggleComponent(WebDriver driver, WebElement rootElement) {
