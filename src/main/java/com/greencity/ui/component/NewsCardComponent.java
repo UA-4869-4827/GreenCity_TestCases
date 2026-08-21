@@ -8,8 +8,8 @@ import org.openqa.selenium.WebDriver;
 
 public class NewsCardComponent extends BasePage {
 
-    private By newsCard = By.xpath("div.list-gallery"); 
-    private By bookmarkButton = By.xpath("span.flag"); 
+    private By newsCard = By.xpath(""); // TODO;
+    private By bookmarkButton = By.xpath(""); // TODO;
 
     public NewsCardComponent(WebDriver driver) {
         super(driver);
