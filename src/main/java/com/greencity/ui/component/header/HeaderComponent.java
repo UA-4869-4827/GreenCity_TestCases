@@ -2,6 +2,7 @@ package com.greencity.ui.component.header;
 
 import com.greencity.ui.component.BaseComponent;
 import com.greencity.ui.modal.SignInModal;
+import com.greencity.ui.modal.SignUpModal;
 import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -72,8 +73,8 @@ public class HeaderComponent extends BaseComponent {
         return new SignInModal(driver);
     }
 
-    public HeaderComponent clickSignUp() {
+    public SignUpModal clickSignUp() {
         clickElement(signUpLink);
-        return this;
+        return new SignUpModal(driver);
     }
 }
