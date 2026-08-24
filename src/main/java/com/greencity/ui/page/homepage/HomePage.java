@@ -3,7 +3,6 @@ package com.greencity.ui.page.homepage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import com.greencity.ui.page.econews.EcoNewsPage;
-import com.greencity.ui.page.places.PlacesPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -97,13 +96,7 @@ public class HomePage extends BasePage {
 //    Methods
 
     public HomePage open() {
-        String currentUrl = driver.getCurrentUrl();
-        String origin = currentUrl.contains("#")
-                ? currentUrl.substring(0, currentUrl.indexOf('#'))
-                : currentUrl;
-        origin = origin.replaceAll("/$", "");
-        driver.get(origin + GREEN_CITY_HOME_HASH);
-        waitForPageToLoad(10);
+        open(GREEN_CITY_HOME_HASH);
         return this;
     }
 
@@ -115,9 +108,14 @@ public class HomePage extends BasePage {
         return getElementText(mainDescription);
     }
 
-    public SignInModal clickMainStartHabitButton() {
-        clickElement(mainStartHabitButton);
+    public SignInModal clickMainStartHabitButtonGuest() {
+        clickElementWithJs(mainStartHabitButton);
         return new SignInModal(driver);
+    }
+
+    public ProfilePage clickMainStartHabitButtonLoggedIn() {
+        clickElementWithJs(mainStartHabitButton);
+        return new ProfilePage(driver);
     }
 
     public String getStatsTitleText() {
@@ -140,9 +138,13 @@ public class HomePage extends BasePage {
         return getElementText(cupsCounterValue);
     }
 
-    public SignInModal clickBagsStartHabitButton() {
-        clickElement(bagsStartHabitButton);
+    public SignInModal clickBagsStartHabitButtonGuest() {
+        clickElementWithJs(bagsStartHabitButton);
         return new SignInModal(driver);
+    }
+    public ProfilePage clickBagsStartHabitButtonLoggedIn() {
+        clickElementWithJs(bagsStartHabitButton);
+        return new ProfilePage(driver);
     }
 
     public String getCupsCounterLabelText() {
@@ -153,19 +155,23 @@ public class HomePage extends BasePage {
         return getElementText(cupsQuestionText);
     }
 
-    public SignInModal clickCupsStartHabitButton() {
-        clickElement(cupsStartHabitButton);
+    public SignInModal clickCupsStartHabitButtonGuest() {
+        clickElementWithJs(cupsStartHabitButton);
         return new SignInModal(driver);
     }
-
-    public PlacesPage openEcoBagsPlaces() {
-        clickElement(buyEcoBagsLink);
-        return new PlacesPage(driver);
+    public ProfilePage clickCupsStartHabitButtonLoggedIn() {
+        clickElementWithJs(cupsStartHabitButton);
+        return new ProfilePage(driver);
     }
 
-    public PlacesPage openCupDiscountPlaces() {
-        clickElement(cupDiscountPlacesLink);
-        return new PlacesPage(driver);
+    public UbsCourierPage openEcoBagsPlaces() {
+        clickElementWithJs(buyEcoBagsLink);
+        return new UbsCourierPage(driver);
+    }
+
+    public UbsCourierPage openCupDiscountPlaces() {
+        clickElementWithJs(cupDiscountPlacesLink);
+        return new UbsCourierPage(driver);
     }
 
     public String getEcoNewsTitleText() {
@@ -173,16 +179,17 @@ public class HomePage extends BasePage {
     }
 
     public EcoNewsPage openAllNews() {
-        clickElement(readAllNewsLink);
+        clickElementWithJs(readAllNewsLink);
         return new EcoNewsPage(driver);
     }
 
     public void enterNewsletterEmail(String email) {
+        clickElementWithJs(newsletterEmailInput);
         typeText(newsletterEmailInput, email);
     }
 
     public void clickSubscribeButton() {
-        clickElement(subscribeButton);
+        clickElementWithJs(subscribeButton);
     }
 
     public void subscribe(String email) {
