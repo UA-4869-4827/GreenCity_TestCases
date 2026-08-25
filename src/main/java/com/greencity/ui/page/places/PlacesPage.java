@@ -1,15 +1,34 @@
 package com.greencity.ui.page.places;
 
 import com.greencity.ui.component.MoreOptionsMenu;
-import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 public class PlacesPage extends BasePage {
 
     private static final String PLACES_HASH = "/#/greenCity/places";
+
+    public enum PlacesFilter {
+        SHOPS(0),
+        RESTAURANTS(1),
+        RECYCLING_POINTS(2),
+        EVENTS(3),
+        SAVED_PLACES(4);
+
+        private final int index;
+
+        PlacesFilter(int index) {
+            this.index = index;
+        }
+
+        WebElement getElement(List<WebElement> filters) {
+            return filters.get(index);
+        }
+    }
 
     @FindBy(css = "input[name='search']")
     private WebElement searchInput;
@@ -17,23 +36,23 @@ public class PlacesPage extends BasePage {
     @FindBy(css = "input.choose-location-input")
     private WebElement locationInput;
 
-    @FindBy(xpath = "//button[.//span[normalize-space()='Shops']]")
-    private WebElement shopsButton;
+    @FindBy(css = "app-tag-filter div.ul-eco-buttons button.tag-button")
+    private List<WebElement> filterButtons;
 
-    @FindBy(xpath = "//button[.//span[normalize-space()='Restaurants']]")
-    private WebElement restaurantsButton;
-
-    @FindBy(xpath = "//button[.//span[normalize-space()='Recycling points']]")
-    private WebElement recyclingPointsButton;
-
-    @FindBy(xpath = "//button[.//span[normalize-space()='Events']]")
-    private WebElement eventsButton;
-
-    @FindBy(css = "app-more-options-filter a.mat-mdc-menu-trigger")
+    @FindBy(css = "app-more-options-filter > a.custom-chip.global-tag")
     private WebElement moreOptionsButton;
 
-    @FindBy(xpath = "//button[normalize-space()='Add place']")
+    @FindBy(css = "div.search > button.secondary-global-button.m-btn")
     private WebElement addPlaceButton;
+
+    @FindBy(css = "div.gm-style-iw[role='dialog']")
+    private WebElement placeInfoWindow;
+
+    @FindBy(css = "div.gm-style-iw[role='dialog'] span.title")
+    private WebElement placeTitle;
+
+    @FindBy(css = "div.gm-style-iw[role='dialog'] span.address")
+    private WebElement placeAddress;
 
     public PlacesPage(WebDriver driver) {
         super(driver);
@@ -44,9 +63,12 @@ public class PlacesPage extends BasePage {
         String origin = currentUrl.contains("#")
                 ? currentUrl.substring(0, currentUrl.indexOf('#'))
                 : currentUrl;
+
         origin = origin.replaceAll("/$", "");
+
         driver.get(origin + PLACES_HASH);
         waitForPageToLoad(10);
+
         return this;
     }
 
@@ -60,23 +82,8 @@ public class PlacesPage extends BasePage {
         return this;
     }
 
-    public PlacesPage filterByShops() {
-        clickElement(shopsButton);
-        return this;
-    }
-
-    public PlacesPage filterByRestaurants() {
-        clickElement(restaurantsButton);
-        return this;
-    }
-
-    public PlacesPage filterByRecyclingPoints() {
-        clickElement(recyclingPointsButton);
-        return this;
-    }
-
-    public PlacesPage filterByEvents() {
-        clickElement(eventsButton);
+    public PlacesPage filterBy(PlacesFilter filter) {
+        clickElement(filter.getElement(filterButtons));
         return this;
     }
 
@@ -85,8 +92,8 @@ public class PlacesPage extends BasePage {
         return new MoreOptionsMenu(driver);
     }
 
-    public SignInModal addPlace() {
+    public AddPlaceModal addPlace() {
         clickElement(addPlaceButton);
-        return new SignInModal(driver);
+        return new AddPlaceModal(driver);
     }
 }
