@@ -17,6 +17,9 @@ public class EventCardComponent extends BaseComponent {
     @FindBy(css = "button.event-button")
     private WebElement joinButton;
 
+    @FindBy(xpath = ".//button[contains(text(),'Змінити подію')]")
+    private WebElement editButton;
+
     @FindBy(css = "button.like")
     private WebElement likeButton;
 
@@ -26,35 +29,92 @@ public class EventCardComponent extends BaseComponent {
     @FindBy(css = "span.flag")
     private WebElement bookmarkButton;
 
+    @FindBy(css = "div.date-container p")
+    private WebElement locationText;
+
+    @FindBy(css = "div.date-container div.date")
+    private WebElement dateText;
+
+    @FindBy(css = "div.author p")
+    private WebElement authorText;
+
+
     public EventCardComponent(WebDriver driver, WebElement rootElement) {
         super(driver, rootElement);
     }
 
+
     public String getTitle() {
         return getElementText(title);
     }
+
+    public String getLocation() {
+        return getElementText(locationText);
+    }
+
+    public String getDate() {
+        return getElementText(dateText);
+    }
+
+    public String getAuthor() {
+        return getElementText(authorText);
+    }
+
+
+    public boolean isOwnEvent() {
+        try {
+            return editButton.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
     public EventDetailsPage openEventDetails() {
         clickElement(moreButton);
         return new EventDetailsPage(driver);
     }
 
-    public SignInModal joinEvent() {
+
+    public void editEvent() {
+        clickElement(editButton);
+    }
+
+
+    public void joinEvent() {
+        clickElement(joinButton);
+    }
+
+
+    public SignInModal joinEventAsGuest() {
         clickElement(joinButton);
         return new SignInModal(driver);
     }
 
-    public SignInModal likeEvent() {
+
+    public void likeEvent() {
+        clickElement(likeButton);
+    }
+
+
+    public SignInModal likeEventAsGuest() {
         clickElement(likeButton);
         return new SignInModal(driver);
     }
+
 
     public EventCardComponent dislikeEvent() {
         clickElement(dislikeButton);
         return this;
     }
 
-    public SignInModal bookmarkEvent() {
+
+    public void bookmarkEvent() {
+        clickElement(bookmarkButton);
+    }
+
+
+    public SignInModal bookmarkEventAsGuest() {
         clickElement(bookmarkButton);
         return new SignInModal(driver);
     }

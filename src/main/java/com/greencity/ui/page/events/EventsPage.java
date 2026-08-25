@@ -7,6 +7,7 @@ import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import com.greencity.ui.page.events.CreateEventPage;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -70,7 +71,12 @@ public class EventsPage extends BasePage {
         return viewModeToggle;
     }
 
-    public SignInModal createEvent() {
+    public CreateEventPage createEventAsLoggedInUser() {
+        clickElement(createEventButton);
+        return new CreateEventPage(driver);
+    }
+
+    public SignInModal createEventAsGuest() {
         clickElement(createEventButton);
         return new SignInModal(driver);
     }
