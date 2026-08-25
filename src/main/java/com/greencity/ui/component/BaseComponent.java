@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 
-public abstract class BaseComponent extends Base {
+public abstract class BaseComponent extends BasePage {
 
     @Getter
     protected WebElement rootElement;
