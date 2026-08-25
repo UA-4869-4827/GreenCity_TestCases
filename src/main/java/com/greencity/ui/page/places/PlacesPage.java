@@ -45,13 +45,13 @@ public class PlacesPage extends BasePage {
     @FindBy(css = "div.search > button.secondary-global-button.m-btn")
     private WebElement addPlaceButton;
 
-    @FindBy(css = "div.gm-style-iw[role='dialog']")
+    @FindBy(css = "div.gm-style-iw")
     private WebElement placeInfoWindow;
 
-    @FindBy(css = "div.gm-style-iw[role='dialog'] span.title")
+    @FindBy(css = "div.gm-style-iw span.title")
     private WebElement placeTitle;
 
-    @FindBy(css = "div.gm-style-iw[role='dialog'] span.address")
+    @FindBy(css = "div.gm-style-iw span.address")
     private WebElement placeAddress;
 
     public PlacesPage(WebDriver driver) {
@@ -95,5 +95,17 @@ public class PlacesPage extends BasePage {
     public AddPlaceModal addPlace() {
         clickElement(addPlaceButton);
         return new AddPlaceModal(driver);
+    }
+
+    public boolean isPlaceInfoWindowDisplayed() {
+        return placeInfoWindow.isDisplayed();
+    }
+
+    public String getPlaceTitle() {
+        return placeTitle.getText();
+    }
+
+    public String getPlaceAddress() {
+        return placeAddress.getText();
     }
 }
