@@ -55,12 +55,12 @@ public class AboutUsPage extends BasePage {
         return new SignInModal(driver);
     }
 
-    public ProfilePage formHabitFromOurVisionHeadingAsGuest() {
+    public ProfilePage formHabitFromOurVisionHeadingAsLoggedIn() {
         clickElement(formHabitFromOurVisionButton);
         return new ProfilePage(driver);
     }
 
-    public SignInModal formHabitFromOurVisionHeadingAsLoggedIn() {
+    public SignInModal formHabitFromOurVisionHeadingAsGuest() {
         clickElement(formHabitFromOurVisionButton);
         return new SignInModal(driver);
     }
@@ -90,8 +90,9 @@ public class AboutUsPage extends BasePage {
         return new FriendsPage(driver);
     }
 
-    public SignInModal findPeopleFromIDontFeelHeading() {
+    public SignInModal findPeopleFromIDontFeelHeadingAsGuest() {
         clickElement(findPeopleFromIDontFeelLink);
         return new SignInModal(driver);
     }
+
 }
