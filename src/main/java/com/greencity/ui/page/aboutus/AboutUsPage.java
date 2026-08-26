@@ -45,12 +45,22 @@ public class AboutUsPage extends BasePage {
         return this;
     }
 
-    public SignInModal formHabitFromAboutUsHeading() {
+    public ProfilePage formHabitFromAboutUsHeadingAsLoggedIn() {
+        clickElement(formHabitFromAboutUsButton);
+        return new  ProfilePage(driver);
+    }
+
+    public SignInModal formHabitFromAboutUsHeadingAsGuest() {
         clickElement(formHabitFromAboutUsButton);
         return new SignInModal(driver);
     }
 
-    public SignInModal formHabitFromOurVisionHeading() {
+    public ProfilePage formHabitFromOurVisionHeadingAsGuest() {
+        clickElement(formHabitFromOurVisionButton);
+        return new ProfilePage(driver);
+    }
+
+    public SignInModal formHabitFromOurVisionHeadingAsLoggedIn() {
         clickElement(formHabitFromOurVisionButton);
         return new SignInModal(driver);
     }
@@ -60,7 +70,12 @@ public class AboutUsPage extends BasePage {
         return new PlacesPage(driver);
     }
 
-    public SignInModal findPeopleFromEcoProductsHeading() {
+    public FriendsPage findPeopleFromEcoProductsHeadingAsLoggedIn() {
+        clickElement(findPeopleFromEcoProductsLink);
+        return new FriendsPage(driver);
+    }
+
+    public SignInModal findPeopleFromEcoProductsHeadingAsGuest() {
         clickElement(findPeopleFromEcoProductsLink);
         return new SignInModal(driver);
     }
@@ -68,6 +83,11 @@ public class AboutUsPage extends BasePage {
     public EcoNewsPage getInspired() {
         clickElement(getInspiredLink);
         return new EcoNewsPage(driver);
+    }
+
+    public FriendsPage findPeopleFromIDontFeelHeadingAsLoggedIn() {
+        clickElement(findPeopleFromIDontFeelLink);
+        return new FriendsPage(driver);
     }
 
     public SignInModal findPeopleFromIDontFeelHeading() {
