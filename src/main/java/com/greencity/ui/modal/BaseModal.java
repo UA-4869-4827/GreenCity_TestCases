@@ -1,7 +1,6 @@
 package com.greencity.ui.modal;
 
 import com.greencity.ui.Base;
-import com.greencity.ui.page.homepage.HomePage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,10 +36,9 @@ public abstract class BaseModal<T extends BaseModal<T>> extends Base {
     }
 
     @Step("Close modal")
-    public HomePage close() {
+    public void close() {
         clickElement(closeButton);
         waitUntilElementInvisible(closeButton);
-        return new HomePage(driver);
     }
 
     protected T enterInto(WebElement field, String text) {
