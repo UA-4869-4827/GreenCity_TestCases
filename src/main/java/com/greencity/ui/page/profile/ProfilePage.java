@@ -6,15 +6,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProfilePage extends BasePage {
 
-    public ProfilePage(WebDriver driver){super(driver);}
-
-    private static final String GREEN_CITY_PROFILE_HASH = "/#/greenCity/profile";
-
-    public ProfilePage waitUntilPageLoaded() {
+    public ProfilePage(WebDriver driver){
+        super(driver);
         wait.until(ExpectedConditions.urlContains(GREEN_CITY_PROFILE_HASH));
         waitForPageToLoad(10);
-        return this;
     }
+
+    private static final String GREEN_CITY_PROFILE_HASH = "/#/greenCity/profile";
 
     public boolean isOpened() {
         return getCurrentUrl().contains(GREEN_CITY_PROFILE_HASH);

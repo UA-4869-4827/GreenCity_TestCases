@@ -144,6 +144,7 @@ public class HomePage extends BasePage {
         clickElement(bagsStartHabitButton);
         return new SignInModal(driver);
     }
+
     public ProfilePage clickBagsStartHabitButton() {
         clickElement(bagsStartHabitButton);
         return new ProfilePage(driver);
