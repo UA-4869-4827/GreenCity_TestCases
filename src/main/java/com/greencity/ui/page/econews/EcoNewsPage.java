@@ -9,26 +9,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class EcoNewsPage extends BasePage {
-
-<<<<<<< HEAD
-    private static final String ECO_NEWS_HASH = "/#/greenCity/news";
-=======
-    private By newsFilter = By.xpath("//button[.//span[normalize-space()='News']]");
-    private By eventsFilter = By.xpath("//button[.//span[normalize-space()='Events']]");
-    private By educationFilter = By.xpath("//button[.//span[normalize-space()='Education']]");
-    private By initiativesFilter = By.xpath("//button[.//span[normalize-space()='Initiatives']]");
-    private By adsFilter = By.xpath("//button[.//span[normalize-space()='Ads']]");
->>>>>>> 412c350 (same fixes)
+   // private static final String ECO_NEWS_HASH = "/#/greenCity/news";
 
     @FindBy(xpath = "//button[.//span[normalize-space()='News']]")
     private WebElement newsFilter;
 
-<<<<<<< HEAD
     @FindBy(xpath = "//button[.//span[normalize-space()='Events']]")
     private WebElement eventsFilter;
 
@@ -53,40 +41,23 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "span.bookmark-img")
     private WebElement savedNewsButton;
 
-    @FindBy(css = "div.list-gallery")
-    private List<WebElement> newsCards;
+    @FindBy(css = "div.container-img")
+    private WebElement calendarButton;
 
-    @FindBy(xpath = "//span[@aria-label='table view']/parent::*")
+    @FindBy(css = "div.list-wrapper")
+    private List<WebElement> newsCardList;
+
+    @FindBy(id = "create-button")
+    private WebElement createNewsButton;
+
+    @FindBy(xpath = " //span[@arial-label='table view']/parent::*")
     private WebElement viewModeRoot;
-=======
-    private By savedNewsButton = By.cssSelector("span.bookmark-img");
-    private By calendarButton = By.cssSelector("div.container-img");
-
-    private By newsCardList = By.cssSelector("div.list-wrapper");
-
-    private By createNewsButton = By.id("create-button");
->>>>>>> 412c350 (same fixes)
 
     private ViewModeToggleComponent viewModeToggle;
 
     public EcoNewsPage(WebDriver driver) {
         super(driver);
         this.viewModeToggle = new ViewModeToggleComponent(driver, viewModeRoot);
-    }
-
-    public EcoNewsPage open() {
-        String currentUrl = driver.getCurrentUrl();
-        String origin = currentUrl.contains("#")
-                ? currentUrl.substring(0, currentUrl.indexOf('#'))
-                : currentUrl;
-        origin = origin.replaceAll("/$", "");
-        driver.get(origin + ECO_NEWS_HASH);
-        waitForPageToLoad(10);
-        return this;
-    }
-
-    public ViewModeToggleComponent getViewModeToggle() {
-        return viewModeToggle;
     }
 
     public EcoNewsPage filterByNews() {
@@ -115,72 +86,41 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage openSearch() {
-<<<<<<< HEAD
         clickElement(searchButton);
-=======
-        click(searchButton);
->>>>>>> 412c350 (same fixes)
         return this;
     }
 
     public EcoNewsPage searchNews(String text) {
-<<<<<<< HEAD
         typeText(searchInput, text);
         return this;
     }
 
-    public EcoNewsPage clearSearch() {
+    public EcoNewsPage clickClearSearch() {
         clickElement(clearSearchButton);
         return this;
     }
 
-    public SignInModal openSavedNews() {
+    public SignInModal openSavedNewsAsGuest() {
         clickElement(savedNewsButton);
         return new SignInModal(driver);
     }
 
-    public NewsCardComponent getNewsCard(int index) {
-        waitUntilAllElementsVisible(newsCards);
-        return new NewsCardComponent(driver, newsCards.get(index));
-    }
-
-    public NewsDetailsPage openNewsByIndex(int index) {
-        return getNewsCard(index).openNews();
-=======
-        type(searchInput, text);
-        return this;
-    }
-
-    public EcoNewsPage clickClearSearch() {
-        click(clearSearchButton);
-        return this;
-    }
-
-    public SignInModal openSavedNewsAsGuest() {
-        click(savedNewsButton);
-        return new SignInModal(driver);
-    }
-
     public EcoNewsPage openSavedNews() {
-        click(savedNewsButton);
+        clickElement(savedNewsButton);
         return this;
     }
 
     public NewsDetailsPage openNewsByIndex(int index) {
-        driver.findElements(newsCardList)
-                .get(index)
-                .click();
-        return new NewsDetailsPage(driver);
->>>>>>> 412c350 (same fixes)
+        return getNewsCards().get(index).openNews();
     }
 
     public CreateNewsPage clickCreateNews() {
-        click(createNewsButton);
+        clickElement(createNewsButton);
         return new CreateNewsPage(driver);
     }
 
     public List<NewsCardComponent> getNewsCards() {
-        return driver.findElements(newsCardList).stream()
+        return newsCardList.stream()
                 .map(el -> new NewsCardComponent(driver, el))
                 .collect(Collectors.toList());
     }

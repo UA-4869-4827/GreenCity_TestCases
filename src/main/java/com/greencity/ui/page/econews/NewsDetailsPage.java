@@ -11,7 +11,6 @@ import java.util.List;
 
 public class NewsDetailsPage extends BasePage {
 
-<<<<<<< HEAD
     @FindBy(css = "img.news_like")
     private WebElement likeButton;
 
@@ -26,21 +25,18 @@ public class NewsDetailsPage extends BasePage {
 
     @FindBy(xpath = "//div[contains(@class,'comment-body-wrapper')]/ancestor::*[contains(@class,'comment')][last()]")
     private WebElement commentsRoot;
-=======
-    private By likeButton = By.cssSelector("img.news_like");
-    private By backToNewsButton = By.cssSelector("div.button-text");
-    private By relatedNewsList = By.cssSelector("app-news-list-gallery-view.recommended-item");
-    private By editNewsButton = By.cssSelector("div.edit-news");
-    private By deleteButton = By.cssSelector(".secondary-global-button");
 
->>>>>>> 412c350 (same fixes)
+    @FindBy(css = "div.edit-news")
+    private WebElement editNewsButton;
+
+    @FindBy(css = ".secondary-global-button")
+    private WebElement deleteButton;
 
     private CommentsComponent comments;
     private SocialShareComponent socialShare;
 
     public NewsDetailsPage(WebDriver driver) {
         super(driver);
-<<<<<<< HEAD
         this.socialShare = new SocialShareComponent(driver, socialShareRoot);
         this.comments = new CommentsComponent(driver, commentsRoot);
     }
@@ -51,10 +47,6 @@ public class NewsDetailsPage extends BasePage {
 
     public SocialShareComponent getSocialShare() {
         return socialShare;
-=======
-        this.comments = new CommentsComponent(driver);
-        this.socialShare = new SocialShareComponent(driver);
->>>>>>> 412c350 (same fixes)
     }
 
     public NewsDetailsPage likeArticle() {
@@ -67,13 +59,13 @@ public class NewsDetailsPage extends BasePage {
         return new EcoNewsPage(driver);
     }
 
-    public CreateNewsPage clickEditNews(){
-        click(editNewsButton);
+    public CreateNewsPage clickEditNews() {
+        clickElement(editNewsButton);
         return new CreateNewsPage(driver);
     }
 
     public EcoNewsPage clickDelete() {
-        click(deleteButton);
+        clickElement(deleteButton);
         return new EcoNewsPage(driver);
     }
 

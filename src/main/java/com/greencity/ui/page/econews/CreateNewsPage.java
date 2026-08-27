@@ -1,23 +1,40 @@
 package com.greencity.ui.page.econews;
 
-import com.greencity.ui.component.CommentsComponent;
-import com.greencity.ui.component.SocialShareComponent;
 import com.greencity.ui.page.BasePage;
-import com.greencity.ui.page.econews.econewspage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class CreateNewsPage extends BasePage {
 
-    private By titleInput = By.cssSelector("[formcontrolname='title']");
-    private By sourceInput = By.cssSelector("[formcontrolname='source']");
-    private By contentEditor = By.cssSelector("[formcontrolname='content'] .ql-editor");
-    private By pictureUploadInput = By.id("upload");
-    private By pictureCancelButton = By.cssSelector(".cropper-buttons button.secondary-global-button");
-    private By pictureSubmitButton = By.cssSelector(".cropper-buttons button.primary-global-button");
-    private By cancelButton = By.cssSelector(".tertiary-global-button");
-    private By previewButton = By.cssSelector(".submit-buttons button.secondary-global-button");
-    private By publishButton = By.cssSelector(".submit-buttons button.primary-global-button");
+    @FindBy(css = "[formcontrolname='title']")
+    private WebElement titleInput;
+
+    @FindBy(css = "[formcontrolname='source']")
+    private WebElement sourceInput;
+
+    @FindBy(css = "[formcontrolname='content'] .ql-editor")
+    private WebElement contentEditor;
+
+    @FindBy(id = "upload")
+    private WebElement pictureUploadInput;
+
+    @FindBy(css = ".cropper-buttons button.secondary-global-button")
+    private WebElement pictureCancelButton;
+
+    @FindBy(css = ".cropper-buttons button.primary-global-button")
+    private WebElement pictureSubmitButton;
+
+    @FindBy(css = ".tertiary-global-button")
+    private WebElement cancelButton;
+
+    @FindBy(css = ".submit-buttons button.secondary-global-button")
+    private WebElement previewButton;
+
+    @FindBy(css = ".submit-buttons button.primary-global-button")
+    private WebElement publishButton;
+
     private static final String TAG_XPATH_TEMPLATE = "//button[contains(@class,'tag-button')]//span[text()='%s']";
 
     public CreateNewsPage(WebDriver driver) {
@@ -25,22 +42,22 @@ public class CreateNewsPage extends BasePage {
     }
 
     public CreateNewsPage enterTitle(String title) {
-        driver.findElement(titleInput).sendKeys(title);
+        titleInput.sendKeys(title);
         return this;
     }
 
     public CreateNewsPage enterSource(String url) {
-        driver.findElement(sourceInput).sendKeys(url);
+        sourceInput.sendKeys(url);
         return this;
     }
 
     public CreateNewsPage enterContent(String text) {
-        driver.findElement(contentEditor).sendKeys(text);
+        contentEditor.sendKeys(text);
         return this;
     }
 
     public CreateNewsPage uploadPicture(String filePath) {
-        driver.findElement(pictureUploadInput).sendKeys(filePath);
+        pictureUploadInput.sendKeys(filePath);
         return this;
     }
 
@@ -51,27 +68,27 @@ public class CreateNewsPage extends BasePage {
     }
 
     public CreateNewsPage clickPictureCancel() {
-        driver.findElement(pictureCancelButton).click();
+        pictureCancelButton.click();
         return this;
     }
 
     public CreateNewsPage clickPictureSubmit() {
-        driver.findElement(pictureSubmitButton).click();
+      pictureSubmitButton.click();
         return this;
     }
 
     public EcoNewsPage clickCancel() {
-        driver.findElement(cancelButton).click();
+        cancelButton.click();
         return new EcoNewsPage(driver);
     }
 
     public PreviewNewsPage clickPreview() {
-        driver.findElement(previewButton).click();
+        previewButton.click();
         return new PreviewNewsPage(driver);
     }
 
     public EcoNewsPage clickPublish() {
-        driver.findElement(publishButton).click();
+        publishButton.click();
         return new EcoNewsPage(driver);
     }
 }

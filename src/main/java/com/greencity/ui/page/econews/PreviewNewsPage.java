@@ -1,26 +1,30 @@
 package com.greencity.ui.page.econews;
 
 import com.greencity.ui.page.BasePage;
-import com.greencity.ui.page.EcoNews.EcoNewsPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class PreviewNewsPage extends BasePage {
 
-    private By backToEditingLink = By.cssSelector("div.back-button");
-    private By editButton = By.cssSelector("button.primary-global-button");
+    @FindBy(css = "div.back-button")
+    private WebElement backToEditingLink;
+
+    @FindBy (css = "button.primary-global-button")
+    private WebElement editButton;
+
 
     public PreviewNewsPage(WebDriver driver) {
         super(driver);
     }
 
     public CreateNewsPage clickBackToEditing() {
-        click(backToEditingLink);
+        clickElement(backToEditingLink);
         return new CreateNewsPage(driver);
     }
 
     public EcoNewsPage clickEdit() {
-        click(editButton);
+        clickElement(editButton);
         return new EcoNewsPage(driver);
     }
 }
