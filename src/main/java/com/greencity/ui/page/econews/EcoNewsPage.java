@@ -9,10 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EcoNewsPage extends BasePage {
-   // private static final String ECO_NEWS_HASH = "/#/greenCity/news";
 
     @FindBy(xpath = "//button[.//span[normalize-space()='News']]")
     private WebElement newsFilter;
@@ -44,13 +42,13 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "div.container-img")
     private WebElement calendarButton;
 
-    @FindBy(css = "div.list-wrapper")
-    private List<WebElement> newsCardList;
+    @FindBy(css = "div.list-gallery")
+    private List<WebElement> newsCards;
 
     @FindBy(id = "create-button")
     private WebElement createNewsButton;
 
-    @FindBy(xpath = " //span[@arial-label='table view']/parent::*")
+    @FindBy(xpath = "//span[@aria-label='table view']/parent::*")
     private WebElement viewModeRoot;
 
     private ViewModeToggleComponent viewModeToggle;
@@ -111,7 +109,7 @@ public class EcoNewsPage extends BasePage {
     }
 
     public NewsDetailsPage openNewsByIndex(int index) {
-        return getNewsCards().get(index).openNews();
+        return getNewsCard(index).openNews();
     }
 
     public CreateNewsPage clickCreateNews() {
@@ -119,9 +117,33 @@ public class EcoNewsPage extends BasePage {
         return new CreateNewsPage(driver);
     }
 
-    public List<NewsCardComponent> getNewsCards() {
-        return newsCardList.stream()
-                .map(el -> new NewsCardComponent(driver, el))
-                .collect(Collectors.toList());
+    public SignInModal clickCreateNewsAsGuest() {
+        clickElement(createNewsButton);
+        return new SignInModal(driver);
+    }
+
+    public NewsCardComponent getNewsCard(int index) {
+        waitUntilAllElementsVisible(newsCards);
+        return new NewsCardComponent(driver, newsCards.get(index));
+    }
+
+    public ViewModeToggleComponent getViewModeToggle() {
+        return viewModeToggle;
+    }
+
+    public EcoNewsPage open() {
+        String currentUrl = driver.getCurrentUrl();
+
+        String origin = currentUrl.contains("#")
+                ? currentUrl.substring(0, currentUrl.indexOf('#'))
+                : currentUrl;
+
+        origin = origin.replaceAll("/$", "");
+
+        driver.get(origin + "/#/greenCity/news");
+
+        waitForPageToLoad(10);
+
+        return this;
     }
 }

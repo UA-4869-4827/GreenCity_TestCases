@@ -1,6 +1,5 @@
 package com.greencity.ui.component;
 
-import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.econews.NewsDetailsPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,47 +36,8 @@ public class NewsCardComponent extends BaseComponent {
     }
 
     public NewsDetailsPage openNews() {
-        clickElement(rootElement);
-         return new NewsDetailsPage(driver);
-    }
-
-    public NewsDetailsPage clickTitle() {
         clickElement(title);
         return new NewsDetailsPage(driver);
     }
 
-    public NewsDetailsPage clickContent() {
-        clickElement(content);
-        return new NewsDetailsPage(driver);
-    }
-
-    public NewsDetailsPage clickDate() {
-        clickElement(date);
-        return new NewsDetailsPage(driver);
-    }
-
-    public NewsDetailsPage clickAuthor() {
-        clickElement(author);
-        return new NewsDetailsPage(driver);
-    }
-
-    public NewsDetailsPage clickTags() {
-        clickElement(tags);
-        return new NewsDetailsPage(driver);
-    }
-
-    public NewsDetailsPage clickLikesCounter() {
-        clickElement(likesCounter);
-        return new NewsDetailsPage(driver);
-    }
-
-    public NewsDetailsPage clickCommentsCounter() {
-        clickElement(commentsCounter);
-        return new NewsDetailsPage(driver);
-    }
-
-    public SignInModal bookmarkNews() {
-        clickElement(bookmarkButton);
-        return new SignInModal(driver);
-    }
 }

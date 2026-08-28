@@ -18,10 +18,10 @@ public class CommentsComponent extends BaseComponent {
     @FindBy(xpath = ".//div[contains(@class,'comment-likes')]//img[contains(@class,'dislike-img')]")
     private List<WebElement> dislikeButtons;
 
-    @FindBy(css = ".comment-textarea-wrapper")
+    @FindBy(css = "app-add-comment .comment-textarea-wrapper")
     private WebElement commentField;
 
-    @FindBy(css = ".primary-global-button")
+    @FindBy(css = "app-add-comment button.primary-global-button")
     private WebElement addCommentButton;
 
     public CommentsComponent(WebDriver driver, WebElement rootElement) {
@@ -47,8 +47,12 @@ public class CommentsComponent extends BaseComponent {
         return this;
     }
 
-    public CommentsComponent inputComment(String textComment) {
-        typeText(commentField, textComment);
+    public CommentsComponent enterComment(String text) {
+        typeText(commentField, text);
+        return this;
+    }
+
+    public CommentsComponent submitComment() {
         clickElement(addCommentButton);
         return this;
     }

@@ -10,9 +10,8 @@ public class PreviewNewsPage extends BasePage {
     @FindBy(css = "div.back-button")
     private WebElement backToEditingLink;
 
-    @FindBy (css = "button.primary-global-button")
+    @FindBy(xpath = "//button[contains(@class,'primary-global-button') and normalize-space()='Edit']")
     private WebElement editButton;
-
 
     public PreviewNewsPage(WebDriver driver) {
         super(driver);
@@ -23,9 +22,8 @@ public class PreviewNewsPage extends BasePage {
         return new CreateNewsPage(driver);
     }
 
-    public EcoNewsPage clickEdit() {
+    public CreateNewsPage clickEdit() {
         clickElement(editButton);
-        return new EcoNewsPage(driver);
+        return new CreateNewsPage(driver);
     }
 }
-

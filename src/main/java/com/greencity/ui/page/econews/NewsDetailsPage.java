@@ -2,6 +2,7 @@ package com.greencity.ui.page.econews;
 
 import com.greencity.ui.component.CommentsComponent;
 import com.greencity.ui.component.SocialShareComponent;
+import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,13 +24,13 @@ public class NewsDetailsPage extends BasePage {
     @FindBy(xpath = "//img[@alt='facebook']/parent::*")
     private WebElement socialShareRoot;
 
-    @FindBy(xpath = "//div[contains(@class,'comment-body-wrapper')]/ancestor::*[contains(@class,'comment')][last()]")
+    @FindBy(css = "app-comments-container")
     private WebElement commentsRoot;
 
     @FindBy(css = "div.edit-news")
     private WebElement editNewsButton;
 
-    @FindBy(css = ".secondary-global-button")
+    @FindBy(css = "button.delete-news-button")
     private WebElement deleteButton;
 
     private CommentsComponent comments;
@@ -52,6 +53,11 @@ public class NewsDetailsPage extends BasePage {
     public NewsDetailsPage likeArticle() {
         clickElement(likeButton);
         return this;
+    }
+
+    public SignInModal likeArticleAsGuest() {
+        clickElement(likeButton);
+        return new SignInModal(driver);
     }
 
     public EcoNewsPage goBackToNews() {

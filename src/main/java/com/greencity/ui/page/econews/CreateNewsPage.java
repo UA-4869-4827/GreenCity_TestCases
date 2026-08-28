@@ -26,7 +26,7 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".cropper-buttons button.primary-global-button")
     private WebElement pictureSubmitButton;
 
-    @FindBy(css = ".tertiary-global-button")
+    @FindBy(xpath = "//button[contains(@class,'tertiary-global-button') and normalize-space()='Cancel']")
     private WebElement cancelButton;
 
     @FindBy(css = ".submit-buttons button.secondary-global-button")
@@ -35,24 +35,24 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".submit-buttons button.primary-global-button")
     private WebElement publishButton;
 
-    private static final String TAG_XPATH_TEMPLATE = "//button[contains(@class,'tag-button')]//span[text()='%s']";
+    private static final String TAG_XPATH_TEMPLATE = "//button[contains(@class,'tag-button')]//span[normalize-space()='%s']";
 
     public CreateNewsPage(WebDriver driver) {
         super(driver);
     }
 
     public CreateNewsPage enterTitle(String title) {
-        titleInput.sendKeys(title);
+        typeText(titleInput, title);
         return this;
     }
 
     public CreateNewsPage enterSource(String url) {
-        sourceInput.sendKeys(url);
+        typeText(sourceInput, url);
         return this;
     }
 
     public CreateNewsPage enterContent(String text) {
-        contentEditor.sendKeys(text);
+        typeText(contentEditor, text);
         return this;
     }
 
@@ -63,32 +63,33 @@ public class CreateNewsPage extends BasePage {
 
     public CreateNewsPage selectTag(String tagName) {
         String xpath = String.format(TAG_XPATH_TEMPLATE, tagName);
-        driver.findElement(By.xpath(xpath)).click();
+        WebElement tag = driver.findElement(By.xpath(xpath));
+        clickElement(tag);
         return this;
     }
 
     public CreateNewsPage clickPictureCancel() {
-        pictureCancelButton.click();
+        clickElement(pictureCancelButton);
         return this;
     }
 
     public CreateNewsPage clickPictureSubmit() {
-      pictureSubmitButton.click();
+        clickElement(pictureSubmitButton);
         return this;
     }
 
     public EcoNewsPage clickCancel() {
-        cancelButton.click();
+        clickElement(cancelButton);
         return new EcoNewsPage(driver);
     }
 
     public PreviewNewsPage clickPreview() {
-        previewButton.click();
+        clickElement(previewButton);
         return new PreviewNewsPage(driver);
     }
 
     public EcoNewsPage clickPublish() {
-        publishButton.click();
+        clickElement(publishButton);
         return new EcoNewsPage(driver);
     }
 }

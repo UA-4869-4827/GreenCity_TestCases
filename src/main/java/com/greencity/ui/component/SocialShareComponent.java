@@ -8,7 +8,6 @@ public class SocialShareComponent extends BaseComponent {
 
     @FindBy(xpath = ".//img[@alt='facebook' or @alt='Share on Facebook']")
     private WebElement facebookButton;
-   
 
     @FindBy(xpath = ".//img[@alt='linkedin' or @alt='Share on Linkedin']")
     private WebElement linkedinButton;
