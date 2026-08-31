@@ -71,7 +71,7 @@ public class EventsPage extends BasePage {
         return viewModeToggle;
     }
 
-    public CreateEventPage createEventAsLoggedInUser() {
+    public CreateEventPage createEvent() {
         clickElement(createEventButton);
         return new CreateEventPage(driver);
     }

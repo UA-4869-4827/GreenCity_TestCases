@@ -1,6 +1,7 @@
 package com.greencity.ui.component;
 
 import com.greencity.ui.modal.SignInModal;
+import com.greencity.ui.page.events.CreateEventPage;
 import com.greencity.ui.page.events.EventDetailsPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,8 +18,9 @@ public class EventCardComponent extends BaseComponent {
     @FindBy(css = "button.event-button")
     private WebElement joinButton;
 
-    @FindBy(xpath = ".//button[contains(text(),'Змінити подію')]")
+    @FindBy(xpath = ".//button[normalize-space()='Edit event']")
     private WebElement editButton;
+
 
     @FindBy(css = "button.like")
     private WebElement likeButton;
@@ -29,7 +31,8 @@ public class EventCardComponent extends BaseComponent {
     @FindBy(css = "span.flag")
     private WebElement bookmarkButton;
 
-    @FindBy(css = "div.date-container p")
+    @FindBy(xpath = ".//div[contains(@class,'date-container')][.//span[contains(@class,'place')]]/p")
+
     private WebElement locationText;
 
     @FindBy(css = "div.date-container div.date")
@@ -62,13 +65,8 @@ public class EventCardComponent extends BaseComponent {
 
 
     public boolean isOwnEvent() {
-        try {
-            return editButton.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+        return isElementDisplayed(editButton);
     }
-
 
     public EventDetailsPage openEventDetails() {
         clickElement(moreButton);
@@ -76,15 +74,16 @@ public class EventCardComponent extends BaseComponent {
     }
 
 
-    public void editEvent() {
+    public CreateEventPage editEvent() {
         clickElement(editButton);
+        return new CreateEventPage(driver);
     }
 
 
-    public void joinEvent() {
+    public EventCardComponent joinEvent() {
         clickElement(joinButton);
+        return this;
     }
-
 
     public SignInModal joinEventAsGuest() {
         clickElement(joinButton);
@@ -92,10 +91,10 @@ public class EventCardComponent extends BaseComponent {
     }
 
 
-    public void likeEvent() {
+    public EventCardComponent likeEvent() {
         clickElement(likeButton);
+        return this;
     }
-
 
     public SignInModal likeEventAsGuest() {
         clickElement(likeButton);
@@ -109,8 +108,9 @@ public class EventCardComponent extends BaseComponent {
     }
 
 
-    public void bookmarkEvent() {
+    public EventCardComponent bookmarkEvent() {
         clickElement(bookmarkButton);
+        return this;
     }
 
 

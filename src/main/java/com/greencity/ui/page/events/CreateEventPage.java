@@ -9,36 +9,35 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 public class CreateEventPage extends BasePage {
+
     public CreateEventPage(WebDriver driver) {
         super(driver);
     }
 
-    @FindBy(css = "input[placeholder='Введіть назву події']")
+    @FindBy(xpath = "//mat-label[normalize-space()='Enter a name for the event']/ancestor::mat-form-field//input")
     private WebElement titleInput;
 
     @FindBy(css = "mat-select[formcontrolname='duration']")
     private WebElement durationSelect;
 
-    @FindBy(xpath = "//mat-chip-option[.//span[contains(@class,'text-label')][normalize-space()='Економічний']]")
-    private WebElement economicTypeChip;
-
-    @FindBy(xpath = "//mat-chip-option[.//span[contains(@class,'text-label')][normalize-space()='Соціальний']]")
-    private WebElement socialTypeChip;
-
-    @FindBy(xpath = "//mat-chip-option[.//span[contains(@class,'text-label')][normalize-space()='Екологічний']]")
-    private WebElement ecologicalTypeChip;
+    /*
+     * Initiative types.
+     * Do not bind locators to Economic / Social / Environmental text.
+     */
+    @FindBy(xpath = "//mat-chip-listbox[@formcontrolname='tags']//mat-chip-option")
+    private List<WebElement> typeChips;
 
     @FindBy(css = "mat-select[formcontrolname='open']")
     private WebElement eventTypeDropdown;
 
-    @FindBy(xpath = "//mat-label[normalize-space()='Запросити']/ancestor::mat-form-field//mat-select")
+    @FindBy(xpath = "//mat-label[normalize-space()='Invite']/ancestor::mat-form-field//mat-select")
     private WebElement inviteDropdown;
 
     @FindBy(css = "div.ql-editor")
     private WebElement descriptionEditor;
 
-    @FindBy(xpath = "//*[contains(text(),'Обрати дату')]")
-    private WebElement dateButton;
+    @FindBy(css = "input[formcontrolname='day']")
+    private WebElement dateInput;
 
     @FindBy(css = "button.mat-calendar-previous-button")
     private WebElement previousMonthButton;
@@ -55,25 +54,26 @@ public class CreateEventPage extends BasePage {
     @FindBy(css = "input[formcontrolname='finishTime']")
     private WebElement endTimeInput;
 
-    @FindBy(css = "mat-checkbox[formcontrolname='allDay'] input")
+    @FindBy(css = "mat-checkbox[formcontrolname='allDay'] div.mdc-checkbox")
     private WebElement allDayCheckbox;
 
-    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Місце']]//input")
+
+    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Place']]")
     private WebElement placeCheckbox;
 
-    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Онлайн']]//input")
+    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Online']]")
     private WebElement onlineCheckbox;
 
-    @FindBy(css = "input[placeholder='Місце проведення події*']")
+    @FindBy(css = "input[formcontrolname='place']")
     private WebElement locationInput;
 
-    @FindBy(css = "input[placeholder*='посилання на подію']")
+    @FindBy(xpath = "//mat-label[contains(@class,'link-title')]/ancestor::mat-form-field//input")
     private WebElement onlineLinkInput;
 
-    @FindBy(xpath = "(//*[normalize-space(text())='Застосувати на всі дні заходу']/preceding-sibling::input)[1]")
+    @FindBy(css = "mat-checkbox.apply-location-checkbox")
     private WebElement applyLocationToAllDaysCheckbox;
 
-    @FindBy(xpath = "(//*[normalize-space(text())='Застосувати на всі дні заходу']/preceding-sibling::input)[2]")
+    @FindBy(css = "mat-checkbox.apply-link-checkbox")
     private WebElement applyLinkToAllDaysCheckbox;
 
     @FindBy(css = "input[type='file']")
@@ -82,14 +82,15 @@ public class CreateEventPage extends BasePage {
     @FindBy(css = "div.stock-images img")
     private List<WebElement> stockImages;
 
-    @FindBy(xpath = "//*[normalize-space(text())='Відмінити']")
+    @FindBy(css = "button.tertiary-global-button")
     private WebElement cancelButton;
 
-    @FindBy(xpath = "//*[normalize-space(text())='Переглянути']")
+    @FindBy(css = "button.secondary-global-button.submit-buttons")
     private WebElement previewButton;
 
-    @FindBy(xpath = "//*[normalize-space(text())='Публікувати']")
+    @FindBy(css = "button.primary-global-button.submit-buttons")
     private WebElement publishButton;
+
 
     public CreateEventPage setTitle(String title) {
         typeText(titleInput, title);
@@ -101,13 +102,16 @@ public class CreateEventPage extends BasePage {
     }
 
     public CreateEventPage selectInitiativeType(String type) {
-        WebElement chip = switch (type) {
-            case "Економічний" -> economicTypeChip;
-            case "Соціальний" -> socialTypeChip;
-            case "Екологічний" -> ecologicalTypeChip;
-            default -> throw new IllegalArgumentException("Unknown initiative type: " + type);
+        int index = switch (type) {
+            case "Economic" -> 0;
+            case "Social" -> 1;
+            case "Environmental" -> 2;
+            default -> throw new IllegalArgumentException(
+                    "Unknown initiative type: " + type
+            );
         };
-        clickElement(chip);
+
+        clickElement(typeChips.get(index));
         return this;
     }
 
@@ -126,7 +130,7 @@ public class CreateEventPage extends BasePage {
     }
 
     public CreateEventPage openDatePicker() {
-        clickElement(dateButton);
+        clickElement(dateInput);
         return this;
     }
 
@@ -144,7 +148,12 @@ public class CreateEventPage extends BasePage {
         WebElement dayCell = calendarDayCells.stream()
                 .filter(cell -> cell.getText().trim().equals(String.valueOf(day)))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Day " + day + " not found in visible calendar month"));
+                .orElseThrow(() ->
+                        new IllegalStateException(
+                                "Day " + day + " not found in visible calendar month"
+                        )
+                );
+
         clickElement(dayCell);
         return this;
     }
@@ -219,11 +228,19 @@ public class CreateEventPage extends BasePage {
         return new EventDetailsPage(driver);
     }
 
-    private CreateEventPage selectDropdownOption(WebElement dropdown, String value) {
+
+    private CreateEventPage selectDropdownOption(
+            WebElement dropdown,
+            String value
+    ) {
         clickElement(dropdown);
+
         WebElement option = driver.findElement(
-                By.xpath("//mat-option[contains(normalize-space(.), '" + value + "')]"));
+                By.xpath("//mat-option[normalize-space(.)='" + value + "']")
+        );
+
         clickElement(option);
+
         return this;
     }
 }
