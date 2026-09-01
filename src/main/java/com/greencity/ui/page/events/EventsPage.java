@@ -7,7 +7,6 @@ import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import com.greencity.ui.page.events.CreateEventPage;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -124,8 +123,21 @@ public class EventsPage extends BasePage {
     private EventsPage selectFilterOption(WebElement filter, String value) {
         clickElement(filter);
         WebElement option = driver.findElement(
-                By.xpath("//mat-option[contains(normalize-space(.), '" + value + "')]"));
+                By.xpath("//mat-option[contains(normalize-space(.), " + xpathLiteral(value) + ")]"));
         clickElement(option);
         return this;
+    }
+
+    private static String xpathLiteral(String value) {
+        if (!value.contains("'")) {
+            return "'" + value + "'";
+        }
+        if (!value.contains("\"")) {
+            return "\"" + value + "\"";
+        }
+        String[] parts = value.split("'", -1);
+        StringBuilder concat = new StringBuilder("concat('");
+        concat.append(String.join("', \"'\", '", parts)).append("')");
+        return concat.toString();
     }
 }

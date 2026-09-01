@@ -52,7 +52,7 @@ public class EventCardComponent extends BaseComponent {
     }
 
     public String getLocation() {
-        return getElementText(locationText);
+        return isElementDisplayed(locationText) ? getElementText(locationText) : "";
     }
 
     public String getDate() {

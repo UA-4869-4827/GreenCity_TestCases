@@ -20,10 +20,6 @@ public class CreateEventPage extends BasePage {
     @FindBy(css = "mat-select[formcontrolname='duration']")
     private WebElement durationSelect;
 
-    /*
-     * Initiative types.
-     * Do not bind locators to Economic / Social / Environmental text.
-     */
     @FindBy(xpath = "//mat-chip-listbox[@formcontrolname='tags']//mat-chip-option")
     private List<WebElement> typeChips;
 
@@ -58,10 +54,10 @@ public class CreateEventPage extends BasePage {
     private WebElement allDayCheckbox;
 
 
-    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Place']]")
+    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Place']]//div[contains(@class,'mdc-checkbox')]")
     private WebElement placeCheckbox;
 
-    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Online']]")
+    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Online']]//div[contains(@class,'mdc-checkbox')]")
     private WebElement onlineCheckbox;
 
     @FindBy(css = "input[formcontrolname='place']")
@@ -70,10 +66,10 @@ public class CreateEventPage extends BasePage {
     @FindBy(xpath = "//mat-label[contains(@class,'link-title')]/ancestor::mat-form-field//input")
     private WebElement onlineLinkInput;
 
-    @FindBy(css = "mat-checkbox.apply-location-checkbox")
+    @FindBy(css = "mat-checkbox.apply-location-checkbox div.mdc-checkbox")
     private WebElement applyLocationToAllDaysCheckbox;
 
-    @FindBy(css = "mat-checkbox.apply-link-checkbox")
+    @FindBy(css = "mat-checkbox.apply-link-checkbox div.mdc-checkbox")
     private WebElement applyLinkToAllDaysCheckbox;
 
     @FindBy(css = "input[type='file']")
@@ -102,16 +98,15 @@ public class CreateEventPage extends BasePage {
     }
 
     public CreateEventPage selectInitiativeType(String type) {
-        int index = switch (type) {
-            case "Economic" -> 0;
-            case "Social" -> 1;
-            case "Environmental" -> 2;
-            default -> throw new IllegalArgumentException(
-                    "Unknown initiative type: " + type
-            );
-        };
+        waitUntilAllElementsVisible(typeChips);
+        WebElement chip = typeChips.stream()
+                .filter(c -> c.getText().trim().equalsIgnoreCase(type))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Unknown initiative type: " + type
+                ));
 
-        clickElement(typeChips.get(index));
+        clickElement(chip);
         return this;
     }
 
@@ -124,8 +119,7 @@ public class CreateEventPage extends BasePage {
     }
 
     public CreateEventPage setDescription(String description) {
-        clickElement(descriptionEditor);
-        descriptionEditor.sendKeys(description);
+        typeText(descriptionEditor, description);
         return this;
     }
 
@@ -145,17 +139,27 @@ public class CreateEventPage extends BasePage {
     }
 
     public CreateEventPage selectDay(int day) {
+        waitUntilAllElementsVisible(calendarDayCells);
         WebElement dayCell = calendarDayCells.stream()
                 .filter(cell -> cell.getText().trim().equals(String.valueOf(day)))
+                .filter(cell -> !isDisabledCalendarCell(cell))
                 .findFirst()
                 .orElseThrow(() ->
                         new IllegalStateException(
-                                "Day " + day + " not found in visible calendar month"
+                                "Day " + day + " not found or is disabled in the visible calendar month"
                         )
                 );
 
         clickElement(dayCell);
         return this;
+    }
+
+    private boolean isDisabledCalendarCell(WebElement cell) {
+        Boolean disabled = (Boolean) js.executeScript(
+                "return arguments[0].closest('.mat-calendar-body-disabled') !== null"
+                        + " || arguments[0].closest('[aria-disabled=\"true\"]') !== null;",
+                cell);
+        return Boolean.TRUE.equals(disabled);
     }
 
     public CreateEventPage setStartTime(String start) {
@@ -236,11 +240,24 @@ public class CreateEventPage extends BasePage {
         clickElement(dropdown);
 
         WebElement option = driver.findElement(
-                By.xpath("//mat-option[normalize-space(.)='" + value + "']")
+                By.xpath("//mat-option[normalize-space(.)=" + xpathLiteral(value) + "]")
         );
 
         clickElement(option);
 
         return this;
+    }
+
+    private static String xpathLiteral(String value) {
+        if (!value.contains("'")) {
+            return "'" + value + "'";
+        }
+        if (!value.contains("\"")) {
+            return "\"" + value + "\"";
+        }
+        String[] parts = value.split("'", -1);
+        StringBuilder concat = new StringBuilder("concat('");
+        concat.append(String.join("', \"'\", '", parts)).append("')");
+        return concat.toString();
     }
 }
