@@ -1,5 +1,6 @@
 package com.greencity.ui.component;
 
+import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.econews.NewsDetailsPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -38,6 +39,16 @@ public class NewsCardComponent extends BaseComponent {
     public NewsDetailsPage openNews() {
         clickElement(title);
         return new NewsDetailsPage(driver);
+    }
+
+    public NewsCardComponent bookmarkNews() {
+        clickElement(bookmarkButton);
+        return this;
+    }
+
+    public SignInModal bookmarkNewsAsGuest() {
+        clickElement(bookmarkButton);
+        return new SignInModal(driver);
     }
 
 }

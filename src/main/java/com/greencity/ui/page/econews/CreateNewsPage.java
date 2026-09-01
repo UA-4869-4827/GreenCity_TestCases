@@ -35,7 +35,7 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".submit-buttons button.primary-global-button")
     private WebElement publishButton;
 
-    private static final String TAG_XPATH_TEMPLATE = "//button[contains(@class,'tag-button')]//span[normalize-space()='%s']";
+    private static final String TAG_XPATH_TEMPLATE = "//button[contains(@class,'tag-button')]//span[normalize-space()=%s]";
 
     public CreateNewsPage(WebDriver driver) {
         super(driver);
@@ -62,10 +62,23 @@ public class CreateNewsPage extends BasePage {
     }
 
     public CreateNewsPage selectTag(String tagName) {
-        String xpath = String.format(TAG_XPATH_TEMPLATE, tagName);
+        String xpath = String.format(TAG_XPATH_TEMPLATE, xpathLiteral(tagName));
         WebElement tag = driver.findElement(By.xpath(xpath));
         clickElement(tag);
         return this;
+    }
+
+    private static String xpathLiteral(String value) {
+        if (!value.contains("'")) {
+            return "'" + value + "'";
+        }
+        if (!value.contains("\"")) {
+            return "\"" + value + "\"";
+        }
+        String[] parts = value.split("'", -1);
+        StringBuilder concat = new StringBuilder("concat('");
+        concat.append(String.join("', \"'\", '", parts)).append("')");
+        return concat.toString();
     }
 
     public CreateNewsPage clickPictureCancel() {

@@ -33,6 +33,9 @@ public class NewsDetailsPage extends BasePage {
     @FindBy(css = "button.delete-news-button")
     private WebElement deleteButton;
 
+    @FindBy(css = "app-warning-pop-up button.primary-global-button")
+    private WebElement confirmDeleteButton;
+
     private CommentsComponent comments;
     private SocialShareComponent socialShare;
 
@@ -72,6 +75,7 @@ public class NewsDetailsPage extends BasePage {
 
     public EcoNewsPage clickDelete() {
         clickElement(deleteButton);
+        clickElement(confirmDeleteButton);
         return new EcoNewsPage(driver);
     }
 

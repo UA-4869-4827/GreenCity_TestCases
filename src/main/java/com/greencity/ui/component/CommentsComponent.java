@@ -18,7 +18,7 @@ public class CommentsComponent extends BaseComponent {
     @FindBy(xpath = ".//div[contains(@class,'comment-likes')]//img[contains(@class,'dislike-img')]")
     private List<WebElement> dislikeButtons;
 
-    @FindBy(css = "app-add-comment .comment-textarea-wrapper")
+    @FindBy(css = "app-add-comment .comment-textarea")
     private WebElement commentField;
 
     @FindBy(css = "app-add-comment button.primary-global-button")
