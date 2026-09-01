@@ -1,32 +1,31 @@
 package com.greencity.ui.page.places;
 
 import com.greencity.ui.component.MoreOptionsMenu;
+import com.greencity.ui.modal.AddPlaceModal;
 import com.greencity.ui.page.BasePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
 
 public class PlacesPage extends BasePage {
 
     private static final String PLACES_HASH = "/#/greenCity/places";
 
     public enum PlacesFilter {
-        SHOPS(0),
-        RESTAURANTS(1),
-        RECYCLING_POINTS(2),
-        EVENTS(3),
-        SAVED_PLACES(4);
+        SHOPS("Shops"),
+        RESTAURANTS("Restaurants"),
+        RECYCLING_POINTS("Recycling points"),
+        EVENTS("Events");
 
-        private final int index;
+        private final String text;
 
-        PlacesFilter(int index) {
-            this.index = index;
+        PlacesFilter(String text) {
+            this.text = text;
         }
 
-        WebElement getElement(List<WebElement> filters) {
-            return filters.get(index);
+        String getText() {
+            return text;
         }
     }
 
@@ -35,9 +34,6 @@ public class PlacesPage extends BasePage {
 
     @FindBy(css = "input.choose-location-input")
     private WebElement locationInput;
-
-    @FindBy(css = "app-tag-filter div.ul-eco-buttons button.tag-button")
-    private List<WebElement> filterButtons;
 
     @FindBy(css = "app-more-options-filter > a.custom-chip.global-tag")
     private WebElement moreOptionsButton;
@@ -83,7 +79,13 @@ public class PlacesPage extends BasePage {
     }
 
     public PlacesPage filterBy(PlacesFilter filter) {
-        clickElement(filter.getElement(filterButtons));
+        WebElement filterButton = driver.findElement(
+                By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
+                        + "//span[contains(@class,'text') and normalize-space()='"
+                        + filter.getText() + "']")
+        );
+
+        clickElement(filterButton);
         return this;
     }
 
@@ -98,14 +100,14 @@ public class PlacesPage extends BasePage {
     }
 
     public boolean isPlaceInfoWindowDisplayed() {
-        return placeInfoWindow.isDisplayed();
+        return isElementDisplayed(placeInfoWindow);
     }
 
     public String getPlaceTitle() {
-        return placeTitle.getText();
+        return getElementText(placeTitle);
     }
 
     public String getPlaceAddress() {
-        return placeAddress.getText();
+        return getElementText(placeAddress);
     }
 }
