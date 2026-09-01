@@ -79,13 +79,12 @@ public class PlacesPage extends BasePage {
     }
 
     public PlacesPage filterBy(PlacesFilter filter) {
-        WebElement filterButton = driver.findElement(
-                By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
-                        + "//span[contains(@class,'text') and normalize-space()='"
-                        + filter.getText() + "']")
-        );
+        By locator = By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
+                + "//span[contains(@class,'text') and normalize-space()='"
+                + filter.getText() + "']");
 
-        clickElement(filterButton);
+        waitUntilElementPresent(locator);
+        clickElement(driver.findElement(locator));
         return this;
     }
 
