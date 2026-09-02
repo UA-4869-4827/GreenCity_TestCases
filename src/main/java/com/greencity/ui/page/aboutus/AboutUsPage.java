@@ -3,7 +3,9 @@ package com.greencity.ui.page.aboutus;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import com.greencity.ui.page.econews.EcoNewsPage;
+import com.greencity.ui.page.friends.FriendsPage;
 import com.greencity.ui.page.places.PlacesPage;
+import com.greencity.ui.page.profile.ProfilePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,12 +47,22 @@ public class AboutUsPage extends BasePage {
         return this;
     }
 
-    public SignInModal formHabitFromAboutUsHeading() {
+    public ProfilePage formHabitFromAboutUsHeading() {
+        clickElement(formHabitFromAboutUsButton);
+        return new ProfilePage(driver);
+    }
+
+    public SignInModal formHabitFromAboutUsHeadingAsGuest() {
         clickElement(formHabitFromAboutUsButton);
         return new SignInModal(driver);
     }
 
-    public SignInModal formHabitFromOurVisionHeading() {
+    public ProfilePage formHabitFromOurVisionHeading() {
+        clickElement(formHabitFromOurVisionButton);
+        return new ProfilePage(driver);
+    }
+
+    public SignInModal formHabitFromOurVisionHeadingAsGuest() {
         clickElement(formHabitFromOurVisionButton);
         return new SignInModal(driver);
     }
@@ -60,7 +72,12 @@ public class AboutUsPage extends BasePage {
         return new PlacesPage(driver);
     }
 
-    public SignInModal findPeopleFromEcoProductsHeading() {
+    public FriendsPage findPeopleFromEcoProductsHeading() {
+        clickElement(findPeopleFromEcoProductsLink);
+        return new FriendsPage(driver);
+    }
+
+    public SignInModal findPeopleFromEcoProductsHeadingAsGuest() {
         clickElement(findPeopleFromEcoProductsLink);
         return new SignInModal(driver);
     }
@@ -70,8 +87,14 @@ public class AboutUsPage extends BasePage {
         return new EcoNewsPage(driver);
     }
 
-    public SignInModal findPeopleFromIDontFeelHeading() {
+    public FriendsPage findPeopleFromIDontFeelHeading() {
+        clickElement(findPeopleFromIDontFeelLink);
+        return new FriendsPage(driver);
+    }
+
+    public SignInModal findPeopleFromIDontFeelHeadingAsGuest() {
         clickElement(findPeopleFromIDontFeelLink);
         return new SignInModal(driver);
     }
+
 }

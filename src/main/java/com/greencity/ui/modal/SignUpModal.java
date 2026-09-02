@@ -1,6 +1,6 @@
 package com.greencity.ui.modal;
 
-import com.greencity.ui.page.homepage.HomePage;
+import com.greencity.ui.page.BasePage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -123,11 +123,11 @@ public class SignUpModal extends BaseModal<SignUpModal> {
     }
 
     @Step("Sign up with email {email}")
-    public HomePage signUp(String email, String userName, String password) {
+    public <P extends BasePage> P signUp(String email, String userName, String password, Class<P> pageClass) {
         fillForm(email, userName, password, password);
         clickSignUpButton();
         waitUntilClosed();
-        return new HomePage(driver);
+        return openPage(pageClass);
     }
 
     @Step("Unsuccessful sign up with email {email}")

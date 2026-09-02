@@ -70,7 +70,12 @@ public class EventsPage extends BasePage {
         return viewModeToggle;
     }
 
-    public SignInModal createEvent() {
+    public CreateEventPage createEvent() {
+        clickElement(createEventButton);
+        return new CreateEventPage(driver);
+    }
+
+    public SignInModal createEventAsGuest() {
         clickElement(createEventButton);
         return new SignInModal(driver);
     }
@@ -118,8 +123,21 @@ public class EventsPage extends BasePage {
     private EventsPage selectFilterOption(WebElement filter, String value) {
         clickElement(filter);
         WebElement option = driver.findElement(
-                By.xpath("//mat-option[contains(normalize-space(.), '" + value + "')]"));
+                By.xpath("//mat-option[contains(normalize-space(.), " + xpathLiteral(value) + ")]"));
         clickElement(option);
         return this;
+    }
+
+    private static String xpathLiteral(String value) {
+        if (!value.contains("'")) {
+            return "'" + value + "'";
+        }
+        if (!value.contains("\"")) {
+            return "\"" + value + "\"";
+        }
+        String[] parts = value.split("'", -1);
+        StringBuilder concat = new StringBuilder("concat('");
+        concat.append(String.join("', \"'\", '", parts)).append("')");
+        return concat.toString();
     }
 }
