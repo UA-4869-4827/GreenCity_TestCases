@@ -4,8 +4,6 @@ UI test project for [GreenCity](https://www.greencity.cx.ua/#/greenCity).
 
 The **Page Object Model is already in place**. Student work is to implement the GitHub test cases (issues) as JUnit tests that go through those page objects — not to rebuild the POM, and not to use raw Selenium in tests.
 
-First wave: **guest** role, default locale **En**. Test cases: issues [#36](https://github.com/UA-4869-4827/GreenCity_TestCases/issues/36)–[#70](https://github.com/UA-4869-4827/GreenCity_TestCases/issues/70). Parent user stories: [#12](https://github.com/UA-4869-4827/GreenCity_TestCases/issues/12)–[#30](https://github.com/UA-4869-4827/GreenCity_TestCases/issues/30).
-
 ## Technologies
 
 - **Java 21**
