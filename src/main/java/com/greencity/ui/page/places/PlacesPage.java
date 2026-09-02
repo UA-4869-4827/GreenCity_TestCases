@@ -41,13 +41,13 @@ public class PlacesPage extends BasePage {
     @FindBy(css = "div.search > button.secondary-global-button.m-btn")
     private WebElement addPlaceButton;
 
-    @FindBy(css = "div.gm-style-iw")
+    @FindBy(css = "div.content-info-pop-up")
     private WebElement placeInfoWindow;
 
-    @FindBy(css = "div.gm-style-iw span.title")
+    @FindBy(css = "div.content-info-pop-up h6.content-title")
     private WebElement placeTitle;
 
-    @FindBy(css = "div.gm-style-iw span.address")
+    @FindBy(css = "div.content-info-pop-up h6.content-address")
     private WebElement placeAddress;
 
     public PlacesPage(WebDriver driver) {
@@ -83,6 +83,14 @@ public class PlacesPage extends BasePage {
                 + "//span[contains(@class,'text') and normalize-space()='"
                 + filter.getText() + "']");
 
+        waitUntilElementPresent(locator);
+        clickElement(driver.findElement(locator));
+        return this;
+    }
+
+    public PlacesPage filterBySavedPlaces() {
+        By locator = By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
+                + "//span[contains(@class,'text') and normalize-space()='Saved places']");
         waitUntilElementPresent(locator);
         clickElement(driver.findElement(locator));
         return this;
