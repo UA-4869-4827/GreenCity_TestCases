@@ -44,6 +44,9 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "div.list-gallery")
     private List<WebElement> newsCards;
 
+    @FindBy(id = "create-button")
+    private WebElement createNewsButton;
+
     @FindBy(xpath = "//span[@aria-label='table view']/parent::*")
     private WebElement viewModeRoot;
 
@@ -52,21 +55,6 @@ public class EcoNewsPage extends BasePage {
     public EcoNewsPage(WebDriver driver) {
         super(driver);
         this.viewModeToggle = new ViewModeToggleComponent(driver, viewModeRoot);
-    }
-
-    public EcoNewsPage open() {
-        String currentUrl = driver.getCurrentUrl();
-        String origin = currentUrl.contains("#")
-                ? currentUrl.substring(0, currentUrl.indexOf('#'))
-                : currentUrl;
-        origin = origin.replaceAll("/$", "");
-        driver.get(origin + ECO_NEWS_HASH);
-        waitForPageToLoad(10);
-        return this;
-    }
-
-    public ViewModeToggleComponent getViewModeToggle() {
-        return viewModeToggle;
     }
 
     public EcoNewsPage filterByNews() {
@@ -104,14 +92,32 @@ public class EcoNewsPage extends BasePage {
         return this;
     }
 
-    public EcoNewsPage clearSearch() {
+    public EcoNewsPage clickClearSearch() {
         clickElement(clearSearchButton);
         return this;
     }
 
-    public SignInModal openSavedNews() {
+    public SignInModal openSavedNewsAsGuest() {
         clickElement(savedNewsButton);
         return new SignInModal(driver);
+    }
+
+    public EcoNewsPage openSavedNews() {
+        clickElement(savedNewsButton);
+        return this;
+    }
+
+    public NewsDetailsPage openNewsByIndex(int index) {
+        return getNewsCard(index).openNews();
+    }
+
+    public CreateNewsPage clickCreateNews() {
+        clickElement(createNewsButton);
+        return new CreateNewsPage(driver);
+    }
+
+    public boolean isCreateNewsButtonDisplayed() {
+        return isElementDisplayed(createNewsButton);
     }
 
     public NewsCardComponent getNewsCard(int index) {
@@ -119,7 +125,23 @@ public class EcoNewsPage extends BasePage {
         return new NewsCardComponent(driver, newsCards.get(index));
     }
 
-    public NewsDetailsPage openNewsByIndex(int index) {
-        return getNewsCard(index).openNews();
+    public ViewModeToggleComponent getViewModeToggle() {
+        return viewModeToggle;
+    }
+
+    public EcoNewsPage open() {
+        String currentUrl = driver.getCurrentUrl();
+
+        String origin = currentUrl.contains("#")
+                ? currentUrl.substring(0, currentUrl.indexOf('#'))
+                : currentUrl;
+
+        origin = origin.replaceAll("/$", "");
+
+        driver.get(origin + ECO_NEWS_HASH);
+
+        waitForPageToLoad(10);
+
+        return this;
     }
 }

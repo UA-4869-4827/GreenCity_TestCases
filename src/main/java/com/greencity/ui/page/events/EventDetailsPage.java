@@ -18,6 +18,9 @@ public class EventDetailsPage extends BasePage {
     @FindBy(xpath = "//button[normalize-space()='Join event']")
     private WebElement joinEventButton;
 
+    @FindBy(xpath = "//button[contains(@class,'secondary-global-button') and normalize-space()='Edit']")
+    private WebElement editEventButton;
+
     @FindBy(css = "a.button-link")
     private WebElement backToEventsButton;
 
@@ -32,19 +35,34 @@ public class EventDetailsPage extends BasePage {
         return new CommentsComponent(driver, commentsRoot);
     }
 
-    public SignInModal likeEvent() {
+    public EventDetailsPage likeEvent() {
         clickElement(likeButton);
-        return new SignInModal(driver);
+        return this;
     }
 
-    public SignInModal saveEvent() {
+    public EventDetailsPage saveEvent() {
+        clickElement(saveEventButton);
+        return this;
+    }
+
+    public SignInModal saveEventAsGuest() {
         clickElement(saveEventButton);
         return new SignInModal(driver);
     }
 
-    public SignInModal joinEvent() {
+    public EventDetailsPage joinEvent() {
+        clickElement(joinEventButton);
+        return this;
+    }
+
+    public SignInModal joinEventAsGuest() {
         clickElement(joinEventButton);
         return new SignInModal(driver);
+    }
+
+    public CreateEventPage editEvent() {
+        clickElement(editEventButton);
+        return new CreateEventPage(driver);
     }
 
     public EventsPage goBackToEvents() {
