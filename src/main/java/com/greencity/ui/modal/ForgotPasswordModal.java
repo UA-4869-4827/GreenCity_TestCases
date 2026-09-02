@@ -1,6 +1,6 @@
 package com.greencity.ui.modal;
 
-import com.greencity.ui.page.homepage.HomePage;
+import com.greencity.ui.page.BasePage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -54,11 +54,11 @@ public class ForgotPasswordModal extends BaseModal<ForgotPasswordModal> {
     }
 
     @Step("Submit login link for email: {email}")
-    public HomePage submitLoginLink(String email) {
+    public <P extends BasePage> P submitLoginLink(String email, Class<P> pageClass) {
         enterEmail(email);
         clickSendLinkButton();
         waitUntilClosed();
-        return new HomePage(driver);
+        return openPage(pageClass);
     }
 
     @Step("Back to 'Sign in' modal")

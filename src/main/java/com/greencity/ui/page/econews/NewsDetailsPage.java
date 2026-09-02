@@ -23,8 +23,17 @@ public class NewsDetailsPage extends BasePage {
     @FindBy(xpath = "//img[@alt='facebook']/parent::*")
     private WebElement socialShareRoot;
 
-    @FindBy(xpath = "//div[contains(@class,'comment-body-wrapper')]/ancestor::*[contains(@class,'comment')][last()]")
+    @FindBy(css = "app-comments-container")
     private WebElement commentsRoot;
+
+    @FindBy(css = "div.edit-news")
+    private WebElement editNewsButton;
+
+    @FindBy(css = "button.delete-news-button")
+    private WebElement deleteButton;
+
+    @FindBy(css = "app-warning-pop-up button.primary-global-button")
+    private WebElement confirmDeleteButton;
 
     private CommentsComponent comments;
     private SocialShareComponent socialShare;
@@ -50,6 +59,17 @@ public class NewsDetailsPage extends BasePage {
 
     public EcoNewsPage goBackToNews() {
         clickElement(backToNewsButton);
+        return new EcoNewsPage(driver);
+    }
+
+    public CreateNewsPage clickEditNews() {
+        clickElement(editNewsButton);
+        return new CreateNewsPage(driver);
+    }
+
+    public EcoNewsPage clickDelete() {
+        clickElement(deleteButton);
+        clickElement(confirmDeleteButton);
         return new EcoNewsPage(driver);
     }
 
