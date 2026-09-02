@@ -2,7 +2,6 @@ package com.greencity.ui.page.econews;
 
 import com.greencity.ui.component.CommentsComponent;
 import com.greencity.ui.component.SocialShareComponent;
-import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -56,11 +55,6 @@ public class NewsDetailsPage extends BasePage {
     public NewsDetailsPage likeArticle() {
         clickElement(likeButton);
         return this;
-    }
-
-    public SignInModal likeArticleAsGuest() {
-        clickElement(likeButton);
-        return new SignInModal(driver);
     }
 
     public EcoNewsPage goBackToNews() {

@@ -12,6 +12,8 @@ import java.util.List;
 
 public class EcoNewsPage extends BasePage {
 
+    private static final String ECO_NEWS_HASH = "/#/greenCity/news";
+
     @FindBy(xpath = "//button[.//span[normalize-space()='News']]")
     private WebElement newsFilter;
 
@@ -38,9 +40,6 @@ public class EcoNewsPage extends BasePage {
 
     @FindBy(css = "span.bookmark-img")
     private WebElement savedNewsButton;
-
-    @FindBy(css = "div.container-img")
-    private WebElement calendarButton;
 
     @FindBy(css = "div.list-gallery")
     private List<WebElement> newsCards;
@@ -117,9 +116,8 @@ public class EcoNewsPage extends BasePage {
         return new CreateNewsPage(driver);
     }
 
-    public SignInModal clickCreateNewsAsGuest() {
-        clickElement(createNewsButton);
-        return new SignInModal(driver);
+    public boolean isCreateNewsButtonDisplayed() {
+        return isElementDisplayed(createNewsButton);
     }
 
     public NewsCardComponent getNewsCard(int index) {
@@ -140,7 +138,7 @@ public class EcoNewsPage extends BasePage {
 
         origin = origin.replaceAll("/$", "");
 
-        driver.get(origin + "/#/greenCity/news");
+        driver.get(origin + ECO_NEWS_HASH);
 
         waitForPageToLoad(10);
 
