@@ -80,4 +80,5 @@ public class GuestHeaderTests extends BaseTestRunner {
         Assertions.assertEquals("Eco news", ecoNewsPage.getPageHeadingText(),
                 "The page title has not returned to English.");
     }
+
 }
