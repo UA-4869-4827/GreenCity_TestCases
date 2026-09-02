@@ -8,12 +8,16 @@ import com.greencity.ui.modal.SignUpModal;
 import com.greencity.ui.page.aboutus.AboutUsPage;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.events.EventsPage;
+import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.ui.page.places.PlacesPage;
 import com.greencity.ui.page.profile.ProfilePage;
+import com.greencity.ui.page.ubscourier.UbsCourierPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.List;
 
 
 public class HeaderComponent extends BaseComponent {
@@ -35,6 +39,9 @@ public class HeaderComponent extends BaseComponent {
 
     @FindBy(xpath = ".//a[contains(@href,'/greenCity/profile')]")
     private WebElement mySpaceLink;
+
+    @FindBy(xpath = ".//a[contains(@href,'/ubs')]")
+    private WebElement ubsCourierLink;
 
     @FindBy(xpath = ".//a[contains(@class,'header_sign-in-link')]")
     private WebElement signInLink;
@@ -70,8 +77,25 @@ public class HeaderComponent extends BaseComponent {
         return isElementDisplayed(signUpLink);
     }
 
-    public HeaderComponent clickLogo() {
+    public HomePage clickLogo() {
         clickElement(logo);
+        return new HomePage(driver);
+    }
+
+    public String getSignUpText() {
+        return getElementText(signUpLink);
+    }
+
+    public List<String> getLanguageOptionLabels() {
+        return rootElement.findElements(By.cssSelector("li.lang-option")).stream()
+                .map(WebElement::getText)
+                .map(String::trim)
+                .filter(label -> !label.isEmpty())
+                .toList();
+    }
+
+    public HeaderComponent openLanguageSwitcher() {
+        clickElement(languageSwitcher);
         return this;
     }
 
@@ -98,6 +122,16 @@ public class HeaderComponent extends BaseComponent {
     public ProfilePage openMySpace() {
         clickElement(mySpaceLink);
         return new ProfilePage(driver);
+    }
+
+    public SignInModal openMySpaceAsGuest() {
+        clickElement(mySpaceLink);
+        return new SignInModal(driver);
+    }
+
+    public UbsCourierPage openUbsCourier() {
+        clickElement(ubsCourierLink);
+        return new UbsCourierPage(driver);
     }
 
     public SignInModal clickSignIn() {

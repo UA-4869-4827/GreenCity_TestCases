@@ -5,14 +5,12 @@ import org.openqa.selenium.WebDriver;
 
 public class FriendsPage extends BasePage {
 
-    private static final String FRIENDS_HASH = "/#/greenCity/friends";
-
     public FriendsPage(WebDriver driver) {
         super(driver);
-        waitUntilUrlContains(FRIENDS_HASH);
+        waitUntilUrlContains("/friends");
     }
 
     public boolean isOpened() {
-        return getCurrentUrl().contains(FRIENDS_HASH);
+        return getCurrentUrl().contains("/friends");
     }
 }

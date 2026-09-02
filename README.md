@@ -1,173 +1,154 @@
 # GreenCity Automated Tests
 
-Automated testing skeleton for the [GreenCity](https://www.greencity.cx.ua/#/greenCity) web application.
+UI test project for [GreenCity](https://www.greencity.cx.ua/#/greenCity).
 
-This repository is a **starting template for students**. It contains a Page Object Model (POM) structure, base test infrastructure, and one sample UI test. Your task is to add pages, components, and tests.
+The **Page Object Model is already in place**. Student work is to implement the GitHub test cases (issues) as JUnit tests that go through those page objects — not to rebuild the POM, and not to use raw Selenium in tests.
+
+First wave: **guest** role, default locale **En**. Test cases: issues [#36](https://github.com/UA-4869-4827/GreenCity_TestCases/issues/36)–[#70](https://github.com/UA-4869-4827/GreenCity_TestCases/issues/70). Parent user stories: [#12](https://github.com/UA-4869-4827/GreenCity_TestCases/issues/12)–[#30](https://github.com/UA-4869-4827/GreenCity_TestCases/issues/30).
 
 ## Technologies
 
 - **Java 21**
-- **JUnit 5** — test framework
-- **Selenium WebDriver** — UI automation
-- **Maven** — dependency management
-- **Allure** — test reporting
-- **Cucumber** — BDD (optional, for later tasks)
-- **Rest Assured** — API tests (optional, for later tasks)
+- **JUnit 5**
+- **Selenium WebDriver 4**
+- **Maven**
+- **Allure**
+- **Cucumber** / **Rest Assured** — available, not required for the first UI wave
 
-## Quick Start
+## Quick start
 
-### 1. Clone the repository
+### 1. Clone
 
 ```bash
 git clone https://github.com/UA-4869-4827/GreenCity_TestCases.git
 cd GreenCity_TestCases
 ```
 
-### 2. Configure test data
+### 2. Config
 
-Copy the example config and fill in your values:
+Copy the example file and fill in credentials locally:
 
 ```bash
 cp src/test/resources/config.properties.example src/test/resources/config.properties
 ```
 
-Edit `src/test/resources/config.properties`:
+Windows (PowerShell):
+
+```powershell
+copy src\test\resources\config.properties.example src\test\resources\config.properties
+```
+
+Important keys:
 
 ```properties
 base.ui.url=https://www.greencity.cx.ua/#/
-base.api.url=https://api-greencity.azurewebsites.net/
-implicitlyWait=10
-
-user.email=your.user@example.com
-user.name=Your User Name
-user.password=your_password
-
-admin.email=admin@example.com
-admin.name=Admin Name
-admin.password=admin_password
+implicitWait=0
+explicitWait=10
+locale=en
+headless=false
 ```
 
-> `config.properties` is in `.gitignore` — do not commit credentials.
+`implicitWait` must stay **0**. The POM uses explicit waits only. Mixing implicit wait with `WebDriverWait` makes tests flaky.
 
-### 3. Install dependencies
+`config.properties` is gitignored — do not commit passwords.
+
+### 3. Build
 
 ```bash
 mvn clean install -DskipTests
 ```
 
-### 4. Run the sample test
+Style check:
+
+```bash
+mvn checkstyle:check
+```
+
+### 4. Run tests
+
+Sample smoke (logo on Home):
 
 ```bash
 mvn -Dtest=BaseTest test
 ```
 
-Run all tests:
-
-```bash
-mvn test
-```
-
-Run a specific test class:
+One class:
 
 ```bash
 mvn -Dtest=YourTestClass test
 ```
 
-## Project Structure
+All tests:
 
-```
-src/
-├── main/java/com/greencity/
-│   ├── ui/
-│   │   ├── Base.java                    # common WebDriver helpers
-│   │   ├── page/
-│   │   │   ├── BasePage.java            # base class for all pages
-│   │   │   └── homepage/HomePage.java   # example page — extend this pattern
-│   │   ├── component/
-│   │   │   ├── BaseComponent.java
-│   │   │   ├── header/HeaderComponent.java
-│   │   │   └── footer/FooterComponent.java
-│   │   └── elements/BaseElement.java
-│   └── api/
-│       └── clients/BaseClient.java      # base class for API clients
-└── test/java/com/greencity/
-    ├── ui/
-    │   ├── testrunners/BaseTestRunner.java  # WebDriver setup/teardown
-    │   └── BaseTest.java                    # sample test
-    ├── api/testRunners/ApiTestRunner.java
-    ├── cucumber/
-    │   ├── TestRunnerCucumber.java
-    │   └── steps/BaseStep.java
-    └── utils/TestValueProvider.java         # reads config.properties
+```bash
+mvn test
 ```
 
-## How to Add Your Code
+## Conventions (follow these in tests)
 
-### New Page Object
+- Drive the UI through page / component / modal methods. Do not call `driver.findElement` from a test.
+- Guest actions that open Sign in use `…AsGuest()` and return `SignInModal` (for example `openMySpaceAsGuest()`, `addPlaceAsGuest()`, `createEventAsGuest()`). The method without `AsGuest` is the logged-in path and waits for the destination page — it will hang for a guest.
+- Sign in / Sign up / Forgot password are **modals**, not pages.
+- Do not return `WebElement` from the POM. Assert with page methods (`isLogoDisplayed()`, `getSignUpText()`, …).
+- Do not use `Thread.sleep`. If a wait is missing, add an explicit wait in the POM.
+- Visible copy that exists in `UiMessage` / `src/main/resources/i18n/` must come from there, not from hardcoded `"Sign up"` strings, so En/Uk still work.
+- Expected results follow the **live site** as written in the GitHub issue. If the issue and the UI disagree, raise it — do not “fix” the product in the test.
 
-1. Create a class in `src/main/java/com/greencity/ui/page/<pagename>/`
-2. Extend `BasePage`
-3. Add `@FindBy` locators and page methods
+## Project structure
 
-Example:
+```
+src/main/java/com/greencity/
+├── config/AppConfig.java              # config.properties + env/system overrides
+├── ui/
+│   ├── Base.java                      # clicks, types, explicit waits
+│   ├── locale/                        # UiLocale, UiMessage, LocaleSupport
+│   ├── page/                          # Home, Eco news, Events, Places, About us, …
+│   ├── component/                     # header, footer, cards, gallery toggle, comments
+│   └── modal/                         # Sign in, Sign up, Forgot password, Add place
+└── api/clients/BaseClient.java
 
-```java
-package com.greencity.ui.page.signin;
+src/main/resources/i18n/               # messages_en.properties, messages_uk.properties
 
-import com.greencity.ui.page.BasePage;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-
-public class SignInPage extends BasePage {
-
-    @FindBy(css = "input[formcontrolname='email']")
-    private WebElement emailInput;
-
-    public SignInPage(WebDriver driver) {
-        super(driver);
-    }
-}
+src/test/java/com/greencity/
+├── ui/testrunners/BaseTestRunner.java # Chrome, locale, HomePage
+├── ui/BaseTest.java                   # sample test
+├── api/testRunners/ApiTestRunner.java
+├── cucumber/
+└── utils/TestValueProvider.java
 ```
 
-### New Component
+`BaseTestRunner` always starts a **guest** session on Home, applies `locale` via `localStorage.language`, and sets implicit wait to zero.
 
-1. Create a class in `src/main/java/com/greencity/ui/component/<name>/`
-2. Extend `BaseComponent`
-3. Pass the root `WebElement` from the parent page
+## How to add a UI test
 
-### New UI Test
-
-1. Create a test class in `src/test/java/com/greencity/ui/`
-2. Extend `BaseTestRunner`
-3. Use JUnit 5 annotations (`@Test`, `@BeforeEach`, etc.)
-
-Example:
+1. Open the GitHub issue for your TC and follow its steps / expected.
+2. Create a class under `src/test/java/com/greencity/ui/` (group by area: header, home, news, events, …).
+3. Extend `BaseTestRunner`.
+4. Use JUnit 5 (`@Test`, assertions).
 
 ```java
 package com.greencity.ui;
 
+import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.testrunners.BaseTestRunner;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SignInTest extends BaseTestRunner {
+public class HeaderGuestTest extends BaseTestRunner {
 
     @Test
-    void signInPageShouldBeAccessible() {
-        assertTrue(homePage.getHeader().getLogo().isDisplayed());
+    void guestMySpaceOpensSignIn() {
+        SignInModal signIn = homePage.getHeader().openMySpaceAsGuest();
+        assertTrue(signIn.getModalTitleText().contains("Welcome back"));
     }
 }
 ```
 
-### Cucumber Feature (optional)
+Do not add a `SignInPage`. Auth is `homePage.getHeader().clickSignIn()`.
 
-1. Add `.feature` files to `src/test/resources/features/`
-2. Add step definitions in `src/test/java/com/greencity/cucumber/steps/`
-3. Run with `mvn -Dtest=TestRunnerCucumber test`
-
-## Allure Report
+## Allure
 
 ```bash
 mvn test
@@ -178,4 +159,4 @@ allure serve target/allure-results
 
 - Java 21+
 - Maven 3.8+
-- Google Chrome (WebDriver is managed automatically via WebDriverManager)
+- Google Chrome (driver via WebDriverManager)

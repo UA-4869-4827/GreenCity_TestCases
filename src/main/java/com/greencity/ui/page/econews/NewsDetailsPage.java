@@ -52,6 +52,14 @@ public class NewsDetailsPage extends BasePage {
         return this;
     }
 
+    public boolean isLikeDisabled() {
+        return getElementAttribute(likeButton, "class").contains("disable");
+    }
+
+    public boolean isEditDisplayed() {
+        return isElementDisplayed(editNewsButton);
+    }
+
     public EcoNewsPage goBackToNews() {
         clickElement(backToNewsButton);
         return new EcoNewsPage(driver);

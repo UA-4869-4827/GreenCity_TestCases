@@ -67,6 +67,16 @@ public class EcoNewsPage extends BasePage {
         return this;
     }
 
+    public EcoNewsPage openCreateNewsRoute() {
+        open(ECO_NEWS_HASH + "/create");
+        return this;
+    }
+
+    public NewsDetailsPage openNewsById(long newsId) {
+        open(ECO_NEWS_HASH + "/" + newsId);
+        return new NewsDetailsPage(driver);
+    }
+
     public EcoNewsPage filterBy(NewsTag tag) {
         clickBy(By.xpath("//button[.//span[normalize-space()=" + xpathLiteral(tag.getText()) + "]]"));
         return this;

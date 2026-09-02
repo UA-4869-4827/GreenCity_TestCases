@@ -42,9 +42,9 @@ public class AboutUsPage extends BasePage {
         return new ProfilePage(driver);
     }
 
-    public SignInModal formHabitFromAboutUsHeadingAsGuest() {
+    public AboutUsPage formHabitFromAboutUsHeadingAsGuest() {
         clickElement(habitButtonNextTo(UiMessage.ABOUT_US_HEADER));
-        return new SignInModal(driver);
+        return this;
     }
 
     public ProfilePage formHabitFromOurVisionHeading() {
@@ -52,9 +52,9 @@ public class AboutUsPage extends BasePage {
         return new ProfilePage(driver);
     }
 
-    public SignInModal formHabitFromOurVisionHeadingAsGuest() {
+    public AboutUsPage formHabitFromOurVisionHeadingAsGuest() {
         clickElement(habitButtonNextTo(UiMessage.ABOUT_US_VISION_HEADER));
-        return new SignInModal(driver);
+        return this;
     }
 
     public PlacesPage findEcoPlaces() {

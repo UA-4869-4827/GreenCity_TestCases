@@ -34,6 +34,14 @@ public class EventDetailsPage extends BasePage {
         return this;
     }
 
+    public boolean isLikeDisabled() {
+        return getElementAttribute(likeButton, "class").contains("disable");
+    }
+
+    public boolean isEditDisplayed() {
+        return isElementDisplayed(byNormalizedText("//button", UiMessage.EVENT_DETAILS_EDIT));
+    }
+
     public EventDetailsPage saveEvent() {
         clickBy(byNormalizedText("//button", UiMessage.EVENT_DETAILS_SAVE));
         return this;

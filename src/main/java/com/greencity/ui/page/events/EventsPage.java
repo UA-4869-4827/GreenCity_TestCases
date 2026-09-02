@@ -88,8 +88,26 @@ public class EventsPage extends BasePage {
         return this;
     }
 
+    public boolean isResetAllEnabled() {
+        waitUntilElementVisible(resetFiltersButton);
+        return resetFiltersButton.isEnabled();
+    }
+
+    public boolean isCreateEventDisplayed() {
+        return isElementDisplayed(createEventButton);
+    }
+
+    public boolean isDateRangeDisplayed() {
+        return isElementDisplayed(dateRangeStartInput);
+    }
+
     public String getItemsFoundText() {
         return getElementText(itemsFoundLabel);
+    }
+
+    public EventDetailsPage openEventById(int eventId) {
+        open(EVENTS_HASH + "/" + eventId);
+        return new EventDetailsPage(driver);
     }
 
     public EventCardComponent getEventCard(int index) {

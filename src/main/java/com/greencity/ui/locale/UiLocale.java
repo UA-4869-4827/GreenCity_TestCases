@@ -7,7 +7,7 @@ import java.util.Locale;
  */
 public enum UiLocale {
     EN("en", "En"),
-    UK("uk", "Ua");
+    UK("uk", "Uk");
 
     private final String code;
     private final String headerLabel;

@@ -3,6 +3,7 @@ package com.greencity.ui.page.places;
 import com.greencity.ui.component.MoreOptionsMenu;
 import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.AddPlaceModal;
+import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -86,6 +87,23 @@ public class PlacesPage extends BasePage {
     public AddPlaceModal addPlace() {
         clickElement(addPlaceButton);
         return new AddPlaceModal(driver);
+    }
+
+    public SignInModal addPlaceAsGuest() {
+        clickElement(addPlaceButton);
+        return new SignInModal(driver);
+    }
+
+    public String getSearchPlaceholder() {
+        return getElementAttribute(searchInput, "placeholder");
+    }
+
+    public String getLocationPlaceholder() {
+        return getElementAttribute(locationInput, "placeholder");
+    }
+
+    public boolean isMoreOptionsDisplayed() {
+        return isElementDisplayed(moreOptionsButton);
     }
 
     public boolean isPlaceInfoWindowDisplayed() {
