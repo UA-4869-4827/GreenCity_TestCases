@@ -2,8 +2,11 @@ package com.greencity.ui.page.econews;
 
 import com.greencity.ui.component.NewsCardComponent;
 import com.greencity.ui.component.ViewModeToggleComponent;
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
+import lombok.Getter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,26 +17,27 @@ public class EcoNewsPage extends BasePage {
 
     private static final String ECO_NEWS_HASH = "/#/greenCity/news";
 
-    @FindBy(xpath = "//button[.//span[normalize-space()='News']]")
-    private WebElement newsFilter;
+    @Getter
+    public enum NewsTag {
+        NEWS(UiMessage.NEWS_TAG_NEWS),
+        EVENTS(UiMessage.NEWS_TAG_EVENTS),
+        EDUCATION(UiMessage.NEWS_TAG_EDUCATION),
+        INITIATIVES(UiMessage.NEWS_TAG_INITIATIVES),
+        ADS(UiMessage.NEWS_TAG_ADS);
 
-    @FindBy(xpath = "//button[.//span[normalize-space()='Events']]")
-    private WebElement eventsFilter;
+        private final UiMessage message;
 
-    @FindBy(xpath = "//button[.//span[normalize-space()='Education']]")
-    private WebElement educationFilter;
+        NewsTag(UiMessage message) {
+            this.message = message;
+        }
 
-    @FindBy(xpath = "//button[.//span[normalize-space()='Initiatives']]")
-    private WebElement initiativesFilter;
-
-    @FindBy(xpath = "//button[.//span[normalize-space()='Ads']]")
-    private WebElement adsFilter;
+        public String getText() {
+            return message.text();
+        }
+    }
 
     @FindBy(css = "span.search-img")
     private WebElement searchButton;
-
-    @FindBy(css = "input[placeholder='Search']")
-    private WebElement searchInput;
 
     @FindBy(css = "img[alt='cancel search']")
     private WebElement clearSearchButton;
@@ -50,36 +54,42 @@ public class EcoNewsPage extends BasePage {
     @FindBy(xpath = "//span[@aria-label='table view']/parent::*")
     private WebElement viewModeRoot;
 
-    private ViewModeToggleComponent viewModeToggle;
+    @Getter
+    private final ViewModeToggleComponent viewModeToggle;
 
     public EcoNewsPage(WebDriver driver) {
         super(driver);
         this.viewModeToggle = new ViewModeToggleComponent(driver, viewModeRoot);
     }
 
-    public EcoNewsPage filterByNews() {
-        clickElement(newsFilter);
+    public EcoNewsPage open() {
+        open(ECO_NEWS_HASH);
         return this;
+    }
+
+    public EcoNewsPage filterBy(NewsTag tag) {
+        clickBy(By.xpath("//button[.//span[normalize-space()=" + xpathLiteral(tag.getText()) + "]]"));
+        return this;
+    }
+
+    public EcoNewsPage filterByNews() {
+        return filterBy(NewsTag.NEWS);
     }
 
     public EcoNewsPage filterByEvents() {
-        clickElement(eventsFilter);
-        return this;
+        return filterBy(NewsTag.EVENTS);
     }
 
     public EcoNewsPage filterByEducation() {
-        clickElement(educationFilter);
-        return this;
+        return filterBy(NewsTag.EDUCATION);
     }
 
     public EcoNewsPage filterByInitiatives() {
-        clickElement(initiativesFilter);
-        return this;
+        return filterBy(NewsTag.INITIATIVES);
     }
 
     public EcoNewsPage filterByAds() {
-        clickElement(adsFilter);
-        return this;
+        return filterBy(NewsTag.ADS);
     }
 
     public EcoNewsPage openSearch() {
@@ -88,11 +98,11 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage searchNews(String text) {
-        typeText(searchInput, text);
+        typeText(locateSearchInput(), text);
         return this;
     }
 
-    public EcoNewsPage clickClearSearch() {
+    public EcoNewsPage clearSearch() {
         clickElement(clearSearchButton);
         return this;
     }
@@ -111,7 +121,7 @@ public class EcoNewsPage extends BasePage {
         return getNewsCard(index).openNews();
     }
 
-    public CreateNewsPage clickCreateNews() {
+    public CreateNewsPage createNews() {
         clickElement(createNewsButton);
         return new CreateNewsPage(driver);
     }
@@ -121,27 +131,13 @@ public class EcoNewsPage extends BasePage {
     }
 
     public NewsCardComponent getNewsCard(int index) {
-        waitUntilAllElementsVisible(newsCards);
-        return new NewsCardComponent(driver, newsCards.get(index));
+        return new NewsCardComponent(driver, getVisibleItem(newsCards, index));
     }
 
-    public ViewModeToggleComponent getViewModeToggle() {
-        return viewModeToggle;
-    }
-
-    public EcoNewsPage open() {
-        String currentUrl = driver.getCurrentUrl();
-
-        String origin = currentUrl.contains("#")
-                ? currentUrl.substring(0, currentUrl.indexOf('#'))
-                : currentUrl;
-
-        origin = origin.replaceAll("/$", "");
-
-        driver.get(origin + ECO_NEWS_HASH);
-
-        waitForPageToLoad(10);
-
-        return this;
+    private WebElement locateSearchInput() {
+        By locator = By.xpath("//input[@placeholder="
+                + xpathLiteral(UiMessage.NEWS_SEARCH_PLACEHOLDER.text()) + "]");
+        waitUntilElementPresent(locator);
+        return driver.findElement(locator);
     }
 }

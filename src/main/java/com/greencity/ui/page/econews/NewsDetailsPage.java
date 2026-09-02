@@ -3,6 +3,7 @@ package com.greencity.ui.page.econews;
 import com.greencity.ui.component.CommentsComponent;
 import com.greencity.ui.component.SocialShareComponent;
 import com.greencity.ui.page.BasePage;
+import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -35,21 +36,15 @@ public class NewsDetailsPage extends BasePage {
     @FindBy(css = "app-warning-pop-up button.primary-global-button")
     private WebElement confirmDeleteButton;
 
-    private CommentsComponent comments;
-    private SocialShareComponent socialShare;
+    @Getter
+    private final CommentsComponent comments;
+    @Getter
+    private final SocialShareComponent socialShare;
 
     public NewsDetailsPage(WebDriver driver) {
         super(driver);
         this.socialShare = new SocialShareComponent(driver, socialShareRoot);
         this.comments = new CommentsComponent(driver, commentsRoot);
-    }
-
-    public CommentsComponent getComments() {
-        return comments;
-    }
-
-    public SocialShareComponent getSocialShare() {
-        return socialShare;
     }
 
     public NewsDetailsPage likeArticle() {
@@ -62,20 +57,19 @@ public class NewsDetailsPage extends BasePage {
         return new EcoNewsPage(driver);
     }
 
-    public CreateNewsPage clickEditNews() {
+    public CreateNewsPage editNews() {
         clickElement(editNewsButton);
         return new CreateNewsPage(driver);
     }
 
-    public EcoNewsPage clickDelete() {
+    public EcoNewsPage deleteNews() {
         clickElement(deleteButton);
         clickElement(confirmDeleteButton);
         return new EcoNewsPage(driver);
     }
 
     public NewsDetailsPage openRelatedNews(int index) {
-        waitUntilAllElementsVisible(relatedNewsList);
-        clickElement(relatedNewsList.get(index));
+        clickElement(getVisibleItem(relatedNewsList, index));
         return new NewsDetailsPage(driver);
     }
 }

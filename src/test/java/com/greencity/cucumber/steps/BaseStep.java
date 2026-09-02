@@ -1,5 +1,6 @@
 package com.greencity.cucumber.steps;
 
+import com.greencity.ui.locale.LocaleContext;
 import com.greencity.utils.TestValueProvider;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
@@ -22,31 +23,24 @@ public class BaseStep {
     public void initDriver() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-
-//        options.addArguments("--disable-notifications");
-//        options.addArguments("--disable-popup-blocking");
-//        options.addArguments("--headless");
+        if (provider.isHeadless()) {
+            options.addArguments("--headless=new");
+        }
 
         driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(provider.getImplicitlyWait()));
+        if (provider.isWindowMaximized() && !provider.isHeadless()) {
+            driver.manage().window().maximize();
+        }
+        driver.manage().timeouts().implicitlyWait(Duration.ZERO);
+        driver.manage().timeouts().pageLoadTimeout(provider.getPageLoadTimeout());
+        driver.manage().timeouts().scriptTimeout(provider.getScriptTimeout());
     }
 
-    protected void sleep(int seconds) {
-        try {
-            Thread.sleep(seconds * 1000L);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    protected void quitDriver() {
+        LocaleContext.clear();
+        if (driver != null) {
+            driver.quit();
+            driver = null;
         }
     }
-
-//    @Step("set AccessToken")
-//    public void setAccessToken() {
-//        WebStorage webStorage = (WebStorage) new Augmenter().augment(driver);
-//        LocalStorage localStorage = webStorage.getLocalStorage();
-//        localStorage.setItem("AccessToken", provider.getAccessToken());
-//        localStorage.setItem("RefreshToken", provider.getRefreshToken());
-//    }
-
-
 }

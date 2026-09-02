@@ -9,20 +9,21 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
-
 public abstract class BasePage extends Base {
     @Getter
     protected HeaderComponent header;
     @Getter
     protected FooterComponent footer;
 
-    @FindBy(xpath = "//app-header")
+    @FindBy(css = "app-header")
     private WebElement headerRoot;
-    @FindBy(xpath = "//footer")
+    @FindBy(css = "footer")
     private WebElement footerRoot;
 
     public BasePage(WebDriver driver) {
         super(driver);
+        initPageElements();
+        waitUntilElementVisible(headerRoot);
         header = new HeaderComponent(driver, headerRoot);
         footer = new FooterComponent(driver, footerRoot);
     }

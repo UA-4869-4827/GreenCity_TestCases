@@ -1,6 +1,8 @@
 package com.greencity.ui.component.header;
 
 import com.greencity.ui.component.BaseComponent;
+import com.greencity.ui.locale.LocaleContext;
+import com.greencity.ui.locale.UiLocale;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.modal.SignUpModal;
 import com.greencity.ui.page.aboutus.AboutUsPage;
@@ -8,7 +10,7 @@ import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.events.EventsPage;
 import com.greencity.ui.page.places.PlacesPage;
 import com.greencity.ui.page.profile.ProfilePage;
-import lombok.Getter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,36 +18,28 @@ import org.openqa.selenium.support.FindBy;
 
 public class HeaderComponent extends BaseComponent {
 
-    @Getter
     @FindBy(xpath = ".//img[@src='assets/img/logo.svg']")
     private WebElement logo;
 
-    @Getter
     @FindBy(xpath = ".//a[contains(@href,'/greenCity/news')]")
     private WebElement ecoNewsLink;
 
-    @Getter
     @FindBy(xpath = ".//a[contains(@href,'/greenCity/events')]")
     private WebElement eventsLink;
 
-    @Getter
     @FindBy(xpath = ".//a[contains(@href,'/greenCity/places')]")
     private WebElement placesLink;
 
-    @Getter
     @FindBy(xpath = ".//a[contains(@href,'/greenCity/about')]")
     private WebElement aboutUsLink;
 
-    @Getter
     @FindBy(xpath = ".//a[contains(@href,'/greenCity/profile')]")
     private WebElement mySpaceLink;
 
-    @Getter
     @FindBy(xpath = ".//a[contains(@class,'header_sign-in-link')]")
     private WebElement signInLink;
 
-    @Getter
-    @FindBy(xpath = ".//*[self::a or self::button or self::span][normalize-space()='Sign up']")
+    @FindBy(css = ".header_sign-up-link, .header_sign-up-btn")
     private WebElement signUpLink;
 
     @FindBy(xpath = ".//*[@id='header_user-wrp']")
@@ -57,8 +51,23 @@ public class HeaderComponent extends BaseComponent {
     @FindBy(xpath = ".//*[@aria-label='sign-out']//a")
     private WebElement signOutLink;
 
+    @FindBy(css = ".header_lang-switcher-wrp, .drop-down.header_lang, ul.header_add-lang")
+    private WebElement languageSwitcher;
+
     public HeaderComponent(WebDriver driver, WebElement rootElement) {
         super(driver, rootElement);
+    }
+
+    public boolean isLogoDisplayed() {
+        return isElementDisplayed(logo);
+    }
+
+    public boolean isSignInDisplayed() {
+        return isElementDisplayed(signInLink);
+    }
+
+    public boolean isSignUpDisplayed() {
+        return isElementDisplayed(signUpLink);
     }
 
     public HeaderComponent clickLogo() {
@@ -118,6 +127,18 @@ public class HeaderComponent extends BaseComponent {
         openUserMenu();
         clickElement(signOutLink);
         waitUntilElementVisible(signInLink);
+        return this;
+    }
+
+    public HeaderComponent switchLanguage(UiLocale locale) {
+        if (locale == LocaleContext.get()) {
+            return this;
+        }
+        clickElement(languageSwitcher);
+        clickElement(findIn(rootElement, By.xpath(".//*[normalize-space()="
+                + xpathLiteral(locale.getHeaderLabel()) + "]")));
+        LocaleContext.set(locale);
+        waitForPageToLoad();
         return this;
     }
 }

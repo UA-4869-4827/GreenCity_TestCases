@@ -1,5 +1,7 @@
 package com.greencity.ui.testrunners;
 
+import com.greencity.ui.locale.LocaleContext;
+import com.greencity.ui.locale.LocaleSupport;
 import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.utils.TestValueProvider;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -28,24 +30,29 @@ public class BaseTestRunner {
     void setUp() {
         initDriver();
         driver.get(testValueProvider.getBaseUIUrl());
+        LocaleSupport.apply(driver, testValueProvider.getLocale());
         homePage = new HomePage(driver);
     }
 
     @Step("init ChromeDriver")
     public void initDriver() {
         ChromeOptions options = new ChromeOptions();
-
-//        options.addArguments("--disable-notifications");
-//        options.addArguments("--disable-popup-blocking");
-//        options.addArguments("--headless");
+        if (testValueProvider.isHeadless()) {
+            options.addArguments("--headless=new");
+        }
 
         driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(testValueProvider.getImplicitlyWait()));
+        if (testValueProvider.isWindowMaximized() && !testValueProvider.isHeadless()) {
+            driver.manage().window().maximize();
+        }
+        driver.manage().timeouts().implicitlyWait(Duration.ZERO);
+        driver.manage().timeouts().pageLoadTimeout(testValueProvider.getPageLoadTimeout());
+        driver.manage().timeouts().scriptTimeout(testValueProvider.getScriptTimeout());
     }
 
     @AfterEach
     void tearDown() {
+        LocaleContext.clear();
         if (driver != null) {
             driver.quit();
         }

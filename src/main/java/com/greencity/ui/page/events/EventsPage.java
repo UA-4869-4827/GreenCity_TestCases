@@ -2,8 +2,10 @@ package com.greencity.ui.page.events;
 
 import com.greencity.ui.component.EventCardComponent;
 import com.greencity.ui.component.ViewModeToggleComponent;
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,18 +19,6 @@ public class EventsPage extends BasePage {
 
     @FindBy(css = "div.create button")
     private WebElement createEventButton;
-
-    @FindBy(xpath = "//mat-label[normalize-space()='Event time']/following-sibling::mat-select")
-    private WebElement eventTimeFilter;
-
-    @FindBy(xpath = "//mat-label[normalize-space()='Location']/following-sibling::mat-select")
-    private WebElement locationFilter;
-
-    @FindBy(xpath = "//mat-label[normalize-space()='Status']/following-sibling::mat-select")
-    private WebElement statusFilter;
-
-    @FindBy(xpath = "//mat-label[normalize-space()='Type']/following-sibling::mat-select")
-    private WebElement typeFilter;
 
     @FindBy(css = "input.mat-start-date")
     private WebElement dateRangeStartInput;
@@ -48,7 +38,8 @@ public class EventsPage extends BasePage {
     @FindBy(css = "div.change-view")
     private WebElement viewModeRoot;
 
-    private ViewModeToggleComponent viewModeToggle;
+    @Getter
+    private final ViewModeToggleComponent viewModeToggle;
 
     public EventsPage(WebDriver driver) {
         super(driver);
@@ -56,18 +47,8 @@ public class EventsPage extends BasePage {
     }
 
     public EventsPage open() {
-        String currentUrl = driver.getCurrentUrl();
-        String origin = currentUrl.contains("#")
-                ? currentUrl.substring(0, currentUrl.indexOf('#'))
-                : currentUrl;
-        origin = origin.replaceAll("/$", "");
-        driver.get(origin + EVENTS_HASH);
-        waitForPageToLoad(10);
+        open(EVENTS_HASH);
         return this;
-    }
-
-    public ViewModeToggleComponent getViewModeToggle() {
-        return viewModeToggle;
     }
 
     public CreateEventPage createEvent() {
@@ -81,19 +62,19 @@ public class EventsPage extends BasePage {
     }
 
     public EventsPage filterByEventTime(String value) {
-        return selectFilterOption(eventTimeFilter, value);
+        return selectFilterOption(UiMessage.EVENT_FILTER_TIME, value);
     }
 
     public EventsPage filterByLocation(String value) {
-        return selectFilterOption(locationFilter, value);
+        return selectFilterOption(UiMessage.EVENT_FILTER_LOCATION, value);
     }
 
     public EventsPage filterByStatus(String value) {
-        return selectFilterOption(statusFilter, value);
+        return selectFilterOption(UiMessage.EVENT_FILTER_STATUS, value);
     }
 
     public EventsPage filterByType(String value) {
-        return selectFilterOption(typeFilter, value);
+        return selectFilterOption(UiMessage.EVENT_FILTER_TYPE, value);
     }
 
     public EventsPage setDateRange(String startDate, String endDate) {
@@ -112,32 +93,17 @@ public class EventsPage extends BasePage {
     }
 
     public EventCardComponent getEventCard(int index) {
-        waitUntilAllElementsVisible(eventCards);
-        return new EventCardComponent(driver, eventCards.get(index));
+        return new EventCardComponent(driver, getVisibleItem(eventCards, index));
     }
 
     public EventDetailsPage openEventByIndex(int index) {
         return getEventCard(index).openEventDetails();
     }
 
-    private EventsPage selectFilterOption(WebElement filter, String value) {
-        clickElement(filter);
-        WebElement option = driver.findElement(
-                By.xpath("//mat-option[contains(normalize-space(.), " + xpathLiteral(value) + ")]"));
-        clickElement(option);
+    private EventsPage selectFilterOption(UiMessage filterLabel, String value) {
+        clickBy(By.xpath("//mat-label[normalize-space()=" + xpathLiteral(filterLabel.text())
+                + "]/following-sibling::mat-select"));
+        clickBy(By.xpath("//mat-option[contains(normalize-space(.), " + xpathLiteral(value) + ")]"));
         return this;
-    }
-
-    private static String xpathLiteral(String value) {
-        if (!value.contains("'")) {
-            return "'" + value + "'";
-        }
-        if (!value.contains("\"")) {
-            return "\"" + value + "\"";
-        }
-        String[] parts = value.split("'", -1);
-        StringBuilder concat = new StringBuilder("concat('");
-        concat.append(String.join("', \"'\", '", parts)).append("')");
-        return concat.toString();
     }
 }

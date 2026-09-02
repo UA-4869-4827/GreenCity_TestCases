@@ -1,5 +1,6 @@
 package com.greencity.ui.component;
 
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.events.CreateEventPage;
 import com.greencity.ui.page.events.EventDetailsPage;
@@ -11,15 +12,6 @@ public class EventCardComponent extends BaseComponent {
 
     @FindBy(css = "p.event-name")
     private WebElement title;
-
-    @FindBy(css = "button.secondary-global-button")
-    private WebElement moreButton;
-
-    @FindBy(css = "button.event-button")
-    private WebElement joinButton;
-
-    @FindBy(xpath = ".//button[normalize-space()='Edit event']")
-    private WebElement editButton;
 
     @FindBy(css = "button.like")
     private WebElement likeButton;
@@ -60,26 +52,26 @@ public class EventCardComponent extends BaseComponent {
     }
 
     public boolean isOwnEvent() {
-        return isElementDisplayed(editButton);
+        return isElementDisplayed(rootElement, byNormalizedText(".//button", UiMessage.EVENT_EDIT));
     }
 
     public EventDetailsPage openEventDetails() {
-        clickElement(moreButton);
+        clickElement(findIn(rootElement, byNormalizedText(".//button", UiMessage.EVENT_MORE)));
         return new EventDetailsPage(driver);
     }
 
     public CreateEventPage editEvent() {
-        clickElement(editButton);
+        clickElement(findIn(rootElement, byNormalizedText(".//button", UiMessage.EVENT_EDIT)));
         return new CreateEventPage(driver);
     }
 
     public EventCardComponent joinEvent() {
-        clickElement(joinButton);
+        clickElement(findIn(rootElement, byNormalizedText(".//button", UiMessage.EVENT_JOIN)));
         return this;
     }
 
     public SignInModal joinEventAsGuest() {
-        clickElement(joinButton);
+        clickElement(findIn(rootElement, byNormalizedText(".//button", UiMessage.EVENT_JOIN)));
         return new SignInModal(driver);
     }
 
