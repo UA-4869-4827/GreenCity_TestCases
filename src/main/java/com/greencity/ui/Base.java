@@ -27,6 +27,15 @@ public abstract class Base {
         PageFactory.initElements(this.driver, this);
     }
 
+    public void open(String pageHash) {
+        String currentUrl = driver.getCurrentUrl();
+        String origin = currentUrl.contains("#")
+                ? currentUrl.substring(0, currentUrl.indexOf('#'))
+                : currentUrl;
+        origin = origin.replaceAll("/$", "");
+        driver.get(origin + pageHash);
+        waitForPageToLoad(10);
+    }
 
     @Step("Refresh the page")
     public void refreshPage() {
