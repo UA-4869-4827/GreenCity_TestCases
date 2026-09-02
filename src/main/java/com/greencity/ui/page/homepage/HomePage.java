@@ -162,6 +162,7 @@ public class HomePage extends BasePage {
         clickElement(cupsStartHabitButton);
         return new SignInModal(driver);
     }
+
     public ProfilePage clickCupsStartHabitButton() {
         clickElement(cupsStartHabitButton);
         return new ProfilePage(driver);
@@ -187,7 +188,6 @@ public class HomePage extends BasePage {
     }
 
     public void enterNewsletterEmail(String email) {
-        clickElement(newsletterEmailInput);
         typeText(newsletterEmailInput, email);
     }
 
