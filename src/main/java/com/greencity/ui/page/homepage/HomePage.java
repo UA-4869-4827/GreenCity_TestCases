@@ -3,7 +3,8 @@ package com.greencity.ui.page.homepage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import com.greencity.ui.page.econews.EcoNewsPage;
-import com.greencity.ui.page.places.PlacesPage;
+import com.greencity.ui.page.profile.ProfilePage;
+import com.greencity.ui.page.ubscourier.UbsCourierPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -97,13 +98,7 @@ public class HomePage extends BasePage {
 //    Methods
 
     public HomePage open() {
-        String currentUrl = driver.getCurrentUrl();
-        String origin = currentUrl.contains("#")
-                ? currentUrl.substring(0, currentUrl.indexOf('#'))
-                : currentUrl;
-        origin = origin.replaceAll("/$", "");
-        driver.get(origin + GREEN_CITY_HOME_HASH);
-        waitForPageToLoad(10);
+        open(GREEN_CITY_HOME_HASH);
         return this;
     }
 
@@ -115,9 +110,14 @@ public class HomePage extends BasePage {
         return getElementText(mainDescription);
     }
 
-    public SignInModal clickMainStartHabitButton() {
+    public SignInModal clickMainStartHabitButtonAsGuest() {
         clickElement(mainStartHabitButton);
         return new SignInModal(driver);
+    }
+
+    public ProfilePage clickMainStartHabitButton() {
+        clickElement(mainStartHabitButton);
+        return new ProfilePage(driver);
     }
 
     public String getStatsTitleText() {
@@ -140,9 +140,14 @@ public class HomePage extends BasePage {
         return getElementText(cupsCounterValue);
     }
 
-    public SignInModal clickBagsStartHabitButton() {
+    public SignInModal clickBagsStartHabitButtonAsGuest() {
         clickElement(bagsStartHabitButton);
         return new SignInModal(driver);
+    }
+
+    public ProfilePage clickBagsStartHabitButton() {
+        clickElement(bagsStartHabitButton);
+        return new ProfilePage(driver);
     }
 
     public String getCupsCounterLabelText() {
@@ -153,19 +158,24 @@ public class HomePage extends BasePage {
         return getElementText(cupsQuestionText);
     }
 
-    public SignInModal clickCupsStartHabitButton() {
+    public SignInModal clickCupsStartHabitButtonAsGuest() {
         clickElement(cupsStartHabitButton);
         return new SignInModal(driver);
     }
 
-    public PlacesPage openEcoBagsPlaces() {
-        clickElement(buyEcoBagsLink);
-        return new PlacesPage(driver);
+    public ProfilePage clickCupsStartHabitButton() {
+        clickElement(cupsStartHabitButton);
+        return new ProfilePage(driver);
     }
 
-    public PlacesPage openCupDiscountPlaces() {
+    public UbsCourierPage openEcoBagsPlaces() {
+        clickElement(buyEcoBagsLink);
+        return new UbsCourierPage(driver);
+    }
+
+    public UbsCourierPage openCupDiscountPlaces() {
         clickElement(cupDiscountPlacesLink);
-        return new PlacesPage(driver);
+        return new UbsCourierPage(driver);
     }
 
     public String getEcoNewsTitleText() {

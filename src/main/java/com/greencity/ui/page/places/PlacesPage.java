@@ -1,8 +1,9 @@
 package com.greencity.ui.page.places;
 
 import com.greencity.ui.component.MoreOptionsMenu;
-import com.greencity.ui.modal.SignInModal;
+import com.greencity.ui.modal.AddPlaceModal;
 import com.greencity.ui.page.BasePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,29 +12,43 @@ public class PlacesPage extends BasePage {
 
     private static final String PLACES_HASH = "/#/greenCity/places";
 
+    public enum PlacesFilter {
+        SHOPS("Shops"),
+        RESTAURANTS("Restaurants"),
+        RECYCLING_POINTS("Recycling points"),
+        EVENTS("Events");
+
+        private final String text;
+
+        PlacesFilter(String text) {
+            this.text = text;
+        }
+
+        String getText() {
+            return text;
+        }
+    }
+
     @FindBy(css = "input[name='search']")
     private WebElement searchInput;
 
     @FindBy(css = "input.choose-location-input")
     private WebElement locationInput;
 
-    @FindBy(xpath = "//button[.//span[normalize-space()='Shops']]")
-    private WebElement shopsButton;
-
-    @FindBy(xpath = "//button[.//span[normalize-space()='Restaurants']]")
-    private WebElement restaurantsButton;
-
-    @FindBy(xpath = "//button[.//span[normalize-space()='Recycling points']]")
-    private WebElement recyclingPointsButton;
-
-    @FindBy(xpath = "//button[.//span[normalize-space()='Events']]")
-    private WebElement eventsButton;
-
-    @FindBy(css = "app-more-options-filter a.mat-mdc-menu-trigger")
+    @FindBy(css = "app-more-options-filter > a.custom-chip.global-tag")
     private WebElement moreOptionsButton;
 
-    @FindBy(xpath = "//button[normalize-space()='Add place']")
+    @FindBy(css = "div.search > button.secondary-global-button.m-btn")
     private WebElement addPlaceButton;
+
+    @FindBy(css = "div.content-info-pop-up")
+    private WebElement placeInfoWindow;
+
+    @FindBy(css = "div.content-info-pop-up h6.content-title")
+    private WebElement placeTitle;
+
+    @FindBy(css = "div.content-info-pop-up h6.content-address")
+    private WebElement placeAddress;
 
     public PlacesPage(WebDriver driver) {
         super(driver);
@@ -44,9 +59,12 @@ public class PlacesPage extends BasePage {
         String origin = currentUrl.contains("#")
                 ? currentUrl.substring(0, currentUrl.indexOf('#'))
                 : currentUrl;
+
         origin = origin.replaceAll("/$", "");
+
         driver.get(origin + PLACES_HASH);
         waitForPageToLoad(10);
+
         return this;
     }
 
@@ -60,23 +78,21 @@ public class PlacesPage extends BasePage {
         return this;
     }
 
-    public PlacesPage filterByShops() {
-        clickElement(shopsButton);
+    public PlacesPage filterBy(PlacesFilter filter) {
+        By locator = By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
+                + "//span[contains(@class,'text') and normalize-space()='"
+                + filter.getText() + "']");
+
+        waitUntilElementPresent(locator);
+        clickElement(driver.findElement(locator));
         return this;
     }
 
-    public PlacesPage filterByRestaurants() {
-        clickElement(restaurantsButton);
-        return this;
-    }
-
-    public PlacesPage filterByRecyclingPoints() {
-        clickElement(recyclingPointsButton);
-        return this;
-    }
-
-    public PlacesPage filterByEvents() {
-        clickElement(eventsButton);
+    public PlacesPage filterBySavedPlaces() {
+        By locator = By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
+                + "//span[contains(@class,'text') and normalize-space()='Saved places']");
+        waitUntilElementPresent(locator);
+        clickElement(driver.findElement(locator));
         return this;
     }
 
@@ -85,8 +101,20 @@ public class PlacesPage extends BasePage {
         return new MoreOptionsMenu(driver);
     }
 
-    public SignInModal addPlace() {
+    public AddPlaceModal addPlace() {
         clickElement(addPlaceButton);
-        return new SignInModal(driver);
+        return new AddPlaceModal(driver);
+    }
+
+    public boolean isPlaceInfoWindowDisplayed() {
+        return isElementDisplayed(placeInfoWindow);
+    }
+
+    public String getPlaceTitle() {
+        return getElementText(placeTitle);
+    }
+
+    public String getPlaceAddress() {
+        return getElementText(placeAddress);
     }
 }
