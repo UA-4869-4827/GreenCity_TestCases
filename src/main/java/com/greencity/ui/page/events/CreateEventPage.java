@@ -53,7 +53,6 @@ public class CreateEventPage extends BasePage {
     @FindBy(css = "mat-checkbox[formcontrolname='allDay'] div.mdc-checkbox")
     private WebElement allDayCheckbox;
 
-
     @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Place']]//div[contains(@class,'mdc-checkbox')]")
     private WebElement placeCheckbox;
 
@@ -86,7 +85,6 @@ public class CreateEventPage extends BasePage {
 
     @FindBy(css = "button.primary-global-button.submit-buttons")
     private WebElement publishButton;
-
 
     public CreateEventPage setTitle(String title) {
         typeText(titleInput, title);
@@ -222,16 +220,15 @@ public class CreateEventPage extends BasePage {
         return new EventsPage(driver);
     }
 
-    public CreateEventPage preview() {
+    public EventPreviewPage preview() {
         clickElement(previewButton);
-        return this;
+        return new EventPreviewPage(driver);
     }
 
-    public EventDetailsPage publish() {
+    public EventsPage publish() {
         clickElement(publishButton);
-        return new EventDetailsPage(driver);
+        return new EventsPage(driver);
     }
-
 
     private CreateEventPage selectDropdownOption(
             WebElement dropdown,

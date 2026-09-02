@@ -21,7 +21,6 @@ public class EventCardComponent extends BaseComponent {
     @FindBy(xpath = ".//button[normalize-space()='Edit event']")
     private WebElement editButton;
 
-
     @FindBy(css = "button.like")
     private WebElement likeButton;
 
@@ -32,7 +31,6 @@ public class EventCardComponent extends BaseComponent {
     private WebElement bookmarkButton;
 
     @FindBy(xpath = ".//div[contains(@class,'date-container')][.//span[contains(@class,'place')]]/p")
-
     private WebElement locationText;
 
     @FindBy(css = "div.date-container div.date")
@@ -41,11 +39,9 @@ public class EventCardComponent extends BaseComponent {
     @FindBy(css = "div.author p")
     private WebElement authorText;
 
-
     public EventCardComponent(WebDriver driver, WebElement rootElement) {
         super(driver, rootElement);
     }
-
 
     public String getTitle() {
         return getElementText(title);
@@ -63,7 +59,6 @@ public class EventCardComponent extends BaseComponent {
         return getElementText(authorText);
     }
 
-
     public boolean isOwnEvent() {
         return isElementDisplayed(editButton);
     }
@@ -73,12 +68,10 @@ public class EventCardComponent extends BaseComponent {
         return new EventDetailsPage(driver);
     }
 
-
     public CreateEventPage editEvent() {
         clickElement(editButton);
         return new CreateEventPage(driver);
     }
-
 
     public EventCardComponent joinEvent() {
         clickElement(joinButton);
@@ -90,7 +83,6 @@ public class EventCardComponent extends BaseComponent {
         return new SignInModal(driver);
     }
 
-
     public EventCardComponent likeEvent() {
         clickElement(likeButton);
         return this;
@@ -101,18 +93,15 @@ public class EventCardComponent extends BaseComponent {
         return new SignInModal(driver);
     }
 
-
     public EventCardComponent dislikeEvent() {
         clickElement(dislikeButton);
         return this;
     }
 
-
     public EventCardComponent bookmarkEvent() {
         clickElement(bookmarkButton);
         return this;
     }
-
 
     public SignInModal bookmarkEventAsGuest() {
         clickElement(bookmarkButton);
