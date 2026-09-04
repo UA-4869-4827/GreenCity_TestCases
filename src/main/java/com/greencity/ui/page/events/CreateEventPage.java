@@ -1,5 +1,6 @@
 package com.greencity.ui.page.events;
 
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,13 +11,6 @@ import java.util.List;
 
 public class CreateEventPage extends BasePage {
 
-    public CreateEventPage(WebDriver driver) {
-        super(driver);
-    }
-
-    @FindBy(xpath = "//mat-label[normalize-space()='Enter a name for the event']/ancestor::mat-form-field//input")
-    private WebElement titleInput;
-
     @FindBy(css = "mat-select[formcontrolname='duration']")
     private WebElement durationSelect;
 
@@ -25,9 +19,6 @@ public class CreateEventPage extends BasePage {
 
     @FindBy(css = "mat-select[formcontrolname='open']")
     private WebElement eventTypeDropdown;
-
-    @FindBy(xpath = "//mat-label[normalize-space()='Invite']/ancestor::mat-form-field//mat-select")
-    private WebElement inviteDropdown;
 
     @FindBy(css = "div.ql-editor")
     private WebElement descriptionEditor;
@@ -52,12 +43,6 @@ public class CreateEventPage extends BasePage {
 
     @FindBy(css = "mat-checkbox[formcontrolname='allDay'] div.mdc-checkbox")
     private WebElement allDayCheckbox;
-
-    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Place']]//div[contains(@class,'mdc-checkbox')]")
-    private WebElement placeCheckbox;
-
-    @FindBy(xpath = "//mat-checkbox[.//label[normalize-space()='Online']]//div[contains(@class,'mdc-checkbox')]")
-    private WebElement onlineCheckbox;
 
     @FindBy(css = "input[formcontrolname='place']")
     private WebElement locationInput;
@@ -86,8 +71,12 @@ public class CreateEventPage extends BasePage {
     @FindBy(css = "button.primary-global-button.submit-buttons")
     private WebElement publishButton;
 
+    public CreateEventPage(WebDriver driver) {
+        super(driver);
+    }
+
     public CreateEventPage setTitle(String title) {
-        typeText(titleInput, title);
+        typeText(locate(titleInput()), title);
         return this;
     }
 
@@ -113,7 +102,7 @@ public class CreateEventPage extends BasePage {
     }
 
     public CreateEventPage invite(String value) {
-        return selectDropdownOption(inviteDropdown, value);
+        return selectDropdownOption(locate(inviteDropdown()), value);
     }
 
     public CreateEventPage setDescription(String description) {
@@ -176,12 +165,12 @@ public class CreateEventPage extends BasePage {
     }
 
     public CreateEventPage togglePlace() {
-        clickElement(placeCheckbox);
+        clickElement(locate(placeCheckbox()));
         return this;
     }
 
     public CreateEventPage toggleOnline() {
-        clickElement(onlineCheckbox);
+        clickElement(locate(onlineCheckbox()));
         return this;
     }
 
@@ -211,7 +200,7 @@ public class CreateEventPage extends BasePage {
     }
 
     public CreateEventPage selectStockImage(int index) {
-        clickElement(stockImages.get(index));
+        clickElement(getVisibleItem(stockImages, index));
         return this;
     }
 
@@ -230,31 +219,38 @@ public class CreateEventPage extends BasePage {
         return new EventsPage(driver);
     }
 
-    private CreateEventPage selectDropdownOption(
-            WebElement dropdown,
-            String value
-    ) {
+    private CreateEventPage selectDropdownOption(WebElement dropdown, String value) {
         clickElement(dropdown);
-
-        WebElement option = driver.findElement(
-                By.xpath("//mat-option[normalize-space(.)=" + xpathLiteral(value) + "]")
-        );
-
-        clickElement(option);
-
+        clickBy(By.xpath("//mat-option[normalize-space(.)=" + xpathLiteral(value) + "]"));
         return this;
     }
 
-    private static String xpathLiteral(String value) {
-        if (!value.contains("'")) {
-            return "'" + value + "'";
-        }
-        if (!value.contains("\"")) {
-            return "\"" + value + "\"";
-        }
-        String[] parts = value.split("'", -1);
-        StringBuilder concat = new StringBuilder("concat('");
-        concat.append(String.join("', \"'\", '", parts)).append("')");
-        return concat.toString();
+    private WebElement locate(By locator) {
+        waitUntilElementPresent(locator);
+        return driver.findElement(locator);
+    }
+
+    private By titleInput() {
+        return By.xpath("//mat-label[normalize-space()="
+                + xpathLiteral(UiMessage.CREATE_EVENT_TITLE_LABEL.text())
+                + "]/ancestor::mat-form-field//input");
+    }
+
+    private By inviteDropdown() {
+        return By.xpath("//mat-label[normalize-space()="
+                + xpathLiteral(UiMessage.CREATE_EVENT_INVITE.text())
+                + "]/ancestor::mat-form-field//mat-select");
+    }
+
+    private By placeCheckbox() {
+        return By.xpath("//mat-checkbox[.//label[normalize-space()="
+                + xpathLiteral(UiMessage.CREATE_EVENT_PLACE.text())
+                + "]]//div[contains(@class,'mdc-checkbox')]");
+    }
+
+    private By onlineCheckbox() {
+        return By.xpath("//mat-checkbox[.//label[normalize-space()="
+                + xpathLiteral(UiMessage.CREATE_EVENT_ONLINE.text())
+                + "]]//div[contains(@class,'mdc-checkbox')]");
     }
 }

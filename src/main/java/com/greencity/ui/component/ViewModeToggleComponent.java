@@ -25,4 +25,16 @@ public class ViewModeToggleComponent extends BaseComponent {
         clickElement(listViewButton);
         return this;
     }
+
+    public boolean isTableViewPressed() {
+        return isPressed(tableViewButton);
+    }
+
+    public boolean isListViewPressed() {
+        return isPressed(listViewButton);
+    }
+
+    private boolean isPressed(WebElement toggle) {
+        return "true".equalsIgnoreCase(getElementAttribute(toggle, "aria-pressed"));
+    }
 }

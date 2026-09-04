@@ -1,8 +1,12 @@
 package com.greencity.ui.page.places;
 
 import com.greencity.ui.component.MoreOptionsMenu;
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.AddPlaceModal;
+import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,20 +16,19 @@ public class PlacesPage extends BasePage {
 
     private static final String PLACES_HASH = "/#/greenCity/places";
 
+    @Getter
+    @RequiredArgsConstructor
     public enum PlacesFilter {
-        SHOPS("Shops"),
-        RESTAURANTS("Restaurants"),
-        RECYCLING_POINTS("Recycling points"),
-        EVENTS("Events");
+        SHOPS(UiMessage.PLACES_FILTER_SHOPS),
+        RESTAURANTS(UiMessage.PLACES_FILTER_RESTAURANTS),
+        RECYCLING_POINTS(UiMessage.PLACES_FILTER_RECYCLING_POINTS),
+        EVENTS(UiMessage.PLACES_FILTER_EVENTS),
+        SAVED_PLACES(UiMessage.PLACES_FILTER_SAVED_PLACES);
 
-        private final String text;
+        private final UiMessage message;
 
-        PlacesFilter(String text) {
-            this.text = text;
-        }
-
-        String getText() {
-            return text;
+        public String getText() {
+            return message.text();
         }
     }
 
@@ -55,16 +58,7 @@ public class PlacesPage extends BasePage {
     }
 
     public PlacesPage open() {
-        String currentUrl = driver.getCurrentUrl();
-        String origin = currentUrl.contains("#")
-                ? currentUrl.substring(0, currentUrl.indexOf('#'))
-                : currentUrl;
-
-        origin = origin.replaceAll("/$", "");
-
-        driver.get(origin + PLACES_HASH);
-        waitForPageToLoad(10);
-
+        open(PLACES_HASH);
         return this;
     }
 
@@ -79,20 +73,9 @@ public class PlacesPage extends BasePage {
     }
 
     public PlacesPage filterBy(PlacesFilter filter) {
-        By locator = By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
-                + "//span[contains(@class,'text') and normalize-space()='"
-                + filter.getText() + "']");
-
-        waitUntilElementPresent(locator);
-        clickElement(driver.findElement(locator));
-        return this;
-    }
-
-    public PlacesPage filterBySavedPlaces() {
-        By locator = By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
-                + "//span[contains(@class,'text') and normalize-space()='Saved places']");
-        waitUntilElementPresent(locator);
-        clickElement(driver.findElement(locator));
+        clickBy(By.xpath("//app-tag-filter//button[contains(@class,'tag-button')]"
+                + "//span[contains(@class,'text') and normalize-space()="
+                + xpathLiteral(filter.getText()) + "]"));
         return this;
     }
 
@@ -104,6 +87,23 @@ public class PlacesPage extends BasePage {
     public AddPlaceModal addPlace() {
         clickElement(addPlaceButton);
         return new AddPlaceModal(driver);
+    }
+
+    public SignInModal addPlaceAsGuest() {
+        clickElement(addPlaceButton);
+        return new SignInModal(driver);
+    }
+
+    public String getSearchPlaceholder() {
+        return getElementAttribute(searchInput, "placeholder");
+    }
+
+    public String getLocationPlaceholder() {
+        return getElementAttribute(locationInput, "placeholder");
+    }
+
+    public boolean isMoreOptionsDisplayed() {
+        return isElementDisplayed(moreOptionsButton);
     }
 
     public boolean isPlaceInfoWindowDisplayed() {
