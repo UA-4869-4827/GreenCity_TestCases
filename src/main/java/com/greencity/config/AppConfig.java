@@ -30,7 +30,7 @@ public final class AppConfig {
     }
 
     public String baseUiUrl() {
-        return get("base.ui.url", "https://www.greencity.cx.ua/#/");
+        return get("base.ui.url", "https://www.greencity.cx.ua/#/greenCity");
     }
 
     public String baseApiUrl() {
