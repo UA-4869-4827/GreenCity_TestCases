@@ -1,7 +1,7 @@
 # Copy to config.properties and fill in credentials.
 # config.properties is gitignored — do not commit passwords.
 
-base.ui.url=https://www.greencity.cx.ua/#/
+base.ui.url=https://www.greencity.cx.ua/#/greenCity
 base.api.url=https://api-greencity.azurewebsites.net/
 
 # Selenium waits. implicitWait MUST stay 0 when using explicit waits in the POM.
