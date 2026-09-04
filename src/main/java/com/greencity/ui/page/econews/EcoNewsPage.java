@@ -67,6 +67,10 @@ public class EcoNewsPage extends BasePage {
         return this;
     }
 
+    public boolean isOpened() {
+        return getCurrentUrl().contains(ECO_NEWS_HASH);
+    }
+
     public EcoNewsPage openCreateNewsRoute() {
         open(ECO_NEWS_HASH + "/create");
         return this;
