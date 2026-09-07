@@ -20,6 +20,7 @@ public abstract class BaseModal<T extends BaseModal<T>> extends Base {
 
     protected BaseModal(WebDriver driver) {
         super(driver);
+        initPageElements();
         waitUntilElementVisible(closeButton);
     }
 
@@ -63,5 +64,9 @@ public abstract class BaseModal<T extends BaseModal<T>> extends Base {
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Cannot create page: " + pageClass.getSimpleName(), e);
         }
+    }
+
+    public boolean isGoogleButtonDisplayed() {
+        return isElementDisplayed(googleButton);
     }
 }
