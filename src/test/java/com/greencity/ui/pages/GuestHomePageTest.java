@@ -12,7 +12,7 @@ public class GuestHomePageTest extends BaseTestRunner {
 
     @Test
     void guestShouldSeeHeroBlockTitle() {
-        assertEquals(UiMessage.HOMEPAGE_HERO_TITLE.text(), homePage.getHeroTitleText());
+        assertEquals(UiMessage.HOMEPAGE_HERO_TITLE.text(), homePage.getHeroTitleText(), "Hero title is incorrect");
     }
 
     @Test
@@ -22,17 +22,17 @@ public class GuestHomePageTest extends BaseTestRunner {
 
     @Test
     void guestShouldSeeHeroPicture() {
-        assertTrue(homePage.isHeroPictureVisible());
+        assertTrue(homePage.isHeroPictureVisible(), "Hero picture is not displayed");
     }
 
     @Test
     void guestShouldSeeHeroStartHabitButton() {
-        assertTrue(homePage.isHeroStartHabitButtonVisible(), "Main start habit button is not displayed.");
+        assertTrue(homePage.isHeroStartHabitButtonVisible(), "Hero start habit button is not displayed.");
     }
 
     @Test
     void signInModalShouldBeOpenWhileClickOnMainHabitButton() {
         SignInModal signInModal = homePage.clickHeroStartHabitButtonAsGuest();
-        assertEquals(UiMessage.SIGN_IN_MODAL_WELCOME_TEXT.text(), signInModal.getModalTitleText());
+        assertEquals(UiMessage.SIGN_IN_MODAL_WELCOME_TEXT.text(), signInModal.getModalTitleText(), "Sign In modal title is incorrect");
     }
 }
