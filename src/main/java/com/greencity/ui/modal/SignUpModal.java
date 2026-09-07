@@ -29,7 +29,7 @@ public class SignUpModal extends BaseModal<SignUpModal> {
     @FindBy(css = "form.form-content-container button[type='submit']")
     private WebElement signUpButton;
 
-    @FindBy(css = "div.exist-account a.green-link")
+    @FindBy(css = ".exist-account a")
     private WebElement signInLink;
 
     @FindBy(id = "email-err-msg")
@@ -44,7 +44,7 @@ public class SignUpModal extends BaseModal<SignUpModal> {
     @FindBy(id = "confirm-err-msg")
     private WebElement confirmErrorMessage;
 
-    @FindBy(css = "p.password-not-valid")
+    @FindBy(css = "form.form-content-container p")
     private WebElement passwordNotValidMessage;
 
     public SignUpModal(WebDriver driver) {
@@ -122,6 +122,24 @@ public class SignUpModal extends BaseModal<SignUpModal> {
     public String getRepeatPasswordFieldType() {
         return getElementAttribute(repeatPasswordInput, "type");
     }
+
+    public boolean isEmailInputDisplayed() { return isElementDisplayed(emailInput); }
+
+    public boolean isUserNameInputDisplayed() { return isElementDisplayed(userNameInput); }
+
+    public boolean isPasswordInputDisplayed() { return isElementDisplayed(passwordInput); }
+
+    public boolean isRepeatPasswordInputDisplayed() { return isElementDisplayed(repeatPasswordInput); }
+
+    public boolean isSignUpButtonDisplayed() { return isElementDisplayed(signUpButton); }
+
+    public boolean isSignInLinkDisplayed() {
+        waitUntilElementVisible(signInLink);
+        return isElementDisplayed(signInLink);
+    }
+
+    public boolean isModalClosed() { return !isElementDisplayed(signUpButton); }
+
 
     @Step("Sign up with email {email}")
     public <P extends BasePage> P signUp(String email, String userName, String password, Class<P> pageClass) {
