@@ -6,6 +6,11 @@ package com.greencity.ui.locale;
 public enum UiMessage {
     SIGN_UP("top-bar.sign-up"),
 
+    HOMEPAGE_HABIT_BUTTON("homepage.habit-button"),
+    HOMEPAGE_HERO_TITLE("homepage.hero.title"),
+
+    SIGN_IN_MODAL_WELCOME_TEXT("sign-in-modal.welcome.text"),
+
     EVENT_MORE("event.btn-top"),
     EVENT_JOIN("event.btn-join"),
     EVENT_EDIT("event.btn-edit"),

@@ -17,18 +17,22 @@ public class HomePage extends BasePage {
 
     private static final String GREEN_CITY_HOME_HASH = "/#/greenCity";
 
-//    Main Section
+//    Hero Section
 
     @FindBy(css = "#header-left h1")
-    private WebElement mainTitle;
+    private WebElement heroTitle;
 
     @FindBy(css = "#header-left p")
-    private WebElement mainDescription;
+    private WebElement heroDescription;
 
     @FindBy(css = "#header-left button.primary-global-button")
-    private WebElement mainStartHabitButton;
+    private WebElement heroStartHabitButton;
 
-//    Stats Section (Bags)
+    @FindBy(id = "#guy-image")
+    private WebElement heroPicture;
+
+
+    //    Stats Section (Bags)
     @FindBy(css = "#stats > h2.section-caption")
     private WebElement statsTitle;
 
@@ -47,7 +51,7 @@ public class HomePage extends BasePage {
     @FindBy(css = "#stat-rows app-stat-row:nth-of-type(1) a[routerlink='/places']")
     private WebElement buyEcoBagsLink;
 
-//    Stats Section (Cups)
+    //    Stats Section (Cups)
     @FindBy(css = "#stat-rows app-stat-row:nth-of-type(2) h3")
     private WebElement cupsCounterLabel;
 
@@ -63,14 +67,14 @@ public class HomePage extends BasePage {
     @FindBy(css = "#stat-rows app-stat-row:nth-of-type(2) a[routerlink='/places']")
     private WebElement cupDiscountPlacesLink;
 
-//    Eco News Section
+    //    Eco News Section
     @FindBy(css = "#events h2.section-caption")
     private WebElement ecoNewsTitle;
 
     @FindBy(css = "#events a.centered")
     private WebElement readAllNewsLink;
 
-//    Subscription Section
+    //    Subscription Section
     @FindBy(css = "#qr-code-wrapper img")
     private WebElement qrCodeImage;
 
@@ -102,21 +106,34 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public String getMainTitleText() {
-        return getElementText(mainTitle);
+    public String getHeroTitleText() {
+        return getElementText(heroTitle);
     }
 
-    public String getMainDescriptionText() {
-        return getElementText(mainDescription);
+    public String getHeroDescriptionText() {
+        return getElementText(heroDescription);
     }
 
-    public SignInModal clickMainStartHabitButtonAsGuest() {
-        clickElement(mainStartHabitButton);
+    public boolean isHeroDescriptionTextVisible() {
+        return isElementDisplayed(heroDescription);
+    }
+
+    public boolean isHeroPictureVisible() {
+        return isElementInvisible(heroPicture);
+    }
+
+    public boolean isHeroStartHabitButtonVisible() {
+        return isElementDisplayed(heroStartHabitButton);
+    }
+
+    public SignInModal clickHeroStartHabitButtonAsGuest() {
+        clickElement(heroStartHabitButton);
+        waitForPageToLoad();
         return new SignInModal(driver);
     }
 
-    public ProfilePage clickMainStartHabitButton() {
-        clickElement(mainStartHabitButton);
+    public ProfilePage clickHeroStartHabitButton() {
+        clickElement(heroStartHabitButton);
         return new ProfilePage(driver);
     }
 
