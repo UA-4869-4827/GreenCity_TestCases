@@ -28,7 +28,7 @@ public class HomePage extends BasePage {
     @FindBy(css = "#header-left button.primary-global-button")
     private WebElement heroStartHabitButton;
 
-    @FindBy(id = "#guy-image")
+    @FindBy(css = "#guy-image")
     private WebElement heroPicture;
 
 
@@ -119,7 +119,10 @@ public class HomePage extends BasePage {
     }
 
     public boolean isHeroPictureVisible() {
-        return isElementInvisible(heroPicture);
+//        return isElementDisplayed(heroPicture);
+        waitUntilElementVisible(heroPicture);
+        return isElementDisplayed(heroPicture);
+
     }
 
     public boolean isHeroStartHabitButtonVisible() {
