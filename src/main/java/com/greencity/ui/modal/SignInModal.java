@@ -108,4 +108,24 @@ public class SignInModal extends BaseModal<SignInModal> {
         enterEmail(email);
         enterPassword(password);
     }
+
+    public boolean isEmailDisplayed() {
+        return isElementDisplayed(emailInput);
+    }
+
+    public boolean isPasswordDisplayed() {
+        return isElementDisplayed(passwordInput);
+    }
+
+    public boolean isForgotPasswordDisplayed() {
+        return isElementDisplayed(forgotPasswordLink);
+    }
+
+    public boolean isSignUpDisplayed() {
+        return isElementDisplayed(signUpLink);
+    }
+
+    public boolean isCloseButtonDisplayed() {
+        return isElementDisplayed(closeButton);
+    }
 }
