@@ -1,7 +1,21 @@
-base.ui.url=https://www.greencity.cx.ua/#/
+# Copy to config.properties and fill in credentials.
+# config.properties is gitignored — do not commit passwords.
+
+base.ui.url=https://www.greencity.cx.ua/#/greenCity
 base.api.url=https://api-greencity.azurewebsites.net/
 
-implicitlyWait=10
+# Selenium waits. implicitWait MUST stay 0 when using explicit waits in the POM.
+implicitWait=0
+explicitWait=10
+pageLoadTimeout=30
+scriptTimeout=30
+
+# UI language: en | uk  (GreenCity localStorage key "language")
+locale=en
+
+browser=chrome
+headless=false
+window.maximize=true
 
 user.email=your.user@example.com
 user.name=Your User Name

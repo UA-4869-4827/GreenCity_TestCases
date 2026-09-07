@@ -25,4 +25,4 @@ test:
 
 code_style:
   formatter: intellij
-  linter: none
+  linter: checkstyle

@@ -50,6 +50,7 @@ public class ForgotPasswordModal extends BaseModal<ForgotPasswordModal> {
     }
 
     public boolean isSendLinkButtonEnabled() {
+        waitUntilElementVisible(sendLinkButton);
         return sendLinkButton.isEnabled();
     }
 

@@ -14,13 +14,13 @@ public class MoreOptionsMenu extends Base {
 
     public MoreOptionsMenu(WebDriver driver) {
         super(driver);
+        initPageElements();
         waitUntilElementVisible(menuPanel);
     }
 
     public PlacesPage selectOption(String optionText) {
-        WebElement option = menuPanel.findElement(
-                By.xpath(".//button[contains(normalize-space(.), '" + optionText + "')]"));
-        clickElement(option);
+        clickBy(By.xpath("//div[contains(@class,'mat-mdc-menu-panel') or contains(@class,'mat-menu-panel')]"
+                + "//button[contains(normalize-space(.), " + xpathLiteral(optionText) + ")]"));
         return new PlacesPage(driver);
     }
 }
