@@ -5,6 +5,7 @@ import com.greencity.ui.component.ViewModeToggleComponent;
 import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
+import io.qameta.allure.Step;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -131,6 +132,19 @@ public class EcoNewsPage extends BasePage {
         return getNewsCard(index).openNews();
     }
 
+    @Step("Open news by title {title}")
+    public NewsDetailsPage openNewsByTitle(String title) {
+        By cardLink = By.xpath(
+                "//app-news-list-gallery-view//h3[normalize-space()=" + xpathLiteral(title) + "]");
+        waitUntilElementPresent(cardLink);
+        WebElement card = driver.findElement(cardLink);
+        scrollToElementWithJs(card);
+        clickElement(card);
+        wait.until(d -> d.getCurrentUrl().matches(".*/greenCity/news/\\d+$"));
+        waitForPageToLoad();
+        return new NewsDetailsPage(driver);
+    }
+
     public CreateNewsPage createNews() {
         clickElement(createNewsButton);
         return new CreateNewsPage(driver);
@@ -138,6 +152,10 @@ public class EcoNewsPage extends BasePage {
 
     public boolean isCreateNewsButtonDisplayed() {
         return isElementDisplayed(createNewsButton);
+    }
+
+    public boolean isNewsListOpened() {
+        return driver.getCurrentUrl().matches(".*/greenCity/news/?$");
     }
 
     public NewsCardComponent getNewsCard(int index) {

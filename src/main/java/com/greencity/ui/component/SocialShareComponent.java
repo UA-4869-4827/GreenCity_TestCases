@@ -30,4 +30,10 @@ public class SocialShareComponent extends BaseComponent {
     public void shareToFacebook() {
         clickElement(facebookButton);
     }
+
+    public boolean isTwitterDisplayed() { return isElementDisplayed(twitterButton); }
+
+    public boolean isLinkedInDisplayed() { return isElementDisplayed(linkedinButton); }
+
+    public boolean isFacebookDisplayed() { return isElementDisplayed(facebookButton); }
 }

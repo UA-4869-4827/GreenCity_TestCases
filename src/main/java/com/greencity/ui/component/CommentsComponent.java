@@ -24,6 +24,9 @@ public class CommentsComponent extends BaseComponent {
     @FindBy(css = "app-add-comment button.primary-global-button")
     private WebElement addCommentButton;
 
+    @FindBy(css = "#total-count")
+    private WebElement totalCount;
+
     public CommentsComponent(WebDriver driver, WebElement rootElement) {
         super(driver, rootElement);
     }
@@ -57,4 +60,13 @@ public class CommentsComponent extends BaseComponent {
         return this;
     }
 
+    public boolean isCommentsCountDisplayed() {
+        return isElementDisplayed(totalCount);
+    }
+
+    public int getTotalCommentsCount() {
+        String digits = getElementText(totalCount).replaceAll("\\D", "");
+        return digits.isEmpty() ? 0 : Integer.parseInt(digits);
+    }
 }
+
