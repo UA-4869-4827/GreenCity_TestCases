@@ -131,4 +131,22 @@ public class SignInTest extends BaseTestRunner {
 
         assertTrue(signInModal.isCloseButtonDisplayed());
     }
+
+    // TC-P1-SIN-03 – Valid credentials close the modal and authenticate the header #50//
+
+    @Test
+    void registeredUserShouldSignInSuccessfully() {
+        SignInModal signInModal = homePage.getHeader().clickSignIn();
+
+        signInModal.enterEmail(testValueProvider.getUserEmail());
+        signInModal.enterPassword(testValueProvider.getUserPassword());
+
+        signInModal.clickSignInButton();
+
+        assertFalse(signInModal.isCloseButtonDisplayed());
+
+        assertTrue(homePage.getHeader().isLoggedIn());
+
+        assertFalse(homePage.getHeader().isSignUpDisplayed());
+    }
 }
