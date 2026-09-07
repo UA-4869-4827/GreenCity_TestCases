@@ -29,6 +29,7 @@ public class AddPlaceModal extends Base {
 
     public AddPlaceModal(WebDriver driver) {
         super(driver);
+        initPageElements();
         waitUntilElementVisible(formContainer);
     }
 

@@ -1,11 +1,13 @@
 package com.greencity.ui.page.aboutus;
 
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.friends.FriendsPage;
 import com.greencity.ui.page.places.PlacesPage;
 import com.greencity.ui.page.profile.ProfilePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,12 +15,6 @@ import org.openqa.selenium.support.FindBy;
 public class AboutUsPage extends BasePage {
 
     private static final String ABOUT_US_HASH = "/#/greenCity/about";
-
-    @FindBy(xpath = "//h2[contains(normalize-space(.), 'About Us')]/following-sibling::button")
-    private WebElement formHabitFromAboutUsButton;
-
-    @FindBy(xpath = "//h2[contains(normalize-space(.), 'Our vision')]/following-sibling::button")
-    private WebElement formHabitFromOurVisionButton;
 
     @FindBy(css = "a.vision-card__link[href*='/places']")
     private WebElement findEcoPlacesLink;
@@ -37,34 +33,28 @@ public class AboutUsPage extends BasePage {
     }
 
     public AboutUsPage open() {
-        String currentUrl = driver.getCurrentUrl();
-        String origin = currentUrl.contains("#")
-                ? currentUrl.substring(0, currentUrl.indexOf('#'))
-                : currentUrl;
-        origin = origin.replaceAll("/$", "");
-        driver.get(origin + ABOUT_US_HASH);
-        waitForPageToLoad(10);
+        open(ABOUT_US_HASH);
         return this;
     }
 
     public ProfilePage formHabitFromAboutUsHeading() {
-        clickElement(formHabitFromAboutUsButton);
+        clickElement(habitButtonNextTo(UiMessage.ABOUT_US_HEADER));
         return new ProfilePage(driver);
     }
 
-    public SignInModal formHabitFromAboutUsHeadingAsGuest() {
-        clickElement(formHabitFromAboutUsButton);
-        return new SignInModal(driver);
+    public AboutUsPage formHabitFromAboutUsHeadingAsGuest() {
+        clickElement(habitButtonNextTo(UiMessage.ABOUT_US_HEADER));
+        return this;
     }
 
     public ProfilePage formHabitFromOurVisionHeading() {
-        clickElement(formHabitFromOurVisionButton);
+        clickElement(habitButtonNextTo(UiMessage.ABOUT_US_VISION_HEADER));
         return new ProfilePage(driver);
     }
 
-    public SignInModal formHabitFromOurVisionHeadingAsGuest() {
-        clickElement(formHabitFromOurVisionButton);
-        return new SignInModal(driver);
+    public AboutUsPage formHabitFromOurVisionHeadingAsGuest() {
+        clickElement(habitButtonNextTo(UiMessage.ABOUT_US_VISION_HEADER));
+        return this;
     }
 
     public PlacesPage findEcoPlaces() {
@@ -95,6 +85,12 @@ public class AboutUsPage extends BasePage {
     public SignInModal findPeopleFromIDontFeelHeadingAsGuest() {
         clickElement(findPeopleFromIDontFeelLink);
         return new SignInModal(driver);
+    }
+
+    private WebElement habitButtonNextTo(UiMessage heading) {
+        By locator = byNormalizedTextContains("//h2", heading);
+        waitUntilElementPresent(locator);
+        return driver.findElement(locator).findElement(By.xpath("./following-sibling::button"));
     }
 
 }
