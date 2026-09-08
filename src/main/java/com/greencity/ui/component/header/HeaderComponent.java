@@ -68,21 +68,25 @@ public class HeaderComponent extends BaseComponent {
 
     public EcoNewsPage openEcoNews() {
         clickElement(ecoNewsLink);
+        waitUntilUrlContains("#/greenCity/news");
         return new EcoNewsPage(driver);
     }
 
     public EventsPage openEvents() {
         clickElement(eventsLink);
+        //waitUntilUrlContains("#/greenCity/events");
         return new EventsPage(driver);
     }
 
     public PlacesPage openPlaces() {
         clickElement(placesLink);
+        waitUntilUrlContains("#/greenCity/places");
         return new PlacesPage(driver);
     }
 
     public AboutUsPage openAboutUs() {
         clickElement(aboutUsLink);
+        waitUntilUrlContains("#/greenCity/about");
         return new AboutUsPage(driver);
     }
 
