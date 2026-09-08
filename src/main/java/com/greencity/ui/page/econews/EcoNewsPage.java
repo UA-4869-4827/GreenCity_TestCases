@@ -7,12 +7,19 @@ import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
 public class EcoNewsPage extends BasePage {
 
     private static final String ECO_NEWS_HASH = "/#/greenCity/news";
+
+    @FindBy(css = "h1.main-header")
+    private WebElement pageHeading;
+
+    @FindBy(css = "div[aria-label='filter by items'] button.tag-button span.text")
+    private List<WebElement> filterLabels;
 
     @FindBy(xpath = "//button[.//span[normalize-space()='News']]")
     private WebElement newsFilter;
@@ -144,4 +151,24 @@ public class EcoNewsPage extends BasePage {
 
         return this;
     }
+
+    public List<String> getFilterLabels() {
+        waitUntilAllElementsVisible(filterLabels);
+
+        return filterLabels.stream()
+                .map(this::getElementText)
+                .toList();
+    }
+
+    public String getPageHeadingText() {
+        return getElementText(pageHeading);
+    }
+
+    public void waitForHeading(String expectedText) {
+        wait.until(ExpectedConditions.textToBePresentInElement(
+                pageHeading,
+                expectedText
+        ));
+    }
+
 }
