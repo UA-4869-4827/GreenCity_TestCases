@@ -54,6 +54,9 @@ public class EcoNewsPage extends BasePage {
     @FindBy(xpath = "//span[@aria-label='table view']/parent::*")
     private WebElement viewModeRoot;
 
+    @FindBy(css = "h1")
+    private WebElement pageTitle;
+
     @Getter
     private final ViewModeToggleComponent viewModeToggle;
 
@@ -100,6 +103,18 @@ public class EcoNewsPage extends BasePage {
 
     public EcoNewsPage filterByAds() {
         return filterBy(NewsTag.ADS);
+    }
+
+    public boolean isFilterDisplayed(NewsTag tag) {
+        By filterLocator = By.xpath(
+                "//button[.//span[normalize-space()="
+                        + xpathLiteral(tag.getText()) + "]]");
+        return isElementDisplayed(filterLocator);
+    }
+
+    public boolean areAllFiltersDisplayed() {
+        return List.of(NewsTag.values()).stream()
+                .allMatch(this::isFilterDisplayed);
     }
 
     public EcoNewsPage openSearch() {
@@ -149,5 +164,17 @@ public class EcoNewsPage extends BasePage {
                 + xpathLiteral(UiMessage.NEWS_SEARCH_PLACEHOLDER.text()) + "]");
         waitUntilElementPresent(locator);
         return driver.findElement(locator);
+    }
+
+    public String getPageTitleText() {
+        return getElementText(pageTitle);
+    }
+
+    public String getPageUrl() {
+        return getCurrentUrl();
+    }
+
+    public boolean isGalleryViewSelected() {
+        return viewModeToggle.isTableViewPressed();
     }
 }
