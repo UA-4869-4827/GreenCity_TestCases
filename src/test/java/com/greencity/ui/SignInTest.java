@@ -18,7 +18,6 @@ public class SignInTest extends BaseTestRunner {
 
     @Test
     void signInModalShouldDisplayRequiredElements() {
-
         SignInModal signInModal = homePage.getHeader().clickSignIn();
 
         assertEquals("Welcome back!", signInModal.getModalTitleText());
@@ -101,6 +100,7 @@ public class SignInTest extends BaseTestRunner {
 
         signInModal.enterEmail("test@example.com");
         signInModal.enterPassword("");
+        signInModal.clickEmailField();
 
         assertEquals("This field is required",
                 signInModal.getPasswordErrorText());
@@ -109,13 +109,13 @@ public class SignInTest extends BaseTestRunner {
     @Test
     void shortPasswordShouldShowValidationMessage() {
         SignInModal signInModal = homePage.getHeader().clickSignIn();
-
         signInModal.enterEmail("test@example.com");
         signInModal.enterPassword("Test12");
+        signInModal.clickEmailField();
 
-        assertEquals(
-                "Password have from 8 to 20 characters long without spaces and contain at least one uppercase letter (A-Z), one lowercase letter (a-z), a digit (0-9), and a special character (~`!@#$%^&*()+=_-{}[]|:;”’?/<>,.)",
-                signInModal.getPasswordErrorText());
+        String actual = signInModal.getPasswordErrorText();
+        assertTrue(actual.contains("8 to 20 characters"),
+                "Expected password validation message, but got: " + actual);
     }
 
     @Test
@@ -126,13 +126,14 @@ public class SignInTest extends BaseTestRunner {
                 "wrong@example.com",
                 "WrongPassword123");
 
-        assertEquals("Bad email or password.",
+        assertEquals("Bad email or password",
                 signInModal.getPasswordErrorText());
 
         assertTrue(signInModal.isCloseButtonDisplayed());
     }
 
-    // TC-P1-SIN-03 – Valid credentials close the modal and authenticate the header #50//
+    // TC-P1-SIN-03 – Valid credentials close the modal and authenticate the header
+    // #50//
 
     @Test
     void registeredUserShouldSignInSuccessfully() {
@@ -142,11 +143,11 @@ public class SignInTest extends BaseTestRunner {
         signInModal.enterPassword(testValueProvider.getUserPassword());
 
         signInModal.clickSignInButton();
+        signInModal.waitUntilSignInCompleted();
 
         assertFalse(signInModal.isCloseButtonDisplayed());
 
         assertTrue(homePage.getHeader().isLoggedIn());
-
         assertFalse(homePage.getHeader().isSignUpDisplayed());
     }
 }

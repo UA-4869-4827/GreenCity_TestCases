@@ -14,13 +14,13 @@ public class SignInModal extends BaseModal<SignInModal> {
     @FindBy(id = "password")
     private WebElement passwordInput;
 
-    @FindBy(className = "show-hide-btn")
+    @FindBy(css = "img.image-show-hide-password")
     private WebElement showHidePasswordButton;
 
     @FindBy(css = "form.sign-in-form button[type='submit']")
     private WebElement signInButton;
 
-    @FindBy(className = "forgot-password")
+    @FindBy(css = "a.forgot-password")
     private WebElement forgotPasswordLink;
 
     @FindBy(css = "div.missing-account a.green-link")
@@ -29,8 +29,13 @@ public class SignInModal extends BaseModal<SignInModal> {
     @FindBy(id = "email-err-msg")
     private WebElement emailErrorMessage;
 
-    @FindBy(id = "pass-err-msg")
-    private WebElement passwordErrorMessage;
+    // Validation error shown under password field: id="pass-err-msg" > .margining
+    @FindBy(css = "#pass-err-msg .margining")
+    private WebElement passwordFieldErrorMessage;
+
+    // Server-side error after submit (e.g. "Bad email or password")
+    @FindBy(css = "div.alert-general-error")
+    private WebElement passwordGeneralErrorMessage;
 
     public SignInModal(WebDriver driver) {
         super(driver);
@@ -51,6 +56,11 @@ public class SignInModal extends BaseModal<SignInModal> {
         return clickOn(signInButton);
     }
 
+    public SignInModal waitUntilSignInCompleted() {
+        waitUntilClosed();
+        return this;
+    }
+
     @Step("Toggle password visibility")
     public SignInModal showPassword() {
         return clickOn(showHidePasswordButton);
@@ -62,15 +72,53 @@ public class SignInModal extends BaseModal<SignInModal> {
     }
 
     public String getModalTitleText() {
-        return getElementText(modalTitle);
+        waitUntilElementVisible(modalTitle);
+        wait.until(d -> !modalTitle.getText().trim().isEmpty());
+        return modalTitle.getText().trim();
     }
 
     public String getEmailErrorText() {
-        return getElementText(emailErrorMessage);
+        waitUntilElementVisible(emailErrorMessage);
+        wait.until(d -> !emailErrorMessage.getText().trim().isEmpty());
+        return emailErrorMessage.getText().trim();
     }
 
+    /**
+     * Returns the password error text.
+     * Checks field-level validation error first (id="pass-err-msg"),
+     * then falls back to the general server-side error (div.alert-general-error).
+     */
     public String getPasswordErrorText() {
-        return getElementText(passwordErrorMessage);
+        wait.until(d -> {
+            try {
+                if (passwordFieldErrorMessage.isDisplayed()
+                        && !passwordFieldErrorMessage.getText().trim().isEmpty()) {
+                    return true;
+                }
+            } catch (Exception ignored) {
+                // element not present yet
+            }
+            try {
+                if (passwordGeneralErrorMessage.isDisplayed()
+                        && !passwordGeneralErrorMessage.getText().trim().isEmpty()) {
+                    return true;
+                }
+            } catch (Exception ignored) {
+                // element not present yet
+            }
+            return false;
+        });
+
+        try {
+            if (passwordFieldErrorMessage.isDisplayed()
+                    && !passwordFieldErrorMessage.getText().trim().isEmpty()) {
+                return passwordFieldErrorMessage.getText().trim();
+            }
+        } catch (Exception ignored) {
+            // fall through to general error
+        }
+
+        return passwordGeneralErrorMessage.getText().trim();
     }
 
     public String getPasswordFieldType() {
@@ -94,13 +142,13 @@ public class SignInModal extends BaseModal<SignInModal> {
 
     @Step("Open 'Sign up' modal")
     public SignUpModal openSignUp() {
-        clickElement(signUpLink);
+        clickElementWithJs(signUpLink);
         return new SignUpModal(driver);
     }
 
     @Step("Open 'Forgot password' modal")
     public ForgotPasswordModal openForgotPassword() {
-        clickElement(forgotPasswordLink);
+        clickElementWithJs(forgotPasswordLink);
         return new ForgotPasswordModal(driver);
     }
 
@@ -127,5 +175,15 @@ public class SignInModal extends BaseModal<SignInModal> {
 
     public boolean isCloseButtonDisplayed() {
         return isElementDisplayed(closeButton);
+    }
+
+    public SignInModal clickEmailField() {
+        clickElement(emailInput);
+        return this;
+    }
+
+    public SignInModal clickPasswordField() {
+        clickElement(passwordInput);
+        return this;
     }
 }

@@ -65,6 +65,9 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "h1")
     private WebElement pageTitle;
 
+    //@FindBy(css = "app-remaining-count h2")
+    //private WebElement itemsFoundCounter;
+
     @Getter
     private final ViewModeToggleComponent viewModeToggle;
 
@@ -113,17 +116,17 @@ public class EcoNewsPage extends BasePage {
         return filterBy(NewsTag.ADS);
     }
 
-    public boolean isFilterDisplayed(NewsTag tag) {
-        By filterLocator = By.xpath(
-                "//button[.//span[normalize-space()="
-                        + xpathLiteral(tag.getText()) + "]]");
-        return isElementDisplayed(filterLocator);
-    }
+    // public boolean isFilterDisplayed(NewsTag tag) {
+    //     By filterLocator = By.xpath(
+    //             "//button[.//span[normalize-space()="
+    //                     + xpathLiteral(tag.getText()) + "]]");
+    //     return isElementDisplayed(filterLocator);
+    // }
 
-    public boolean areAllFiltersDisplayed() {
-        return List.of(NewsTag.values()).stream()
-                .allMatch(this::isFilterDisplayed);
-    }
+    // public boolean areAllFiltersDisplayed() {
+    //     return List.of(NewsTag.values()).stream()
+    //             .allMatch(this::isFilterDisplayed);
+    // }
 
     public EcoNewsPage openSearch() {
         clickElement(searchButton);
@@ -184,6 +187,10 @@ public class EcoNewsPage extends BasePage {
         return new NewsCardComponent(driver, getVisibleItem(newsCards, index));
     }
 
+    //public boolean isNewsCardDisplayed() {
+    //    return !newsCards.isEmpty() && isElementDisplayed(newsCards.get(0));
+    //}
+
     private WebElement locateSearchInput() {
         By locator = By.xpath("//input[@placeholder="
                 + xpathLiteral(UiMessage.NEWS_SEARCH_PLACEHOLDER.text()) + "]");
@@ -209,6 +216,10 @@ public class EcoNewsPage extends BasePage {
     public String getPageTitleText() {
         return getElementText(pageTitle);
     }
+
+    //public boolean isItemsFoundCounterDisplayed() {
+    //    return isElementDisplayed(itemsFoundCounter);
+    //}
 
     public String getPageUrl() {
         return getCurrentUrl();

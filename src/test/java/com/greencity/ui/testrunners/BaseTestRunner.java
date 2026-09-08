@@ -31,8 +31,9 @@ public class BaseTestRunner {
     void setUp() {
         assumeReadyToStartBrowser();
         initDriver();
-        driver.get(testValueProvider.getBaseUIUrl());
-        LocaleSupport.apply(driver, testValueProvider.getLocale());
+        String baseUrl = testValueProvider.getBaseUIUrl();
+        driver.get(baseUrl);
+        LocaleSupport.apply(driver, testValueProvider.getLocale(), baseUrl);
         homePage = new HomePage(driver);
     }
 
