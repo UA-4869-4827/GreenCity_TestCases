@@ -103,7 +103,7 @@ public class HeaderComponent extends BaseComponent {
     }
 
     public EcoNewsPage openEcoNews() {
-        clickElement(ecoNewsLink);
+        clickElementWithJs(ecoNewsLink);
         return new EcoNewsPage(driver);
     }
 
