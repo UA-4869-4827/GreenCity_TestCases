@@ -1,5 +1,6 @@
 package com.greencity.ui.smoke;
 
+import com.greencity.ui.component.footer.FooterComponent;
 import com.greencity.ui.component.header.HeaderComponent;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.modal.SignUpModal;
@@ -9,7 +10,6 @@ import com.greencity.ui.testrunners.BaseTestRunner;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.List;
 
@@ -55,48 +55,89 @@ public class GuestHeaderTests extends BaseTestRunner {
 
         signUpModal.close(HomePage.class);
 
-        JavascriptExecutor js = (JavascriptExecutor) driver;
+        header.scrollBy(0, 2000);
 
-        js.executeScript("window.scrollBy(0, 2000);");
         Assertions.assertTrue(
                 header.getLogo().isDisplayed(),
                 "Header hidden after scrolling down"
         );
 
-        js.executeScript("window.scrollTo(0, 0);");
+        header.scrollBy(0, -2000);
+
         Assertions.assertTrue(
                 header.getLogo().isDisplayed(),
                 "Header hidden after scrolling back up"
         );
     }
 
-    /*@Test
-    @DisplayName("TC-P0-HDR-02 – Language switch updates chrome En – Uk")
-    void testLanguageSwitchUpdatesChromeEnToUk() {
+    @Test
+    @DisplayName("TC-P0-HDR-02 – Language switch updates header En – Uk")
+    void testLanguageSwitchUpdatesChromeEnToUk() throws InterruptedException {
         EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
+        HeaderComponent header = ecoNewsPage.getHeader();
+        FooterComponent footer = ecoNewsPage.getFooter();
 
-        ecoNewsPage.getHeader().clickLanguageSwitcher();
+        header.selectLanguage(HeaderComponent.Language.UKRAINIAN);
 
-        Assertions.assertEquals("Зареєструватися", ecoNewsPage.getHeader().getSignUpLink().getText().trim(),
-                "Button 'Sign up' in the Header did not translate in Ukrainian");
+        Assertions.assertFalse(
+                header.containsRawI18nKey(),
+                "Header contains raw i18n key"
+        );
 
-        Assertions.assertEquals("Еко новини", ecoNewsPage.getPageHeadingText(),
-                "Heading Eco News page did not translate in Ukrainian");
+        Assertions.assertEquals(
+                "Зареєструватися",
+                header.getSignUpText()
+        );
+
+        Assertions.assertEquals(
+                "Еко новини",
+                ecoNewsPage.getPageHeadingText()
+        );
 
         List<String> filterLabels = ecoNewsPage.getFilterLabels();
-        Assertions.assertTrue(filterLabels.contains("Новини"), "The filter 'Новини' does not exist");
-        Assertions.assertTrue(filterLabels.contains("Події"), "The filter 'Події' does not exist");
-        Assertions.assertTrue(filterLabels.contains("Освіта"), "The filter 'Освіта' does not exist");
 
-        Assertions.assertFalse(ecoNewsPage.getPageHeadingText().contains("user.warning.button"),
-                "External raw localization key in the header!");
+        Assertions.assertTrue(
+                filterLabels.contains("Новини"),
+                "Ukrainian filter 'Новини' is missing"
+        );
 
-        ecoNewsPage.getHeader().clickLanguageSwitcher();
+        Assertions.assertTrue(
+                filterLabels.contains("Події"),
+                "Ukrainian filter 'Події' is missing"
+        );
 
-        Assertions.assertEquals("Sign up", ecoNewsPage.getHeader().getSignUpLink().getText().trim(),
-                "Button 'Sign up' did not translate in English");
-        Assertions.assertEquals("Eco news", ecoNewsPage.getPageHeadingText(),
-                "The page title has not returned to English.");
-    }*/
+        Assertions.assertTrue(
+                filterLabels.contains("Освіта"),
+                "Ukrainian filter 'Освіта' is missing"
+        );
+
+        Assertions.assertEquals(
+                "Еко новини",
+                footer.getEcoNewsLinkText(),
+                "Footer Eco news link did not translate to Ukrainian"
+        );
+
+        header.selectLanguage(HeaderComponent.Language.ENGLISH);
+
+        ecoNewsPage.waitForHeading("Eco news");
+
+        Assertions.assertEquals(
+                "Sign up",
+                header.getSignUpText(),
+                "Sign up text did not translate back to English"
+        );
+
+        Assertions.assertEquals(
+                "Eco news",
+                ecoNewsPage.getPageHeadingText(),
+                "Eco News heading did not translate back to English"
+        );
+
+        Assertions.assertEquals(
+                "Eco news",
+                footer.getEcoNewsLinkText(),
+                "Footer Eco news link did not translate back to English"
+        );
+    }
 
 }

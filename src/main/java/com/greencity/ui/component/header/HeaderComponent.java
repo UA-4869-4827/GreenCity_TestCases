@@ -10,29 +10,32 @@ import com.greencity.ui.page.places.PlacesPage;
 import com.greencity.ui.page.profile.ProfilePage;
 import lombok.Getter;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
 
 public class HeaderComponent extends BaseComponent {
+    private static final String LANGUAGE_OPTION =  "//li[contains(@class,'lang-option')][.//span[normalize-space()='%s']]";
 
     @Getter
     public enum Language {
-        ENGLISH("english"),
-        UKRAINIAN("Uk");
+        ENGLISH("En", "Sign up"),
+        UKRAINIAN("Uk", "Зареєструватися");
 
-        private final String ariaLabel;
+        private final String text;
+        private final String signUpText;
 
-        Language(String ariaLabel) {
-            this.ariaLabel = ariaLabel;
+        Language(String text, String signUpText) {
+            this.text = text;
+            this.signUpText = signUpText;
         }
-
     }
-
-    private static final String LANGUAGE_OPTION = "//li[@role='option' and @aria-label='%s']";
 
     @Getter
     @FindBy(xpath = ".//img[@src='assets/img/logo.svg']")
@@ -63,7 +66,7 @@ public class HeaderComponent extends BaseComponent {
     private WebElement signInLink;
 
     @Getter
-    @FindBy(xpath = ".//*[self::a or self::button or self::span][normalize-space()='Sign up']")
+    @FindBy(css = ".header_sign-up-btn")
     private WebElement signUpLink;
 
     @Getter
@@ -81,6 +84,12 @@ public class HeaderComponent extends BaseComponent {
 
     @FindBy(xpath = ".//*[@aria-label='sign-out']//a")
     private WebElement signOutLink;
+
+    @FindBy(css = ".warning_massage")
+    private WebElement warningMessage;
+
+    @FindBy(css = ".warning_button_comment")
+    private WebElement warningButton;
 
     public HeaderComponent(WebDriver driver, WebElement rootElement) {
         super(driver, rootElement);
@@ -146,18 +155,44 @@ public class HeaderComponent extends BaseComponent {
         return this;
     }
 
-    public HeaderComponent selectLanguage(Language language) {
-        WebElement languageOption = driver.findElement(
-                By.xpath(String.format(LANGUAGE_OPTION, language.getAriaLabel()))
-        );
-
-        clickElement(languageOption);
-        return this;
+    private void waitForLanguageChanged(Language language) {
+        wait.until(ExpectedConditions.textToBePresentInElement(
+                signUpLink,
+                language.getSignUpText()
+        ));
     }
 
-    public HeaderComponent openLanguageSwitcher() {
-        clickElement(languageSwitcher);
-        return this;
+    public void selectLanguage(Language language) {
+        openLanguageSwitcher();
+        clickLanguageOption(language);
+        waitForLanguageChanged(language);
+
+    }
+
+    private void clickLanguageOption(Language language) {
+        By languageOption = By.xpath(
+                String.format(LANGUAGE_OPTION, language.getText())
+        );
+
+        WebElement option = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(languageOption)
+        );
+
+        dispatchClick(option);
+    }
+
+    private void dispatchClick(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].dispatchEvent(new MouseEvent('click', " +
+                        "{bubbles: true, cancelable: true, view: window}));",
+                element
+        );
+    }
+
+    public void openLanguageSwitcher() {
+        if (!"true".equals(languageSwitcher.getAttribute("aria-expanded"))) {
+            clickElement(languageSwitcher);
+        }
     }
 
     public List<String> getAvailableLanguagesText() {
@@ -184,6 +219,29 @@ public class HeaderComponent extends BaseComponent {
     public boolean isLanguageSwitcherDisplayed() {
         waitUntilElementVisible(languageSwitcher);
         return languageSwitcher.isDisplayed();
+    }
+
+    public String getSignUpText() {
+        return getElementText(signUpLink);
+    }
+
+    public boolean containsRawI18nKey() {
+        String headerText = rootElement.getText();
+
+        return headerText.contains("user.warning.");
+    }
+
+    public HeaderComponent scrollDown(int pixels) {
+        new Actions(driver)
+                .scrollByAmount(0, pixels)
+                .perform();
+        return this;
+    }
+
+    public void scrollBy(int x, int y) {
+        new Actions(driver)
+                .scrollByAmount(x, y)
+                .perform();
     }
 
 }
