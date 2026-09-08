@@ -17,9 +17,9 @@ browser=chrome
 headless=false
 window.maximize=true
 
-user.email=your.user@example.com
-user.name=Your User Name
-user.password=your_password
+user.email=aqa.test26@gmail.com
+user.name=Vira Test
+user.password=Qwerty666!
 
 admin.email=admin@example.com
 admin.name=Admin Name
