@@ -109,7 +109,10 @@ public abstract class Base {
         } catch (InvalidElementStateException e) {
             element.sendKeys(Keys.chord(selectAllModifier(), "a"), Keys.DELETE);
         }
-        element.sendKeys(text);
+         element.sendKeys(text);
+
+        System.out.println("Expected text: " + text);
+        System.out.println("Actual value: " + element.getDomProperty("value"));
     }
 
     private static Keys selectAllModifier() {
