@@ -209,6 +209,10 @@ public class EcoNewsPage extends BasePage {
         return getElementText(pageHeading);
     }
 
+    public boolean isPageHeadingDisplayed() {
+        return isElementDisplayed(pageHeading);
+    }
+
     public void waitForHeading(String expectedText) {
         wait.until(ExpectedConditions.textToBePresentInElement(pageHeading, expectedText));
     }
