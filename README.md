@@ -39,7 +39,7 @@ copy src\test\resources\config.properties.example src\test\resources\config.prop
 Important keys:
 
 ```properties
-base.ui.url=https://www.greencity.cx.ua/#/
+base.ui.url=https://www.greencity.cx.ua/#/greenCity/
 implicitWait=0
 explicitWait=10
 locale=en
