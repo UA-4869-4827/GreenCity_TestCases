@@ -87,6 +87,7 @@ public class SignUpModal extends BaseModal<SignUpModal> {
     }
 
     public boolean isSignUpButtonEnabled() {
+        waitUntilElementVisible(signUpButton);
         return signUpButton.isEnabled();
     }
 
