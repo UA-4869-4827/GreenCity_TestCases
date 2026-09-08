@@ -33,17 +33,17 @@ public class CommentsComponent extends BaseComponent {
     }
 
     public CommentsComponent likeComment(int index) {
-        clickElement(likeButtons.get(index));
+        clickElement(getVisibleItem(likeButtons, index));
         return this;
     }
 
     public SignInModal likeCommentAsGuest(int index) {
-        clickElement(likeButtons.get(index));
+        clickElement(getVisibleItem(likeButtons, index));
         return new SignInModal(driver);
     }
 
     public CommentsComponent dislikeComment(int index) {
-        clickElement(dislikeButtons.get(index));
+        clickElement(getVisibleItem(dislikeButtons, index));
         return this;
     }
 

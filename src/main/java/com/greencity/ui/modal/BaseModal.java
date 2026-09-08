@@ -20,6 +20,7 @@ public abstract class BaseModal<T extends BaseModal<T>> extends Base {
 
     protected BaseModal(WebDriver driver) {
         super(driver);
+        initPageElements();
         waitUntilElementVisible(closeButton);
     }
 
@@ -34,6 +35,10 @@ public abstract class BaseModal<T extends BaseModal<T>> extends Base {
     @Step("Continue with Google")
     public void continueWithGoogle() {
         clickElement(googleButton);
+    }
+
+    public boolean isGoogleButtonDisplayed() {
+        return isElementDisplayed(googleButton);
     }
 
     @Step("Close modal")
