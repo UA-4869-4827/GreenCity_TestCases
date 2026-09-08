@@ -9,12 +9,30 @@ import com.greencity.ui.page.events.EventsPage;
 import com.greencity.ui.page.places.PlacesPage;
 import com.greencity.ui.page.profile.ProfilePage;
 import lombok.Getter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 
 public class HeaderComponent extends BaseComponent {
+
+    @Getter
+    public enum Language {
+        ENGLISH("english"),
+        UKRAINIAN("Uk");
+
+        private final String ariaLabel;
+
+        Language(String ariaLabel) {
+            this.ariaLabel = ariaLabel;
+        }
+
+    }
+
+    private static final String LANGUAGE_OPTION = "//li[@role='option' and @aria-label='%s']";
 
     @Getter
     @FindBy(xpath = ".//img[@src='assets/img/logo.svg']")
@@ -47,6 +65,13 @@ public class HeaderComponent extends BaseComponent {
     @Getter
     @FindBy(xpath = ".//*[self::a or self::button or self::span][normalize-space()='Sign up']")
     private WebElement signUpLink;
+
+    @Getter
+    @FindBy(css = "ul[aria-label='language switcher']")
+    private WebElement languageSwitcher;
+
+    @FindBy(css = "ul[aria-label='language switcher'] li.lang-option")
+    private List<WebElement> languageOptions;
 
     @FindBy(xpath = ".//*[@id='header_user-wrp']")
     private WebElement userMenu;
@@ -120,4 +145,45 @@ public class HeaderComponent extends BaseComponent {
         waitUntilElementVisible(signInLink);
         return this;
     }
+
+    public HeaderComponent selectLanguage(Language language) {
+        WebElement languageOption = driver.findElement(
+                By.xpath(String.format(LANGUAGE_OPTION, language.getAriaLabel()))
+        );
+
+        clickElement(languageOption);
+        return this;
+    }
+
+    public HeaderComponent openLanguageSwitcher() {
+        clickElement(languageSwitcher);
+        return this;
+    }
+
+    public List<String> getAvailableLanguagesText() {
+        return languageOptions.stream()
+                .map(this::getElementText)
+                .toList();
+    }
+
+    public boolean isLogoDisplayed() {
+        waitUntilElementVisible(logo);
+        return logo.isDisplayed();
+    }
+
+    public boolean isSignInDisplayed() {
+        waitUntilElementVisible(signInLink);
+        return signInLink.isDisplayed();
+    }
+
+    public boolean isSignUpDisplayed() {
+        waitUntilElementVisible(signUpLink);
+        return signUpLink.isDisplayed();
+    }
+
+    public boolean isLanguageSwitcherDisplayed() {
+        waitUntilElementVisible(languageSwitcher);
+        return languageSwitcher.isDisplayed();
+    }
+
 }

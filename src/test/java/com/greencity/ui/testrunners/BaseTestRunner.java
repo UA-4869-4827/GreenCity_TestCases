@@ -29,6 +29,7 @@ public class BaseTestRunner {
         initDriver();
         driver.get(testValueProvider.getBaseUIUrl());
         homePage = new HomePage(driver);
+        homePage.open();
     }
 
     @Step("init ChromeDriver")

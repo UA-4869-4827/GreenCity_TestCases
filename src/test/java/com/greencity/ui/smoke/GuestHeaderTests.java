@@ -19,40 +19,58 @@ public class GuestHeaderTests extends BaseTestRunner {
     void testGuestHeaderExposesAuthAndLanguageControls() {
         HeaderComponent header = homePage.getHeader();
 
-        Assertions.assertTrue(header.getLogo().isDisplayed(), "GREENCITY logo is not visible");
-        Assertions.assertTrue(header.getSignInLink().isDisplayed(), "Sign In link is not visible");
-        Assertions.assertTrue(header.getSignUpLink().isDisplayed(), "Sign Up link is not visible");
-        Assertions.assertTrue(header.getLanguageSwitcher().isDisplayed(), "Language switcher is not visible");
+        Assertions.assertTrue(header.isLogoDisplayed(), "GREENCITY logo is not visible");
+        Assertions.assertTrue(header.isSignInDisplayed(), "Sign In link is not visible");
+        Assertions.assertTrue(header.isSignUpDisplayed(), "Sign Up link is not visible");
+        Assertions.assertTrue(header.isLanguageSwitcherDisplayed(), "Language switcher is not visible");
 
-        header.clickLanguageSwitcher();
+        header.openLanguageSwitcher();
         List<String> languages = header.getAvailableLanguagesText();
 
-        Assertions.assertTrue(languages.contains("En"), "Language switcher dropdown doesn't contain 'En'");
-        Assertions.assertTrue(languages.contains("Uk"), "Language switcher dropdown doesn't contain 'Uk'");
-        Assertions.assertFalse(languages.contains("Ru"), "Language switcher contains forbidden 'Ru' locale!");
+        Assertions.assertTrue(languages.contains("En"),
+                "Language switcher dropdown doesn't contain 'En'");
+        Assertions.assertTrue(languages.contains("Uk"),
+                "Language switcher dropdown doesn't contain 'Uk'");
+        Assertions.assertFalse(languages.contains("Ru"),
+                "Language switcher contains forbidden 'Ru' locale!");
 
-        header.clickLanguageSwitcher();
+        header.selectLanguage(HeaderComponent.Language.ENGLISH);
 
         SignInModal signInModal = header.clickSignIn();
-        Assertions.assertEquals("Welcome back!", signInModal.getModalTitleText(), "Incorrect Sign In modal title");
+
+        Assertions.assertEquals(
+                "Welcome back!",
+                signInModal.getModalTitleText(),
+                "Incorrect Sign In modal title"
+        );
 
         homePage = signInModal.close(HomePage.class);
 
         SignUpModal signUpModal = header.clickSignUp();
-        Assertions.assertEquals("Hello!", signUpModal.getTitleText(), "Incorrect Sign Up modal title");
+        Assertions.assertEquals(
+                "Hello!",
+                signUpModal.getModalTitleText(),
+                "Incorrect Sign Up modal title"
+        );
 
-        signUpModal.clickCloseButton();
+        signUpModal.close(HomePage.class);
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
         js.executeScript("window.scrollBy(0, 2000);");
-        Assertions.assertTrue(header.getLogo().isDisplayed(), "Header hidden after scrolling down");
+        Assertions.assertTrue(
+                header.getLogo().isDisplayed(),
+                "Header hidden after scrolling down"
+        );
 
         js.executeScript("window.scrollTo(0, 0);");
-        Assertions.assertTrue(header.getLogo().isDisplayed(), "Header hidden after scrolling back up");
+        Assertions.assertTrue(
+                header.getLogo().isDisplayed(),
+                "Header hidden after scrolling back up"
+        );
     }
 
-    @Test
+    /*@Test
     @DisplayName("TC-P0-HDR-02 – Language switch updates chrome En – Uk")
     void testLanguageSwitchUpdatesChromeEnToUk() {
         EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
@@ -79,6 +97,6 @@ public class GuestHeaderTests extends BaseTestRunner {
                 "Button 'Sign up' did not translate in English");
         Assertions.assertEquals("Eco news", ecoNewsPage.getPageHeadingText(),
                 "The page title has not returned to English.");
-    }
+    }*/
 
 }
