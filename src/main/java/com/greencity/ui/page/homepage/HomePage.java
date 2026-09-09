@@ -102,6 +102,11 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    public boolean isOpened() {
+        wait.until(driver -> isHomeHash(getCurrentUrl()));
+        return isHomeHash(getCurrentUrl());
+    }
+
     public String getMainTitleText() {
         return getElementText(mainTitle);
     }
@@ -230,5 +235,14 @@ public class HomePage extends BasePage {
 
     public String getErrorSubscriptionMessage() {
         return getElementText(errorSubscriptionMessage);
+    }
+
+    private static boolean isHomeHash(String url) {
+        int hashIndex = url.indexOf('#');
+        if (hashIndex < 0) {
+            return false;
+        }
+        String fragment = url.substring(hashIndex);
+        return "#/greenCity".equals(fragment) || "#/greenCity/".equals(fragment);
     }
 }

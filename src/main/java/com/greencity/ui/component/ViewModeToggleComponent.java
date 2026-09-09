@@ -26,6 +26,10 @@ public class ViewModeToggleComponent extends BaseComponent {
         return this;
     }
 
+    public boolean isDisplayed() {
+        return isElementDisplayed(tableViewButton) && isElementDisplayed(listViewButton);
+    }
+
     public boolean isTableViewPressed() {
         return isPressed(tableViewButton);
     }

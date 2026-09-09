@@ -45,6 +45,15 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "span.bookmark-img")
     private WebElement savedNewsButton;
 
+    @FindBy(css = "h1.main-header")
+    private WebElement heading;
+
+    @FindBy(css = "button.tag-button")
+    private List<WebElement> filterChips;
+
+    @FindBy(css = "main h2")
+    private WebElement itemsFoundLabel;
+
     @FindBy(css = "div.list-gallery")
     private List<WebElement> newsCards;
 
@@ -54,12 +63,16 @@ public class EcoNewsPage extends BasePage {
     @FindBy(xpath = "//span[@aria-label='table view']/parent::*")
     private WebElement viewModeRoot;
 
-    @Getter
     private final ViewModeToggleComponent viewModeToggle;
 
     public EcoNewsPage(WebDriver driver) {
         super(driver);
+        waitUntilUrlContains(ECO_NEWS_HASH);
         this.viewModeToggle = new ViewModeToggleComponent(driver, viewModeRoot);
+    }
+
+    public ViewModeToggleComponent getViewModeToggle() {
+        return viewModeToggle;
     }
 
     public EcoNewsPage open() {
@@ -140,6 +153,39 @@ public class EcoNewsPage extends BasePage {
         return isElementDisplayed(createNewsButton);
     }
 
+    public boolean isOpened() {
+        wait.until(driver -> isNewsListHash(getCurrentUrl()));
+        return isNewsListHash(getCurrentUrl());
+    }
+
+    public String getHeadingText() {
+        return getElementText(heading);
+    }
+
+    public boolean areFilterChipsDisplayed() {
+        wait.until(driver -> filterChips.size() >= NewsTag.values().length);
+        return filterChips.stream().allMatch(this::isElementDisplayed);
+    }
+
+    public boolean isItemsFoundCounterDisplayed() {
+        wait.until(driver -> isElementDisplayed(itemsFoundLabel)
+                && itemsFoundLabel.getText().contains(UiMessage.NEWS_ITEMS_FOUND.text()));
+        return true;
+    }
+
+    public String getItemsFoundText() {
+        isItemsFoundCounterDisplayed();
+        return getElementText(itemsFoundLabel);
+    }
+
+    public boolean isAtLeastOneNewsCardDisplayed() {
+        try {
+            return isElementDisplayed(getVisibleItem(newsCards, 0));
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
     public NewsCardComponent getNewsCard(int index) {
         return new NewsCardComponent(driver, getVisibleItem(newsCards, index));
     }
@@ -149,5 +195,14 @@ public class EcoNewsPage extends BasePage {
                 + xpathLiteral(UiMessage.NEWS_SEARCH_PLACEHOLDER.text()) + "]");
         waitUntilElementPresent(locator);
         return driver.findElement(locator);
+    }
+
+    private static boolean isNewsListHash(String url) {
+        int hashIndex = url.indexOf('#');
+        if (hashIndex < 0) {
+            return false;
+        }
+        String fragment = url.substring(hashIndex);
+        return "#/greenCity/news".equals(fragment) || "#/greenCity/news/".equals(fragment);
     }
 }

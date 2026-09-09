@@ -6,7 +6,6 @@ import com.greencity.ui.modal.AddPlaceModal;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,7 +16,6 @@ public class PlacesPage extends BasePage {
     private static final String PLACES_HASH = "/#/greenCity/places";
 
     @Getter
-    @RequiredArgsConstructor
     public enum PlacesFilter {
         SHOPS(UiMessage.PLACES_FILTER_SHOPS),
         RESTAURANTS(UiMessage.PLACES_FILTER_RESTAURANTS),
@@ -26,6 +24,10 @@ public class PlacesPage extends BasePage {
         SAVED_PLACES(UiMessage.PLACES_FILTER_SAVED_PLACES);
 
         private final UiMessage message;
+
+        PlacesFilter(UiMessage message) {
+            this.message = message;
+        }
 
         public String getText() {
             return message.text();

@@ -69,6 +69,10 @@ public class HeaderComponent extends BaseComponent {
         return isElementDisplayed(logo);
     }
 
+    public boolean isEcoNewsNavActive() {
+        return getElementAttribute(ecoNewsLink, "class").contains("active-link");
+    }
+
     public boolean isSignInDisplayed() {
         return isElementDisplayed(signInLink);
     }

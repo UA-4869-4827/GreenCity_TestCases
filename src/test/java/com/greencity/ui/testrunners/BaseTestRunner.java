@@ -9,6 +9,7 @@ import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -39,10 +40,13 @@ public class BaseTestRunner {
         ChromeOptions options = new ChromeOptions();
         if (testValueProvider.isHeadless()) {
             options.addArguments("--headless=new");
+            options.addArguments("--window-size=1920,1080");
         }
 
         driver = new ChromeDriver(options);
-        if (testValueProvider.isWindowMaximized() && !testValueProvider.isHeadless()) {
+        if (testValueProvider.isHeadless()) {
+            driver.manage().window().setSize(new Dimension(1920, 1080));
+        } else if (testValueProvider.isWindowMaximized()) {
             driver.manage().window().maximize();
         }
         driver.manage().timeouts().implicitlyWait(Duration.ZERO);
