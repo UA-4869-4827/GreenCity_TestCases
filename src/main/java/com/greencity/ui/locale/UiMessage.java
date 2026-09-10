@@ -6,6 +6,20 @@ package com.greencity.ui.locale;
 public enum UiMessage {
     SIGN_UP("top-bar.sign-up"),
 
+    HOMEPAGE_HABIT_BUTTON("homepage.habit-button"),
+    HOMEPAGE_HERO_TITLE("homepage.hero.title"),
+    HOMEPAGE_STATS_BAGS_QUESTION("homepage.stats.bags-question"),
+    HOMEPAGE_STATS_CUPS_QUESTION("homepage.stats.cups-question"),
+    HOMEPAGE_COMMUNITY_HEADING("homepage.community-heading"),
+    HOMEPAGE_BAGS_COUNTER("homepage.bags-counter"),
+    HOMEPAGE_CUPS_COUNTER("homepage.cups-counter"),
+    HOMEPAGE_NEWSLETTER_HEADING("homepage.newsletter.heading"),
+    HOMEPAGE_NEWSLETTER_PLACEHOLDER("homepage.newsletter.placeholder"),
+    HOMEPAGE_NEWSLETTER_SUBSCRIBE_BUTTON("homepage.newsletter.btn.subscribe"),
+    HOMEPAGE_NEWSLETTER_ERROR_VALIDATION("homepage.newsletter.error-validation"),
+
+    SIGN_IN_MODAL_WELCOME_TEXT("sign-in-modal.welcome-text"),
+
     EVENT_MORE("event.btn-top"),
     EVENT_JOIN("event.btn-join"),
     EVENT_EDIT("event.btn-edit"),
