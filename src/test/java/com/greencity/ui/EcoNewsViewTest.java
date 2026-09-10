@@ -11,21 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * TC-P1-NVW-01 – Gallery is default; list toggle does not change the dataset
- * TC-P1-NVW-02 – Card opens details; guest bookmark is gated
- * Parent US: #24
- */
 public class EcoNewsViewTest extends BaseTestRunner {
 
-    // TC-P1-NVW-01 – Gallery is default; list toggle does not change the dataset #59 //
+    // TC-P1-NVW-01 – Gallery is default; list toggle does not change the dataset
+    // #59 //
 
     @Test
     void ecoNewsPageShouldOpenInGalleryViewByDefault() {
         EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
 
-        assertTrue(ecoNewsPage.isGalleryViewSelected(),
-                "Gallery (table) view should be active by default");
+        assertTrue(ecoNewsPage.isGalleryViewSelected());
     }
 
     @Test
@@ -34,12 +29,14 @@ public class EcoNewsViewTest extends BaseTestRunner {
 
         NewsCardComponent card = ecoNewsPage.getNewsCard(0);
 
-        assertTrue(card.isTitleDisplayed(), "Card title should be displayed");
-        assertTrue(card.isAuthorDisplayed(), "Card author should be displayed");
-        assertTrue(card.isDateDisplayed(), "Card date should be displayed");
-        assertTrue(card.isTagDisplayed(), "Card tag should be displayed");
-        assertTrue(card.isLikesCounterDisplayed(), "Card likes count should be displayed");
-        assertTrue(card.isCommentsCounterDisplayed(), "Card comments count should be displayed");
+        assertTrue(card.isTitleDisplayed());
+        assertTrue(card.isAuthorDisplayed());
+        assertTrue(card.isDateDisplayed());
+        assertTrue(card.isTagDisplayed());
+        assertTrue(card.isLikesCounterDisplayed());
+        assertTrue(card.isCommentsCounterDisplayed());
+        assertTrue(card.isImageDisplayed());
+        assertTrue(card.isBookmarkDisplayed());
     }
 
     @Test
@@ -48,12 +45,11 @@ public class EcoNewsViewTest extends BaseTestRunner {
 
         ecoNewsPage.getViewModeToggle().switchToListView();
 
-        assertTrue(ecoNewsPage.isListViewSelected(),
-                "List view control should be pressed after switching");
-        assertFalse(ecoNewsPage.isGalleryViewSelected(),
-                "Gallery view control should not be pressed after switching to list");
+        assertTrue(ecoNewsPage.isListViewSelected());
+        assertFalse(ecoNewsPage.isGalleryViewSelected());
     }
 
+    
     @Test
     void switchToListViewShouldNotChangeItemsCount() {
         EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
@@ -64,8 +60,7 @@ public class EcoNewsViewTest extends BaseTestRunner {
 
         int listCardsCount = ecoNewsPage.getNewsCardsCountInListView();
 
-        assertEquals(galleryCardsCount, listCardsCount,
-                "Items count should not change after switching to list view");
+        assertEquals(galleryCardsCount, listCardsCount);
     }
 
     @Test
@@ -75,27 +70,34 @@ public class EcoNewsViewTest extends BaseTestRunner {
         ecoNewsPage.getViewModeToggle().switchToListView();
         ecoNewsPage.getViewModeToggle().switchToTableView();
 
-        assertTrue(ecoNewsPage.isGalleryViewSelected(),
-                "Gallery view should be restored after switching back");
-        assertFalse(ecoNewsPage.isListViewSelected(),
-                "List view control should not be pressed after restoring gallery");
+        assertTrue(ecoNewsPage.isGalleryViewSelected());
+        assertFalse(ecoNewsPage.isListViewSelected());
     }
 
+    @Test
+    void newsShouldBeSortedFromNewestToOldest() {
+        EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
+
+        NewsCardComponent firstCard = ecoNewsPage.getNewsCard(0);
+        NewsCardComponent secondCard = ecoNewsPage.getNewsCard(1);
+
+        String firstDate = firstCard.getDate();
+        String secondDate = secondCard.getDate();
+
+        System.out.println("First news date: " + firstDate);
+        System.out.println("Second news date: " + secondDate);
+    }
+
+    
     // TC-P1-NVW-02 – Card opens details; guest bookmark is gated #60 //
 
-    /**
-     * Guest bookmark gate: clicking the "Saved news" button (bookmark-img)
-     * on the EcoNews page header requires sign-in.
-     * Note: per-card bookmark icon is CSS :hover-only and not accessible via WebDriver.
-     */
     @Test
     void guestSavedNewsClickShouldOpenSignInModal() {
         EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
 
         SignInModal signInModal = ecoNewsPage.openSavedNewsAsGuest();
 
-        assertEquals("Welcome back!", signInModal.getModalTitleText(),
-                "Sign in modal should open when guest clicks saved news bookmark");
+        assertEquals("Welcome back!", signInModal.getModalTitleText());
     }
 
     @Test
@@ -104,7 +106,6 @@ public class EcoNewsViewTest extends BaseTestRunner {
 
         NewsDetailsPage detailsPage = ecoNewsPage.openNewsByIndex(0);
 
-        assertTrue(driver.getCurrentUrl().contains("/greenCity/news/"),
-                "URL should contain /greenCity/news/ after clicking a card");
+        assertTrue(driver.getCurrentUrl().contains("/greenCity/news/"));
     }
 }
