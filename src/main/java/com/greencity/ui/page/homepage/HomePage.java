@@ -119,14 +119,16 @@ public class HomePage extends BasePage {
     }
 
     public boolean isHeroPictureVisible() {
-//        return isElementDisplayed(heroPicture);
         waitUntilElementVisible(heroPicture);
         return isElementDisplayed(heroPicture);
-
     }
 
     public boolean isHeroStartHabitButtonVisible() {
         return isElementDisplayed(heroStartHabitButton);
+    }
+
+    public String getHeroStartHabitButtonText() {
+        return getElementText(heroStartHabitButton);
     }
 
     public SignInModal clickHeroStartHabitButtonAsGuest() {
@@ -140,12 +142,21 @@ public class HomePage extends BasePage {
         return new ProfilePage(driver);
     }
 
-    public String getStatsTitleText() {
+    public String getStatsHeadingText() {
         return getElementText(statsTitle);
+    }
+
+    public boolean isStatsHeadingVisible() {
+        return isElementDisplayed(statsTitle);
     }
 
     public String getBagsCounterValue() {
         return getElementText(bagsCounterValue);
+    }
+
+    public boolean isBagsCounterLabelVisible() {
+        scrollToElementWithJs(bagsCounterLabel);
+        return isElementDisplayed(bagsCounterLabel);
     }
 
     public String getBagsCounterLabelText() {
@@ -156,12 +167,14 @@ public class HomePage extends BasePage {
         return getElementText(bagsQuestionText);
     }
 
-    public String getCupsCounterValue() {
-        return getElementText(cupsCounterValue);
+    public boolean isBagsQuestionTextVisible() {
+        scrollToElementWithJs(bagsQuestionText);
+        return isElementDisplayed(bagsQuestionText);
     }
 
     public SignInModal clickBagsStartHabitButtonAsGuest() {
         clickElement(bagsStartHabitButton);
+        waitForPageToLoad();
         return new SignInModal(driver);
     }
 
@@ -170,12 +183,44 @@ public class HomePage extends BasePage {
         return new ProfilePage(driver);
     }
 
+    public boolean isBagsStartHabitButtonVisible() {
+        scrollToElementWithJs(bagsStartHabitButton);
+        return isElementDisplayed(bagsStartHabitButton);
+    }
+
+    public String getBagsStartHabitButtonText() {
+        return getElementText(bagsStartHabitButton);
+    }
+
+    public String getCupsCounterValue() {
+        return getElementText(cupsCounterValue);
+    }
+
+    public boolean isCupsCounterLabelVisible() {
+        scrollToElementWithJs(cupsCounterLabel);
+        return isElementDisplayed(cupsCounterLabel);
+    }
+
     public String getCupsCounterLabelText() {
         return getElementText(cupsCounterLabel);
     }
 
     public String getCupsQuestionText() {
         return getElementText(cupsQuestionText);
+    }
+
+    public boolean isCupsQuestionTextVisible() {
+        scrollToElementWithJs(cupsQuestionText);
+        return isElementDisplayed(cupsQuestionText);
+    }
+
+    public boolean isCupsStartHabitButtonVisible() {
+        scrollToElementWithJs(cupsStartHabitButton);
+        return isElementDisplayed(cupsStartHabitButton);
+    }
+
+    public String getCupsStartHabitButtonText() {
+        return getElementText(cupsStartHabitButton);
     }
 
     public SignInModal clickCupsStartHabitButtonAsGuest() {
@@ -215,6 +260,15 @@ public class HomePage extends BasePage {
         clickElement(subscribeButton);
     }
 
+    public boolean isSubscribeButtonVisible() {
+        scrollToElementWithJs(subscribeButton);
+        return isElementDisplayed(subscribeButton);
+    }
+
+    public String getSubscribeButtonText() {
+        return getElementText(subscribeButton);
+    }
+
     public void subscribe(String email) {
         enterNewsletterEmail(email);
         clickSubscribeButton();
@@ -224,8 +278,18 @@ public class HomePage extends BasePage {
         return getElementText(newsletterTitle);
     }
 
+    public boolean isNewsletterTitleVisible() {
+        scrollToElementWithJs(newsletterTitle);
+        return isElementDisplayed(newsletterTitle);
+    }
+
     public String getNewsletterDescriptionText() {
         return getElementText(newsletterDescription);
+    }
+
+    public boolean isNewsletterDescriptionVisible() {
+        scrollToElementWithJs(newsletterDescription);
+        return isElementDisplayed(newsletterDescription);
     }
 
     public String getEmailPlaceholderText() {
@@ -241,6 +305,7 @@ public class HomePage extends BasePage {
     }
 
     public boolean isQrCodeDisplayed() {
+        scrollToElementWithJs(qrCodeImage);
         return isElementDisplayed(qrCodeImage);
     }
 
@@ -248,7 +313,15 @@ public class HomePage extends BasePage {
         return getElementText(successfulSubscriptionMessage);
     }
 
+    public boolean isSuccessSubscriptionMessageVisible() {
+        return isElementDisplayed(successfulSubscriptionMessage);
+    }
+
     public String getErrorSubscriptionMessage() {
         return getElementText(errorSubscriptionMessage);
+    }
+
+    public boolean isErrorSubscriptionMessageVisible() {
+        return isElementDisplayed(errorSubscriptionMessage);
     }
 }
