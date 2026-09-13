@@ -41,6 +41,12 @@ public class FooterComponent extends BaseComponent {
     @FindBy(css = "a.footer_social-link")
     private List<WebElement> socialLinks;
 
+    @FindBy(css = ".footer_follow-us")
+    private WebElement followUsLabel;
+
+    @FindBy(id = "copyright-label")
+    private WebElement copyrightLabel;
+
     public FooterComponent(WebDriver driver, WebElement rootElement) {
         super(driver, rootElement);
     }
@@ -104,4 +110,66 @@ public class FooterComponent extends BaseComponent {
     public String getMySpaceHref() {
         return getElementAttribute(mySpaceLink, "href");
     }
+
+    public String getEcoNewsHref() {
+        return getElementAttribute(ecoNewsLink, "href");
+    }
+
+    public String getEventsHref() {
+        return getElementAttribute(eventsLink, "href");
+    }
+
+    public String getPlacesHref() {
+        return getElementAttribute(placesLink, "href");
+    }
+
+    public String getAboutUsHref() {
+        return getElementAttribute(aboutUsLink, "href");
+    }
+
+    public String getUbsCourierHref() {
+        return getElementAttribute(ubsCourierLink, "href");
+    }
+
+    public String getLogoHref() {
+        return getElementAttribute(logoLink, "href");
+    }
+
+    public boolean isFollowUsDisplayed() {
+        return isElementDisplayed(followUsLabel);
+    }
+
+    public boolean isLogoDisplayed() {
+        return isElementDisplayed(logoLink);
+    }
+
+    public boolean isEcoNewsDisplayed() {
+        return isElementDisplayed(ecoNewsLink);
+    }
+
+    public String getCopyrightLabelText() {
+        return getElementText(copyrightLabel);
+    }
+
+    public boolean isEventsDisplayed() {
+        return isElementDisplayed(eventsLink);
+    }
+
+    public boolean isPlacesDisplayed() {
+        return isElementDisplayed(placesLink);
+    }
+
+    public boolean isAboutUsDisplayed() {
+        return isElementDisplayed(aboutUsLink);
+    }
+
+    public boolean isMySpaceDisplayed() {
+        return isElementDisplayed(mySpaceLink);
+    }
+
+    public boolean isUbsCourierDisplayed() {
+        return isElementDisplayed(ubsCourierLink);
+    }
 }
+
+
