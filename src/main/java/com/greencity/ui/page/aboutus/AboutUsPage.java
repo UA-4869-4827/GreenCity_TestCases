@@ -37,6 +37,22 @@ public class AboutUsPage extends BasePage {
         return this;
     }
 
+    public boolean isOpened() {
+        return getCurrentUrl().contains(ABOUT_US_HASH);
+    }
+
+    public boolean isAboutUsHeadingDisplayed() {
+        By locator = headingLocator(UiMessage.ABOUT_US_HEADER);
+        waitUntilElementPresent(locator);
+        return isElementDisplayed(locator);
+    }
+
+    public boolean isOurVisionHeadingDisplayed() {
+        By locator = headingLocator(UiMessage.ABOUT_US_VISION_HEADER);
+        waitUntilElementPresent(locator);
+        return isElementDisplayed(locator);
+    }
+
     public ProfilePage formHabitFromAboutUsHeading() {
         clickElement(habitButtonNextTo(UiMessage.ABOUT_US_HEADER));
         return new ProfilePage(driver);
@@ -88,9 +104,13 @@ public class AboutUsPage extends BasePage {
     }
 
     private WebElement habitButtonNextTo(UiMessage heading) {
-        By locator = byNormalizedTextContains("//h2", heading);
+        By locator = headingLocator(heading);
         waitUntilElementPresent(locator);
         return driver.findElement(locator).findElement(By.xpath("./following-sibling::button"));
+    }
+
+    private By headingLocator(UiMessage heading) {
+        return byNormalizedTextContains("//h2", heading);
     }
 
 }
