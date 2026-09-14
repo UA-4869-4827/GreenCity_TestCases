@@ -19,6 +19,9 @@ public class AboutUsPage extends BasePage {
     @FindBy(css = "#main-content > div.about-section.section > div > h2")
     private WebElement aboutUsSectionTitle;
 
+    @FindBy(css = "h2.section__header")
+    private WebElement pageHeading;
+
     @FindBy(css = "#main-content > div.vision-section > div > div > h2")
     private WebElement ourVisionTitle;
 
@@ -124,6 +127,10 @@ public class AboutUsPage extends BasePage {
     public SignInModal findPeopleFromIDontFeelHeadingAsGuest() {
         clickElement(findPeopleFromIDontFeelLink);
         return new SignInModal(driver);
+    }
+
+    public boolean isPageHeadingDisplayed() {
+        return isElementDisplayed(pageHeading);
     }
 
     private WebElement habitButtonNextTo(UiMessage heading) {
