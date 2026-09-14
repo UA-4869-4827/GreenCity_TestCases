@@ -1,69 +1,90 @@
 package com.greencity.utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
+import com.greencity.config.AppConfig;
+import com.greencity.ui.locale.UiLocale;
+
+import java.time.Duration;
 
 public class TestValueProvider {
-    Properties properties;
 
-    public TestValueProvider() {
-        try {
-            FileInputStream fileInputStream = new FileInputStream("src/test/resources/config.properties");
-            properties = new Properties();
-            properties.load(fileInputStream);
-        } catch (IOException err) {
-            System.out.println(err.getMessage());
-            System.out.println("Use system env");
-        }
-    }
+    private final AppConfig config = AppConfig.get();
 
     public String getBaseUIUrl() {
-        return properties != null ? properties.getProperty("base.ui.url") : System.getenv("BASE_UI_URL");
+        return config.baseUiUrl();
     }
 
     public String getBaseAPIUrl() {
-        return properties != null ? properties.getProperty("base.api.url") : System.getenv("BASE_API_URL");
+        return config.baseApiUrl();
     }
 
-    public int getImplicitlyWait() {
-        return properties != null ? Integer.parseInt(properties.getProperty("implicitlyWait")) : Integer.parseInt(System.getenv("IMPLICITLY_WAIT"));
+    /**
+     * Implicit wait must stay zero when the POM uses explicit waits.
+     */
+    public Duration getImplicitWait() {
+        return config.implicitWait();
     }
 
+    public Duration getExplicitWait() {
+        return config.explicitWait();
+    }
+
+    public Duration getPageLoadTimeout() {
+        return config.pageLoadTimeout();
+    }
+
+    public Duration getScriptTimeout() {
+        return config.scriptTimeout();
+    }
+
+    public UiLocale getLocale() {
+        return config.locale();
+    }
+
+    public String getBrowser() {
+        return config.browser();
+    }
+
+    public boolean isHeadless() {
+        return config.headless();
+    }
+
+    public boolean isWindowMaximized() {
+        return config.maximizeWindow();
+    }
 
     public String getUserEmail() {
-        return properties != null ? properties.getProperty("user.email") : System.getenv("USER_EMAIL");
+        return config.userEmail();
     }
 
     public String getUserName() {
-        return properties != null ? properties.getProperty("user.name") : System.getenv("USER_NAME");
+        return config.userName();
     }
 
     public String getUserPassword() {
-        return properties != null ? properties.getProperty("user.password") : System.getenv("USER_PASSWORD");
+        return config.userPassword();
     }
 
     public String getAdminEmail() {
-        return properties != null ? properties.getProperty("admin.email") : System.getenv("ADMIN_EMAIL");
+        return config.adminEmail();
     }
 
     public String getAdminName() {
-        return properties != null ? properties.getProperty("admin.name") : System.getenv("ADMIN_NAME");
+        return config.adminName();
     }
 
     public String getAdminPassword() {
-        return properties != null ? properties.getProperty("admin.password") : System.getenv("ADMIN_PASSWORD");
+        return config.adminPassword();
     }
 
     public String getJDBCGreenCityUsername() {
-        return properties != null ? properties.getProperty("JDBCGreenCityUsername") : System.getenv("JDBC_GREENCITY_USERNAME");
+        return config.jdbcGreenCityUsername();
     }
 
     public String getJDBCGreenCityPassword() {
-        return properties != null ? properties.getProperty("JDBCGreenCityPassword") : System.getenv("JDBC_GREENCITY_PASSWORD");
+        return config.jdbcGreenCityPassword();
     }
 
     public String getJDBCGreenCityURL() {
-        return properties != null ? properties.getProperty("JDBCGreenCityURL") : System.getenv("JDBC_GREENCITY_URL");
+        return config.jdbcGreenCityUrl();
     }
 }

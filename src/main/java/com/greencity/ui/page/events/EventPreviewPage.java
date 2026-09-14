@@ -15,6 +15,7 @@ public class EventPreviewPage extends BasePage {
 
     public EventPreviewPage(WebDriver driver) {
         super(driver);
+        waitUntilUrlContains("/greenCity/events/preview");
     }
 
     public CreateEventPage clickBackToEditing() {

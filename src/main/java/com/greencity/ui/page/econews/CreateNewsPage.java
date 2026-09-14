@@ -1,5 +1,6 @@
 package com.greencity.ui.page.econews;
 
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -26,16 +27,11 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".cropper-buttons button.primary-global-button")
     private WebElement pictureSubmitButton;
 
-    @FindBy(xpath = "//button[contains(@class,'tertiary-global-button') and normalize-space()='Cancel']")
-    private WebElement cancelButton;
-
     @FindBy(css = ".submit-buttons button.secondary-global-button")
     private WebElement previewButton;
 
     @FindBy(css = ".submit-buttons button.primary-global-button")
     private WebElement publishButton;
-
-    private static final String TAG_XPATH_TEMPLATE = "//button[contains(@class,'tag-button')]//span[normalize-space()=%s]";
 
     public CreateNewsPage(WebDriver driver) {
         super(driver);
@@ -62,23 +58,13 @@ public class CreateNewsPage extends BasePage {
     }
 
     public CreateNewsPage selectTag(String tagName) {
-        String xpath = String.format(TAG_XPATH_TEMPLATE, xpathLiteral(tagName));
-        WebElement tag = driver.findElement(By.xpath(xpath));
-        clickElement(tag);
+        clickBy(By.xpath("//button[contains(@class,'tag-button')]//span[normalize-space()="
+                + xpathLiteral(tagName) + "]"));
         return this;
     }
 
-    private static String xpathLiteral(String value) {
-        if (!value.contains("'")) {
-            return "'" + value + "'";
-        }
-        if (!value.contains("\"")) {
-            return "\"" + value + "\"";
-        }
-        String[] parts = value.split("'", -1);
-        StringBuilder concat = new StringBuilder("concat('");
-        concat.append(String.join("', \"'\", '", parts)).append("')");
-        return concat.toString();
+    public CreateNewsPage selectTag(UiMessage tag) {
+        return selectTag(tag.text());
     }
 
     public CreateNewsPage clickPictureCancel() {
@@ -91,17 +77,18 @@ public class CreateNewsPage extends BasePage {
         return this;
     }
 
-    public EcoNewsPage clickCancel() {
-        clickElement(cancelButton);
+    public EcoNewsPage cancel() {
+        clickBy(By.xpath("//button[contains(@class,'tertiary-global-button') and normalize-space()="
+                + xpathLiteral(UiMessage.CREATE_NEWS_CANCEL.text()) + "]"));
         return new EcoNewsPage(driver);
     }
 
-    public PreviewNewsPage clickPreview() {
+    public PreviewNewsPage preview() {
         clickElement(previewButton);
         return new PreviewNewsPage(driver);
     }
 
-    public EcoNewsPage clickPublish() {
+    public EcoNewsPage publish() {
         clickElement(publishButton);
         return new EcoNewsPage(driver);
     }

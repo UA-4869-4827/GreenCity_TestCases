@@ -20,6 +20,7 @@ public abstract class BaseModal<T extends BaseModal<T>> extends Base {
 
     protected BaseModal(WebDriver driver) {
         super(driver);
+        initPageElements();
         waitUntilElementVisible(closeButton);
     }
 
