@@ -1,8 +1,10 @@
 package com.greencity.header;
 
-import com.greencity.ui.component.header.HeaderComponent;
+import com.greencity.ui.page.aboutus.AboutUsPage;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.events.EventsPage;
+import com.greencity.ui.page.homepage.HomePage;
+import com.greencity.ui.page.places.PlacesPage;
 import com.greencity.ui.testrunners.BaseTestRunner;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +14,14 @@ public class HeaderTest extends BaseTestRunner {
     @Test
     @DisplayName("TC-P0-NAV-01 – Header opens GreenCity sections")
     void testHeaderNavigation() {
+        homePage = homePage.getHeader()
+                .clickSignIn()
+                .signIn(
+                        testValueProvider.getUserEmail(),
+                        testValueProvider.getUserPassword(),
+                        HomePage.class
+                );
+
         EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
 
         Assertions.assertTrue(
@@ -25,5 +35,32 @@ public class HeaderTest extends BaseTestRunner {
                 eventsPage.isPageHeadingDisplayed(),
                 "Events page heading is not displayed"
         );
+
+        PlacesPage placesPage = eventsPage.getHeader().openPlaces();
+
+        Assertions.assertTrue(
+                placesPage.isSearchForPlaceDisplayed(),
+                "Searching for a place input is not displayed"
+        );
+
+        Assertions.assertTrue(
+                placesPage.isAddPlaceButtonDisplayed(),
+                "Add place button is not displayed"
+        );
+
+        AboutUsPage aboutUsPage = placesPage.getHeader().openAboutUs();
+
+        Assertions.assertTrue(
+                aboutUsPage.isPageHeadingDisplayed(),
+                "About Us page heading is not displayed"
+        );
+
+        HomePage homePage = aboutUsPage.getHeader().clickLogo();
+
+        Assertions.assertTrue(
+                homePage.isMainTitleDisplayed(),
+                "Home page main title is not displayed"
+        );
     }
+
 }

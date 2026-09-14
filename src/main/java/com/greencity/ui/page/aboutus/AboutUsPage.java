@@ -14,6 +14,9 @@ public class AboutUsPage extends BasePage {
 
     private static final String ABOUT_US_HASH = "/#/greenCity/about";
 
+    @FindBy(css = "h2.section__header")
+    private WebElement pageHeading;
+
     @FindBy(xpath = "//h2[contains(normalize-space(.), 'About Us')]/following-sibling::button")
     private WebElement formHabitFromAboutUsButton;
 
@@ -95,6 +98,10 @@ public class AboutUsPage extends BasePage {
     public SignInModal findPeopleFromIDontFeelHeadingAsGuest() {
         clickElement(findPeopleFromIDontFeelLink);
         return new SignInModal(driver);
+    }
+
+    public boolean isPageHeadingDisplayed() {
+        return isElementDisplayed(pageHeading);
     }
 
 }

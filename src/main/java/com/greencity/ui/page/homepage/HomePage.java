@@ -231,4 +231,9 @@ public class HomePage extends BasePage {
     public String getErrorSubscriptionMessage() {
         return getElementText(errorSubscriptionMessage);
     }
+
+    public boolean isMainTitleDisplayed() {
+        return isElementDisplayed(mainTitle);
+    }
+
 }

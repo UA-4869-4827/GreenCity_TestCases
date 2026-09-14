@@ -6,6 +6,7 @@ import com.greencity.ui.modal.SignUpModal;
 import com.greencity.ui.page.aboutus.AboutUsPage;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.events.EventsPage;
+import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.ui.page.places.PlacesPage;
 import com.greencity.ui.page.profile.ProfilePage;
 import lombok.Getter;
@@ -61,9 +62,9 @@ public class HeaderComponent extends BaseComponent {
         super(driver, rootElement);
     }
 
-    public HeaderComponent clickLogo() {
+    public HomePage clickLogo() {
         clickElement(logo);
-        return this;
+        return new HomePage(driver);
     }
 
     public EcoNewsPage openEcoNews() {

@@ -117,4 +117,13 @@ public class PlacesPage extends BasePage {
     public String getPlaceAddress() {
         return getElementText(placeAddress);
     }
+
+    public boolean isSearchForPlaceDisplayed() {
+        return isElementDisplayed(searchInput);
+    }
+
+    public boolean isAddPlaceButtonDisplayed() {
+        return isElementDisplayed(addPlaceButton);
+    }
+
 }
