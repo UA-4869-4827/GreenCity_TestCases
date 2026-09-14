@@ -2,6 +2,9 @@ package com.greencity.ui.component;
 
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.econews.NewsDetailsPage;
+
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,8 +26,8 @@ public class NewsCardComponent extends BaseComponent {
     @FindBy(css = "span.mw")
     private WebElement author;
 
-    @FindBy(css = ".filter-tag span")
-    private WebElement tags;
+    @FindBy(css = ".filter-tag span:not(.tag-divider)")
+    private List<WebElement> tags;
 
     @FindBy(xpath = ".//p[img[@alt='likes']]/span[@class='numerosity']")
     private WebElement likesCounter;
@@ -52,8 +55,10 @@ public class NewsCardComponent extends BaseComponent {
         return getElementText(author);
     }
 
-    public String getTags() {
-        return getElementText(tags);
+    public List<String> getTags() {
+        return tags.stream()
+                .map(element -> element.getText())
+                .toList();
     }
 
     public String getLikesCount() {
