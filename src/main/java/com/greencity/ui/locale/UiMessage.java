@@ -22,6 +22,7 @@ public enum UiMessage {
     NEWS_TAG_EDUCATION("homepage.eco-news.tags.education"),
     NEWS_TAG_INITIATIVES("homepage.eco-news.tags.initiatives"),
     NEWS_TAG_ADS("homepage.eco-news.tags.ads"),
+    NEWS_PAGE_HEADER("eco-news.page.header"),
     NEWS_SEARCH_PLACEHOLDER("search.search-popup.placeholder"),
     CREATE_NEWS_CANCEL("create-news.cancel-button"),
     CREATE_NEWS_EDIT("create-news.edit-button"),

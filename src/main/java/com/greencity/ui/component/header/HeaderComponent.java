@@ -3,6 +3,7 @@ package com.greencity.ui.component.header;
 import com.greencity.ui.component.BaseComponent;
 import com.greencity.ui.locale.LocaleContext;
 import com.greencity.ui.locale.UiLocale;
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.modal.SignUpModal;
 import com.greencity.ui.page.aboutus.AboutUsPage;
@@ -16,6 +17,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -164,15 +166,33 @@ public class HeaderComponent extends BaseComponent {
         return this;
     }
 
+    public boolean isLanguageSwitcherDisplayed() {
+        return isElementDisplayed(languageSwitcher);
+    }
+
+    public List<String> getAvailableLanguagesText() {
+        return getLanguageOptionLabels();
+    }
+
+    public boolean containsRawI18nKey() {
+        return getElementText(rootElement).contains("user.warning.");
+    }
+
+    public HeaderComponent scrollBy(int x, int y) {
+        actions.scrollByAmount(x, y).perform();
+        return this;
+    }
+
     public HeaderComponent switchLanguage(UiLocale locale) {
         if (locale == LocaleContext.get()) {
             return this;
         }
-        clickElement(languageSwitcher);
+        openLanguageSwitcher();
         clickElement(findIn(rootElement, By.xpath(".//*[normalize-space()="
                 + xpathLiteral(locale.getHeaderLabel()) + "]")));
         LocaleContext.set(locale);
         waitForPageToLoad();
+        wait.until(ExpectedConditions.textToBePresentInElement(signUpLink, UiMessage.SIGN_UP.text()));
         return this;
     }
 }

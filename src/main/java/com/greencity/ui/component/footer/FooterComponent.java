@@ -89,6 +89,10 @@ public class FooterComponent extends BaseComponent {
         return new HomePage(driver);
     }
 
+    public String getEcoNewsLinkText() {
+        return getElementText(ecoNewsLink);
+    }
+
     public String getCopyrightText() {
         String footerText = getElementText(rootElement);
         int copyrightStart = footerText.lastIndexOf("©");

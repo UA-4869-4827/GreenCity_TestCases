@@ -12,7 +12,8 @@ public abstract class BaseComponent extends Base {
 
     public BaseComponent(WebDriver driver, WebElement rootElement) {
         super(driver);
-        this.rootElement = rootElement;
         initNestedElements(rootElement);
+        // Keep the real root after PageFactory so it is not replaced by a name=rootElement proxy.
+        this.rootElement = rootElement;
     }
 }
