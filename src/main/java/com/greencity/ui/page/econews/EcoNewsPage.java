@@ -54,6 +54,9 @@ public class EcoNewsPage extends BasePage {
     @FindBy(xpath = "//span[@aria-label='table view']/parent::*")
     private WebElement viewModeRoot;
 
+    @FindBy(css = "app-remaining-count h2")
+    private WebElement itemsFoundCount;
+
     @Getter
     private final ViewModeToggleComponent viewModeToggle;
 
@@ -78,7 +81,9 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage filterBy(NewsTag tag) {
-        clickBy(By.xpath("//button[.//span[normalize-space()=" + xpathLiteral(tag.getText()) + "]]"));
+        clickBy(By.xpath(
+                "//button[.//span[normalize-space()="
+                        + xpathLiteral(tag.getText()) + "]]"));
         return this;
     }
 
@@ -144,10 +149,47 @@ public class EcoNewsPage extends BasePage {
         return new NewsCardComponent(driver, getVisibleItem(newsCards, index));
     }
 
+    public String getItemsFoundCount() {
+        return getElementText(itemsFoundCount);
+    }
+
+    public String waitForItemsFoundCountToChange(String previousCount) {
+        return wait.until(driver -> {
+            String currentCount = itemsFoundCount.getText().trim();
+            return !currentCount.equals(previousCount) ? currentCount : null;
+        });
+    }
+
+    public List<NewsCardComponent> getVisibleNewsCards() {
+        return newsCards.stream()
+                .map(element -> new NewsCardComponent(driver, element))
+                .toList();
+    }
+
+    public void waitUntilNewsCardsAreDisplayed() {
+        wait.until(driver -> newsCards.stream()
+                .anyMatch(element -> element.isDisplayed()));
+    }
+
+    public void waitUntilSearchResultIsDisplayed(String searchQuery) {
+        By resultTitle = By.xpath(
+                "//div[contains(@class,'list-gallery')]"
+                        + "//h3[contains(normalize-space(), "
+                        + xpathLiteral(searchQuery)
+                        + ")]");
+
+        waitUntilElementPresent(resultTitle);
+    }
+
     private WebElement locateSearchInput() {
-        By locator = By.xpath("//input[@placeholder="
-                + xpathLiteral(UiMessage.NEWS_SEARCH_PLACEHOLDER.text()) + "]");
+        By locator = By.xpath(
+                "//input[@placeholder="
+                        + xpathLiteral(
+                                UiMessage.NEWS_SEARCH_PLACEHOLDER.text())
+                        + "]");
+
         waitUntilElementPresent(locator);
         return driver.findElement(locator);
     }
+
 }
