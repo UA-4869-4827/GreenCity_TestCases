@@ -19,21 +19,23 @@ public class AboutUsGuestTest extends BaseTestRunner {
     }
 
     @Test
-    void guestFormHabitFromAboutUsHeadingStaysOnAboutUs() {
+    void guestFormHabitFromAboutUsHeadingOpensSignIn() {
         AboutUsPage aboutUsPage = homePage.getHeader().openAboutUs();
 
-        AboutUsPage result = aboutUsPage.formHabitFromAboutUsHeadingAsGuest();
+        SignInModal signIn = aboutUsPage.formHabitFromAboutUsHeadingAsGuest();
 
-        assertTrue(result.isOpened(), "Guest should stay on About us page.");
+        assertTrue(signIn.getModalTitleText().contains("Welcome back"),
+                "Sign in modal did not open from About Us Form Habit.");
     }
 
     @Test
-    void guestFormHabitFromOurVisionHeadingStaysOnAboutUs() {
+    void guestFormHabitFromOurVisionHeadingOpensSignIn() {
         AboutUsPage aboutUsPage = homePage.getHeader().openAboutUs();
 
-        AboutUsPage result = aboutUsPage.formHabitFromOurVisionHeadingAsGuest();
+        SignInModal signIn = aboutUsPage.formHabitFromOurVisionHeadingAsGuest();
 
-        assertTrue(result.isOpened(), "Guest should stay on About us page.");
+        assertTrue(signIn.getModalTitleText().contains("Welcome back"),
+                "Sign in modal did not open from Our vision Form Habit.");
     }
 
     @Test

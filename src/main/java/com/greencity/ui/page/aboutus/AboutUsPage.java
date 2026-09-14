@@ -42,11 +42,15 @@ public class AboutUsPage extends BasePage {
     }
 
     public boolean isAboutUsHeadingDisplayed() {
-        return isElementDisplayed(headingLocator(UiMessage.ABOUT_US_HEADER));
+        By locator = headingLocator(UiMessage.ABOUT_US_HEADER);
+        waitUntilElementPresent(locator);
+        return isElementDisplayed(locator);
     }
 
     public boolean isOurVisionHeadingDisplayed() {
-        return isElementDisplayed(headingLocator(UiMessage.ABOUT_US_VISION_HEADER));
+        By locator = headingLocator(UiMessage.ABOUT_US_VISION_HEADER);
+        waitUntilElementPresent(locator);
+        return isElementDisplayed(locator);
     }
 
     public ProfilePage formHabitFromAboutUsHeading() {
