@@ -13,6 +13,7 @@ import java.util.List;
 public class EcoNewsPage extends BasePage {
 
     private static final String ECO_NEWS_HASH = "/#/greenCity/news";
+    private static final String CREATE_NEWS_HASH = "/#/greenCity/news/create-news";
 
     @FindBy(xpath = "//button[.//span[normalize-space()='News']]")
     private WebElement newsFilter;
@@ -163,4 +164,18 @@ public class EcoNewsPage extends BasePage {
         waitUntilAllElementsVisible(newsCards);
         return !newsCards.isEmpty();
     }
+
+    public EcoNewsPage openCreateNews() {
+        String currentUrl = driver.getCurrentUrl();
+        String origin = currentUrl.contains("#")
+                ? currentUrl.substring(0, currentUrl.indexOf('#'))
+                : currentUrl;
+
+        origin = origin.replaceAll("/$", "");
+        driver.get(origin + CREATE_NEWS_HASH);
+        waitForPageToLoad(10);
+
+        return this;
+    }
+
 }
