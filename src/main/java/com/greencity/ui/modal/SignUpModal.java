@@ -123,22 +123,34 @@ public class SignUpModal extends BaseModal<SignUpModal> {
         return getElementAttribute(repeatPasswordInput, "type");
     }
 
-    public boolean isEmailInputDisplayed() { return isElementDisplayed(emailInput); }
+    public boolean isEmailInputDisplayed() {
+        return isElementDisplayed(emailInput);
+    }
 
-    public boolean isUserNameInputDisplayed() { return isElementDisplayed(userNameInput); }
+    public boolean isUserNameInputDisplayed() {
+        return isElementDisplayed(userNameInput);
+    }
 
-    public boolean isPasswordInputDisplayed() { return isElementDisplayed(passwordInput); }
+    public boolean isPasswordInputDisplayed() {
+        return isElementDisplayed(passwordInput);
+    }
 
-    public boolean isRepeatPasswordInputDisplayed() { return isElementDisplayed(repeatPasswordInput); }
+    public boolean isRepeatPasswordInputDisplayed() {
+        return isElementDisplayed(repeatPasswordInput);
+    }
 
-    public boolean isSignUpButtonDisplayed() { return isElementDisplayed(signUpButton); }
+    public boolean isSignUpButtonDisplayed() {
+        return isElementDisplayed(signUpButton);
+    }
 
     public boolean isSignInLinkDisplayed() {
         waitUntilElementVisible(signInLink);
         return isElementDisplayed(signInLink);
     }
 
-    public boolean isModalClosed() { return !isElementDisplayed(signUpButton); }
+    public boolean isModalClosed() {
+        return !isElementDisplayed(signUpButton);
+    }
 
 
     @Step("Sign up with email {email}")
