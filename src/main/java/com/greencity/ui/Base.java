@@ -183,4 +183,9 @@ public abstract class Base {
     public void waitForBodyToBePresent() {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
     }
+
+    protected void waitUntilUrlContains(String urlPart) {
+        wait.until(ExpectedConditions.urlContains(urlPart));
+    }
+
 }

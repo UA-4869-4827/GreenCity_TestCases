@@ -6,6 +6,7 @@ import com.greencity.ui.modal.SignUpModal;
 import com.greencity.ui.page.aboutus.AboutUsPage;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.events.EventsPage;
+import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.ui.page.places.PlacesPage;
 import com.greencity.ui.page.profile.ProfilePage;
 import lombok.Getter;
@@ -41,6 +42,10 @@ public class HeaderComponent extends BaseComponent {
     private WebElement mySpaceLink;
 
     @Getter
+    @FindBy(css = "a[href='#/ubs']")
+    private WebElement ubsCourierLink;
+
+    @Getter
     @FindBy(xpath = ".//a[contains(@class,'header_sign-in-link')]")
     private WebElement signInLink;
 
@@ -61,34 +66,38 @@ public class HeaderComponent extends BaseComponent {
         super(driver, rootElement);
     }
 
-    public HeaderComponent clickLogo() {
+    public HomePage clickLogo() {
         clickElement(logo);
-        return this;
+        return new HomePage(driver);
     }
 
     public EcoNewsPage openEcoNews() {
         clickElement(ecoNewsLink);
+        waitUntilUrlContains("#/greenCity/news");
         return new EcoNewsPage(driver);
     }
 
     public EventsPage openEvents() {
         clickElement(eventsLink);
+        //waitUntilUrlContains("#/greenCity/events");
         return new EventsPage(driver);
     }
 
     public PlacesPage openPlaces() {
         clickElement(placesLink);
+        waitUntilUrlContains("#/greenCity/places");
         return new PlacesPage(driver);
     }
 
     public AboutUsPage openAboutUs() {
         clickElement(aboutUsLink);
+        waitUntilUrlContains("#/greenCity/about");
         return new AboutUsPage(driver);
     }
 
-    public ProfilePage openMySpace() {
+    public HeaderComponent clickMySpace() {
         clickElement(mySpaceLink);
-        return new ProfilePage(driver);
+        return this;
     }
 
     public SignInModal clickSignIn() {
@@ -118,6 +127,11 @@ public class HeaderComponent extends BaseComponent {
         openUserMenu();
         clickElement(signOutLink);
         waitUntilElementVisible(signInLink);
+        return this;
+    }
+
+    public HeaderComponent clickUbsCourier() {
+        clickElement(ubsCourierLink);
         return this;
     }
 }

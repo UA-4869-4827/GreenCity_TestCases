@@ -4,6 +4,7 @@ import com.greencity.ui.component.NewsCardComponent;
 import com.greencity.ui.component.ViewModeToggleComponent;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
+import lombok.Getter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,6 +14,9 @@ import java.util.List;
 public class EcoNewsPage extends BasePage {
 
     private static final String ECO_NEWS_HASH = "/#/greenCity/news";
+
+    @FindBy(css = "h1.main-header")
+    private WebElement pageHeading;
 
     @FindBy(xpath = "//button[.//span[normalize-space()='News']]")
     private WebElement newsFilter;
@@ -143,5 +147,9 @@ public class EcoNewsPage extends BasePage {
         waitForPageToLoad(10);
 
         return this;
+    }
+
+    public boolean isPageHeadingDisplayed() {
+        return isElementDisplayed(pageHeading);
     }
 }

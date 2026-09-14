@@ -4,6 +4,7 @@ import com.greencity.ui.component.EventCardComponent;
 import com.greencity.ui.component.ViewModeToggleComponent;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.BasePage;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,9 @@ import java.util.List;
 public class EventsPage extends BasePage {
 
     private static final String EVENTS_HASH = "/#/greenCity/events";
+
+    @FindBy(css = "p.main-header")
+    private WebElement pageHeading;
 
     @FindBy(css = "div.create button")
     private WebElement createEventButton;
@@ -139,5 +143,9 @@ public class EventsPage extends BasePage {
         StringBuilder concat = new StringBuilder("concat('");
         concat.append(String.join("', \"'\", '", parts)).append("')");
         return concat.toString();
+    }
+
+    public boolean isPageHeadingDisplayed() {
+        return isElementDisplayed(pageHeading);
     }
 }
