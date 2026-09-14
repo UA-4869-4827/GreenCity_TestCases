@@ -132,9 +132,9 @@ public class HeaderComponent extends BaseComponent {
         return new AboutUsPage(driver);
     }
 
-    public ProfilePage openMySpace() {
+    public HeaderComponent clickMySpace() {
         clickElement(mySpaceLink);
-        return new ProfilePage(driver);
+        return this;
     }
 
     public SignInModal openMySpaceAsGuest() {
@@ -206,6 +206,11 @@ public class HeaderComponent extends BaseComponent {
         LocaleContext.set(locale);
         waitForPageToLoad();
         wait.until(ExpectedConditions.textToBePresentInElement(signUpLink, UiMessage.SIGN_UP.text()));
+        return this;
+    }
+
+    public HeaderComponent clickUbsCourier() {
+        clickElement(ubsCourierLink);
         return this;
     }
 }

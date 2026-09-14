@@ -1,5 +1,6 @@
 package com.greencity.header;
 
+import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.aboutus.AboutUsPage;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.events.EventsPage;
@@ -63,4 +64,27 @@ public class HeaderTest extends BaseTestRunner {
         );
     }
 
+    @Test
+    @DisplayName("TC-P0-NAV-02 – Guest My space is gated; UBS courier leaves GreenCity")
+    void testGuestHeaderNavigation() {
+        homePage.getHeader().clickMySpace();
+
+        SignInModal signInModal = new SignInModal(driver);
+
+        Assertions.assertEquals(
+                "Welcome back!",
+                signInModal.getModalTitleText(),
+                "Sign in modal is not displayed"
+        );
+
+        homePage = signInModal.close(HomePage.class);
+
+        homePage.getHeader().clickUbsCourier();
+
+        Assertions.assertTrue(
+                driver.getCurrentUrl().contains("#/ubs"),
+                "UBS courier page was not opened"
+        );
+
+    }
 }
