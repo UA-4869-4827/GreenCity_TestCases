@@ -42,6 +42,10 @@ public class HeaderComponent extends BaseComponent {
     private WebElement mySpaceLink;
 
     @Getter
+    @FindBy(css = "a[href='#/ubs']")
+    private WebElement ubsCourierLink;
+
+    @Getter
     @FindBy(xpath = ".//a[contains(@class,'header_sign-in-link')]")
     private WebElement signInLink;
 
@@ -91,9 +95,9 @@ public class HeaderComponent extends BaseComponent {
         return new AboutUsPage(driver);
     }
 
-    public ProfilePage openMySpace() {
+    public HeaderComponent clickMySpace() {
         clickElement(mySpaceLink);
-        return new ProfilePage(driver);
+        return this;
     }
 
     public SignInModal clickSignIn() {
@@ -123,6 +127,11 @@ public class HeaderComponent extends BaseComponent {
         openUserMenu();
         clickElement(signOutLink);
         waitUntilElementVisible(signInLink);
+        return this;
+    }
+
+    public HeaderComponent clickUbsCourier() {
+        clickElement(ubsCourierLink);
         return this;
     }
 }
