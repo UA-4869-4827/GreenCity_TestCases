@@ -314,6 +314,11 @@ public class HomePage extends BasePage {
     }
 
     public boolean isSuccessSubscriptionMessageVisible() {
+        waitUntilElementVisible(successfulSubscriptionMessage);
+        return isElementDisplayed(successfulSubscriptionMessage);
+    }
+
+    public boolean isSuccessSubscriptionMessagePresent() {
         return isElementDisplayed(successfulSubscriptionMessage);
     }
 
@@ -322,6 +327,8 @@ public class HomePage extends BasePage {
     }
 
     public boolean isErrorSubscriptionMessageVisible() {
+        waitUntilElementVisible(errorSubscriptionMessage);
         return isElementDisplayed(errorSubscriptionMessage);
     }
+
 }

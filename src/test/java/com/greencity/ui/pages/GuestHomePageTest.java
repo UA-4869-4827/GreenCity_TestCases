@@ -143,7 +143,7 @@ public class GuestHomePageTest extends BaseTestRunner {
         homePage.subscribe("");
         assertTrue(homePage.isEmailValidationErrorDisplayed(), "Email validation error is not displayed for an empty email");
         assertEquals(UiMessage.HOMEPAGE_NEWSLETTER_ERROR_VALIDATION.text(), homePage.getEmailValidationErrorText(), "Email validation error text is incorrect for an empty email");
-        assertFalse(homePage.isSuccessSubscriptionMessageVisible(), "Success snackbar is displayed after subscribing with an empty email");
+        assertFalse(homePage.isSuccessSubscriptionMessagePresent(), "Success snackbar is displayed after subscribing with an empty email");
     }
 
     @Test
@@ -151,7 +151,7 @@ public class GuestHomePageTest extends BaseTestRunner {
         homePage.subscribe("invalid-email");
         assertTrue(homePage.isEmailValidationErrorDisplayed(), "Email validation error is not displayed for an invalid email");
         assertEquals(UiMessage.HOMEPAGE_NEWSLETTER_ERROR_VALIDATION.text(), homePage.getEmailValidationErrorText(), "Email validation error text is incorrect for an invalid email");
-        assertFalse(homePage.isSuccessSubscriptionMessageVisible(), "Success snackbar is displayed after subscribing with an invalid email");
+        assertFalse(homePage.isSuccessSubscriptionMessagePresent(), "Success snackbar is displayed after subscribing with an invalid email");
     }
 
 //    TC-P1-NSL-02 – Unique valid email shows a success snackbar #46
