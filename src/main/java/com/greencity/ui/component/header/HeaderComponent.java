@@ -19,7 +19,6 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-
 public class HeaderComponent extends BaseComponent {
 
     @FindBy(xpath = ".//img[@src='assets/img/logo.svg']")
@@ -68,6 +67,10 @@ public class HeaderComponent extends BaseComponent {
     public boolean isLogoDisplayed() {
         return isElementDisplayed(logo);
     }
+
+    // public boolean isEcoNewsActive() {
+    //     return getElementAttribute(ecoNewsLink, "class").contains("active-link");
+    // }
 
     public boolean isSignInDisplayed() {
         return isElementDisplayed(signInLink);

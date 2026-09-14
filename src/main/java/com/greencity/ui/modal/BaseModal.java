@@ -37,6 +37,10 @@ public abstract class BaseModal<T extends BaseModal<T>> extends Base {
         clickElement(googleButton);
     }
 
+    public boolean isGoogleButtonDisplayed() {
+        return isElementDisplayed(googleButton);
+    }
+
     @Step("Close modal")
     public <P extends BasePage> P close(Class<P> pageClass) {
         clickElement(closeButton);

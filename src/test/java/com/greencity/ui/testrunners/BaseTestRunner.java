@@ -29,8 +29,9 @@ public class BaseTestRunner {
     @BeforeEach
     void setUp() {
         initDriver();
-        driver.get(testValueProvider.getBaseUIUrl());
-        LocaleSupport.apply(driver, testValueProvider.getLocale());
+        String baseUrl = testValueProvider.getBaseUIUrl();
+        driver.get(baseUrl);
+        LocaleSupport.apply(driver, testValueProvider.getLocale(), baseUrl);
         homePage = new HomePage(driver);
     }
 
