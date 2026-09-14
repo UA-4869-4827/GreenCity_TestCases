@@ -18,6 +18,7 @@ import java.util.List;
 public class EcoNewsPage extends BasePage {
 
     private static final String ECO_NEWS_HASH = "/#/greenCity/news";
+    private static final String CREATE_NEWS_HASH = "/#/greenCity/news/create-news";
 
     @Getter
     public enum NewsTag {
