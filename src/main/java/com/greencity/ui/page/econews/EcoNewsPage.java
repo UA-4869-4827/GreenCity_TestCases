@@ -50,6 +50,12 @@ public class EcoNewsPage extends BasePage {
     @FindBy(xpath = "//span[@aria-label='table view']/parent::*")
     private WebElement viewModeRoot;
 
+    @FindBy(css = "h1.main-header")
+    private WebElement pageHeading;
+
+    @FindBy(css = "app-remaining-count h2")
+    private WebElement itemsFoundCounter;
+
     private ViewModeToggleComponent viewModeToggle;
 
     public EcoNewsPage(WebDriver driver) {
@@ -143,5 +149,18 @@ public class EcoNewsPage extends BasePage {
         waitForPageToLoad(10);
 
         return this;
+    }
+
+    public boolean isPageHeadingDisplayed() {
+        return isElementDisplayed(pageHeading);
+    }
+
+    public boolean isItemsFoundCounterDisplayed() {
+        return isElementDisplayed(itemsFoundCounter);
+    }
+
+    public boolean isNewsCardDisplayed() {
+        waitUntilAllElementsVisible(newsCards);
+        return !newsCards.isEmpty();
     }
 }

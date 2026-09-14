@@ -25,4 +25,10 @@ public class ViewModeToggleComponent extends BaseComponent {
         clickElement(listViewButton);
         return this;
     }
+
+    public boolean isTableViewActive() {
+        return Boolean.parseBoolean(
+                getElementAttribute(tableViewButton, "aria-pressed")
+        );
+    }
 }
