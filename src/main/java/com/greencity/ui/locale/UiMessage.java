@@ -6,6 +6,10 @@ package com.greencity.ui.locale;
 public enum UiMessage {
     SIGN_UP("top-bar.sign-up"),
 
+    SIGN_IN_EMAIL_REQUIRED("sign-in.email.required"),
+    SIGN_IN_INVALID_CREDENTIALS("sign-in.invalid-credentials"),
+    SIGN_IN_PASSWORD_VALIDATION("sign-in.password.validation"),
+
     EVENT_MORE("event.btn-top"),
     EVENT_JOIN("event.btn-join"),
     EVENT_EDIT("event.btn-edit"),

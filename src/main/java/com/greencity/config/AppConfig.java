@@ -4,8 +4,6 @@ import com.greencity.ui.locale.UiLocale;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Locale;
 import java.util.Optional;
@@ -22,7 +20,6 @@ public final class AppConfig {
 
     private AppConfig() {
         loadFromClasspath("config.properties");
-        loadFromFile(Path.of("src/test/resources/config.properties"));
     }
 
     public static AppConfig get() {
@@ -118,7 +115,11 @@ public final class AppConfig {
         if (raw == null || raw.isBlank()) {
             return defaultValue;
         }
-        return Integer.parseInt(raw.trim());
+        try {
+            return Integer.parseInt(raw.trim());
+        } catch (NumberFormatException ignored) {
+            return defaultValue;
+        }
     }
 
     public boolean getBoolean(String key, boolean defaultValue) {
@@ -126,7 +127,14 @@ public final class AppConfig {
         if (raw == null || raw.isBlank()) {
             return defaultValue;
         }
-        return Boolean.parseBoolean(raw.trim());
+        String normalized = raw.trim();
+        if ("true".equalsIgnoreCase(normalized)) {
+            return true;
+        }
+        if ("false".equalsIgnoreCase(normalized)) {
+            return false;
+        }
+        return defaultValue;
     }
 
     private void loadFromClasspath(String resourceName) {
@@ -136,17 +144,6 @@ public final class AppConfig {
             }
         } catch (IOException ignored) {
             // Fall back to file / env / defaults.
-        }
-    }
-
-    private void loadFromFile(Path path) {
-        if (!Files.isRegularFile(path)) {
-            return;
-        }
-        try (InputStream in = Files.newInputStream(path)) {
-            properties.load(in);
-        } catch (IOException ignored) {
-            // Fall back to env / defaults.
         }
     }
 

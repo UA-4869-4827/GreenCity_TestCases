@@ -3,6 +3,7 @@ package com.greencity.ui;
 import com.greencity.ui.modal.ForgotPasswordModal;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.modal.SignUpModal;
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.ui.testrunners.BaseTestRunner;
 import org.junit.jupiter.api.Test;
@@ -90,7 +91,7 @@ public class SignInTest extends BaseTestRunner {
         signInModal.enterEmail("");
         signInModal.enterPassword("TestPassword123");
 
-        assertEquals("Email is required.",
+        assertEquals(UiMessage.SIGN_IN_EMAIL_REQUIRED.text(),
                 signInModal.getEmailErrorText());
     }
 
@@ -113,9 +114,8 @@ public class SignInTest extends BaseTestRunner {
         signInModal.enterPassword("Test12");
         signInModal.clickEmailField();
 
-        String actual = signInModal.getPasswordErrorText();
-        assertTrue(actual.contains("8 to 20 characters"),
-                "Expected password validation message, but got: " + actual);
+        assertTrue(signInModal.getPasswordErrorText().contains(UiMessage.SIGN_IN_PASSWORD_VALIDATION.text()),
+                "Expected password validation message");
     }
 
     @Test
@@ -126,7 +126,7 @@ public class SignInTest extends BaseTestRunner {
                 "wrong@example.com",
                 "WrongPassword123");
 
-        assertEquals("Bad email or password",
+        assertEquals(UiMessage.SIGN_IN_INVALID_CREDENTIALS.text(),
                 signInModal.getPasswordErrorText());
 
         assertTrue(signInModal.isCloseButtonDisplayed());
@@ -134,20 +134,16 @@ public class SignInTest extends BaseTestRunner {
 
     // TC-P1-SIN-03 – Valid credentials close the modal and authenticate the header
     // #50//
-
     @Test
     void registeredUserShouldSignInSuccessfully() {
         SignInModal signInModal = homePage.getHeader().clickSignIn();
 
-        signInModal.enterEmail(testValueProvider.getUserEmail());
-        signInModal.enterPassword(testValueProvider.getUserPassword());
+        HomePage homePageAfterSignIn = signInModal.signIn(
+                testValueProvider.getUserEmail(),
+                testValueProvider.getUserPassword(),
+                HomePage.class);
 
-        signInModal.clickSignInButton();
-        signInModal.waitUntilSignInCompleted();
-
-        assertFalse(signInModal.isCloseButtonDisplayed());
-
-        assertTrue(homePage.getHeader().isLoggedIn());
-        assertFalse(homePage.getHeader().isSignUpDisplayed());
+        assertTrue(homePageAfterSignIn.getHeader().isLoggedIn());
+        assertFalse(homePageAfterSignIn.getHeader().isSignUpDisplayed());
     }
 }
