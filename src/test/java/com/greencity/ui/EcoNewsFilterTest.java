@@ -5,6 +5,9 @@ import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.testrunners.BaseTestRunner;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,7 +34,13 @@ class EcoNewsFilterTest extends BaseTestRunner {
 
         ecoNewsPage.waitUntilNewsCardsAreDisplayed();
 
-        for (NewsCardComponent card : ecoNewsPage.getVisibleNewsCards()) {
+        List<NewsCardComponent> educationCards = ecoNewsPage.getVisibleNewsCards();
+
+        assertTrue(
+                !educationCards.isEmpty(),
+                "News cards should be displayed after applying Education filter");
+
+        for (NewsCardComponent card : educationCards) {
 
             assertTrue(
                     card.getTags().stream()
@@ -56,7 +65,13 @@ class EcoNewsFilterTest extends BaseTestRunner {
 
         ecoNewsPage.waitUntilNewsCardsAreDisplayed();
 
-        for (NewsCardComponent card : ecoNewsPage.getVisibleNewsCards()) {
+        List<NewsCardComponent> combinedCards = ecoNewsPage.getVisibleNewsCards();
+
+        assertTrue(
+                !combinedCards.isEmpty(),
+                "News cards should be displayed after applying combined filters");
+
+        for (NewsCardComponent card : combinedCards) {
 
             boolean hasEducation = card.getTags().stream()
                     .anyMatch(tag -> tag.equalsIgnoreCase(
@@ -110,12 +125,10 @@ class EcoNewsFilterTest extends BaseTestRunner {
 
         String restoredCount = ecoNewsPage.waitForItemsFoundCountToChange(searchCount);
 
-        assertTrue(
-                restoredCount.equals(initialCount),
-                "Clear search should restore the initial count. Expected: "
-                        + initialCount
-                        + ", but was: "
-                        + restoredCount);
+        assertEquals(
+        initialCount,
+        restoredCount,
+        "Clear search should restore the initial count");
 
         assertTrue(
                 !ecoNewsPage.getVisibleNewsCards().isEmpty(),

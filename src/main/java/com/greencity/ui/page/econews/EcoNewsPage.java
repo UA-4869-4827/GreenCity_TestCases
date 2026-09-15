@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -154,8 +155,13 @@ public class EcoNewsPage extends BasePage {
     }
 
     public String waitForItemsFoundCountToChange(String previousCount) {
+        By itemsFoundCountLocator = By.cssSelector("app-remaining-count h2");
+
         return wait.until(driver -> {
-            String currentCount = itemsFoundCount.getText().trim();
+            String currentCount = driver.findElement(itemsFoundCountLocator)
+                    .getText()
+                    .trim();
+
             return !currentCount.equals(previousCount) ? currentCount : null;
         });
     }
@@ -167,8 +173,8 @@ public class EcoNewsPage extends BasePage {
     }
 
     public void waitUntilNewsCardsAreDisplayed() {
-        wait.until(driver -> newsCards.stream()
-                .anyMatch(element -> element.isDisplayed()));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div.list-gallery")));
     }
 
     public void waitUntilSearchResultIsDisplayed(String searchQuery) {
