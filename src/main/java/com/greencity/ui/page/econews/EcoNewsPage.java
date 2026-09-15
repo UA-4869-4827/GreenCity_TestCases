@@ -195,8 +195,12 @@ public class EcoNewsPage extends BasePage {
     }
 
     public String waitForItemsFoundCountToChange(String previousCount) {
+        By itemsFoundCountLocator = By.cssSelector("app-remaining-count h2");
+
         return wait.until(driver -> {
-            String currentCount = itemsFoundCounter.getText().trim();
+            String currentCount = driver.findElement(itemsFoundCountLocator)
+                    .getText()
+                    .trim();
             return !currentCount.equals(previousCount) ? currentCount : null;
         });
     }
@@ -208,8 +212,8 @@ public class EcoNewsPage extends BasePage {
     }
 
     public void waitUntilNewsCardsAreDisplayed() {
-        wait.until(driver -> newsCards.stream()
-                .anyMatch(element -> element.isDisplayed()));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div.list-gallery")));
     }
 
     public void waitUntilSearchResultIsDisplayed(String searchQuery) {
@@ -233,7 +237,6 @@ public class EcoNewsPage extends BasePage {
         return driver.findElement(locator);
     }
 
-<<<<<<< HEAD
     public List<String> getFilterLabels() {
         waitUntilAllElementsVisible(filterLabels);
         return filterLabels.stream()
