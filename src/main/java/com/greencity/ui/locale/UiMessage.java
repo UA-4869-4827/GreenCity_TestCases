@@ -19,6 +19,9 @@ public enum UiMessage {
     HOMEPAGE_NEWSLETTER_ERROR_VALIDATION("homepage.newsletter.error-validation"),
 
     SIGN_IN_MODAL_WELCOME_TEXT("sign-in-modal.welcome-text"),
+    SIGN_IN_EMAIL_REQUIRED("sign-in.email.required"),
+    SIGN_IN_INVALID_CREDENTIALS("sign-in.invalid-credentials"),
+    SIGN_IN_PASSWORD_VALIDATION("sign-in.password.validation"),
 
     EVENT_MORE("event.btn-top"),
     EVENT_JOIN("event.btn-join"),
