@@ -84,6 +84,12 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".submit-buttons button.primary-global-button")
     private WebElement publishButton;
 
+    @FindBy(css = "app-warning-pop-up .warning-title")
+    private WebElement cancelWarningTitle;
+
+    @FindBy(css = "app-warning-pop-up button.primary-global-button")
+    private WebElement confirmCancelButton;
+
     @FindBy(css = "app-create-edit-news h2.title-header")
     private WebElement pageHeading;
 
@@ -186,10 +192,10 @@ public class CreateNewsPage extends BasePage {
         return this;
     }
 
-    public EcoNewsPage cancel() {
+    public CreateNewsPage cancel() {
         clickBy(By.xpath("//button[contains(@class,'tertiary-global-button') and normalize-space()="
                 + xpathLiteral(UiMessage.CREATE_NEWS_CANCEL.text()) + "]"));
-        return new EcoNewsPage(driver);
+        return this;
     }
 
     public PreviewNewsPage preview() {
@@ -199,6 +205,16 @@ public class CreateNewsPage extends BasePage {
 
     public EcoNewsPage publish() {
         clickElement(publishButton);
+        return new EcoNewsPage(driver);
+    }
+
+    public boolean isCancelConfirmationDisplayed() {
+        waitUntilElementVisible(cancelWarningTitle);
+        return cancelWarningTitle.isDisplayed();
+    }
+
+    public EcoNewsPage confirmCancel() {
+        clickElement(confirmCancelButton);
         return new EcoNewsPage(driver);
     }
 
