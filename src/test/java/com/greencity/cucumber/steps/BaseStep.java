@@ -1,5 +1,6 @@
 package com.greencity.cucumber.steps;
 
+import com.greencity.ui.driver.ChromeOptionsFactory;
 import com.greencity.ui.locale.LocaleContext;
 import com.greencity.utils.TestValueProvider;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -22,13 +23,11 @@ public class BaseStep {
     @Step("init ChromeDriver")
     public void initDriver() {
         WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        if (provider.isHeadless()) {
-            options.addArguments("--headless=new");
-        }
+        boolean headless = provider.isHeadless() || ChromeOptionsFactory.isCi();
+        ChromeOptions options = ChromeOptionsFactory.create(headless);
 
         driver = new ChromeDriver(options);
-        if (provider.isWindowMaximized() && !provider.isHeadless()) {
+        if (provider.isWindowMaximized() && !headless) {
             driver.manage().window().maximize();
         }
         driver.manage().timeouts().implicitlyWait(Duration.ZERO);
