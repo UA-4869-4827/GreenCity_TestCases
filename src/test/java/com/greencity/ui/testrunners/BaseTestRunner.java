@@ -9,6 +9,7 @@ import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import com.greencity.ui.driver.ChromeOptionsFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -36,13 +37,11 @@ public class BaseTestRunner {
 
     @Step("init ChromeDriver")
     public void initDriver() {
-        ChromeOptions options = new ChromeOptions();
-        if (testValueProvider.isHeadless()) {
-            options.addArguments("--headless=new");
-        }
+        boolean headless = testValueProvider.isHeadless() || ChromeOptionsFactory.isCi();
+        ChromeOptions options = ChromeOptionsFactory.create(headless);
 
         driver = new ChromeDriver(options);
-        if (testValueProvider.isWindowMaximized() && !testValueProvider.isHeadless()) {
+        if (testValueProvider.isWindowMaximized() && !headless) {
             driver.manage().window().maximize();
         }
         driver.manage().timeouts().implicitlyWait(Duration.ZERO);

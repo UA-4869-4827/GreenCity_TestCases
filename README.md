@@ -146,6 +146,40 @@ public class HeaderGuestTest extends BaseTestRunner {
 
 Do not add a `SignInPage`. Auth is `homePage.getHeader().clickSignIn()`.
 
+## CI (GitHub Actions)
+
+### On every push / PR to `main` (`ci.yml`)
+
+| Job | What it does | Required to merge |
+|-----|--------------|-------------------|
+| **quality** | Checkstyle + `test-compile` | Yes |
+| **ui-smoke** | Guest UI tests tagged `@Tag("smoke")`, headless Chrome | Yes |
+| **ui-auth** | Tests tagged `@Tag("auth")` | Only if repo variable `RUN_AUTH_UI_TESTS=true` |
+
+### Nightly (`nightly.yml`)
+
+| Trigger | When |
+|---------|------|
+| **schedule** | Every day at **02:00 UTC** (≈ 05:00 Kyiv) |
+| **workflow_dispatch** | Manual run from the Actions tab |
+
+Nightly always runs **quality** + **ui-smoke**. **ui-auth** runs only if `USER_EMAIL` / `USER_PASSWORD` secrets are set; otherwise that job skips cleanly.
+
+Config in CI comes from environment variables (see `AppConfig`: env → system property → `config.properties`). Secrets for logged-in tests:
+
+- `USER_EMAIL`, `USER_PASSWORD`, optional `USER_NAME`
+- Repo variable `RUN_AUTH_UI_TESTS=true` to also enable auth on PR CI
+
+Local equivalents:
+
+```bash
+mvn -B -DskipTests validate test-compile   # quality gate
+mvn -B -Psmoke test                        # guest smoke (set headless=true in config or HEADLESS=true)
+mvn -B -Pauth test                         # logged-in suite
+```
+
+Tag new guest smoke tests with `@Tag("smoke")`. Tag tests that need a real account with `@Tag("auth")`.
+
 ## Allure
 
 ```bash
