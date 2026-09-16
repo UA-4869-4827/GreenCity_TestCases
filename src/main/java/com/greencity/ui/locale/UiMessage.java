@@ -19,6 +19,14 @@ public enum UiMessage {
     HOMEPAGE_NEWSLETTER_ERROR_VALIDATION("homepage.newsletter.error-validation"),
 
     SIGN_IN_MODAL_WELCOME_TEXT("sign-in-modal.welcome-text"),
+    FORGOT_PASSWORD_TITLE("forgot-password.modal.title"),
+    FORGOT_PASSWORD_SUBTITLE("forgot-password.modal.subtitle"),
+    FORGOT_PASSWORD_SEND_LINK_BUTTON_TEXT("forgot-password.modal.send-link.button.text"),
+    FORGOT_PASSWORD_BACK_TO_SIGN_IN_TEXT("forgot-password.modal.back-to-sign-in.button.text"),
+    FORGOT_PASSWORD_SIGN_IN_WITH_GOOGLE_TEXT("forgot-password.modal.sign-in-with-google.text"),
+    FORGOT_PASSWORD_INVALID_EMAIL_ERROR_MESSAGE("forgot-password.modal.invalid-email.error-message"),
+    FORGOT_PASSWORD_EMPTY_EMAIL_ERROR_MESSAGE("forgot-password.modal.empty-email.error-message"),
+    FORGOT_PASSWORD_UNREGISTERED_EMAIL_ERROR_MESSAGE("forgot-password.modal.unregistered-email.error-message"),
 
     EVENT_MORE("event.btn-top"),
     EVENT_JOIN("event.btn-join"),
