@@ -16,6 +16,15 @@ public class AboutUsPage extends BasePage {
 
     private static final String ABOUT_US_HASH = "/#/greenCity/about";
 
+    @FindBy(css = "#main-content > div.about-section.section > div > h2")
+    private WebElement aboutUsSectionTitle;
+
+    @FindBy(css = "#main-content > div.vision-section > div > div > h2")
+    private WebElement ourVisionTitle;
+
+    @FindBy(css = "h2.vision-gallery__header")
+    private WebElement easierWithUsTitle;
+
     @FindBy(css = "a.vision-card__link[href*='/places']")
     private WebElement findEcoPlacesLink;
 
@@ -37,14 +46,38 @@ public class AboutUsPage extends BasePage {
         return this;
     }
 
+    public boolean isAboutUsSectionTitleVisible() {
+        return isElementDisplayed(aboutUsSectionTitle);
+    }
+
+    public String getAboutUsSectionTitle() {
+        return getElementText(aboutUsSectionTitle);
+    }
+
+    public boolean isOurVisionSectionTitleVisible() {
+        return isElementDisplayed(ourVisionTitle);
+    }
+
+    public String getOurVisionSectionTitle() {
+        return getElementText(ourVisionTitle);
+    }
+
+    public boolean isEasierWithUsSectionTitleVisible() {
+        return isElementDisplayed(easierWithUsTitle);
+    }
+
+    public String getEasierWithUsSectionTitle() {
+        return getElementText(easierWithUsTitle);
+    }
+
     public ProfilePage formHabitFromAboutUsHeading() {
         clickElement(habitButtonNextTo(UiMessage.ABOUT_US_HEADER));
         return new ProfilePage(driver);
     }
 
-    public SignInModal formHabitFromAboutUsHeadingAsGuest() {
+    public AboutUsPage formHabitFromAboutUsHeadingAsGuest() {
         clickElement(habitButtonNextTo(UiMessage.ABOUT_US_HEADER));
-        return new SignInModal(driver);
+        return new AboutUsPage(driver);
     }
 
     public ProfilePage formHabitFromOurVisionHeading() {
@@ -52,15 +85,21 @@ public class AboutUsPage extends BasePage {
         return new ProfilePage(driver);
     }
 
-    public SignInModal formHabitFromOurVisionHeadingAsGuest() {
+    public AboutUsPage formHabitFromOurVisionHeadingAsGuest() {
         clickElement(habitButtonNextTo(UiMessage.ABOUT_US_VISION_HEADER));
-        return new SignInModal(driver);
+        return new AboutUsPage(driver);
     }
 
     public PlacesPage findEcoPlaces() {
         clickElement(findEcoPlacesLink);
         return new PlacesPage(driver);
     }
+
+    public SignInModal findEcoPlacesAsGuest() {
+        clickElement(findEcoPlacesLink);
+        return new SignInModal(driver);
+    }
+
 
     public FriendsPage findPeopleFromEcoProductsHeading() {
         clickElement(findPeopleFromEcoProductsLink);
