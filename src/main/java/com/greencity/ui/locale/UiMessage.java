@@ -61,6 +61,7 @@ public enum UiMessage {
 
     ABOUT_US_HEADER("about-us.intro.block-1.header"),
     ABOUT_US_VISION_HEADER("about-us.intro.block-2.header"),
+    ABOUT_US_EASIER_HEADER("about-us.intro.block-3.header"),
 
     PLACES_FILTER_SHOPS("places.filter.shops"),
     PLACES_FILTER_RESTAURANTS("places.filter.restaurants"),
