@@ -48,6 +48,9 @@ public class HeaderComponent extends BaseComponent {
     @FindBy(xpath = ".//a[contains(@class,'header_sign-in-link')]")
     private WebElement signInLink;
 
+    @FindBy(css = "img.ubs-header-sing-in-img-greencity")
+    private WebElement signInIcon;
+
     @FindBy(css = ".header_sign-up-link, .header_sign-up-btn")
     private WebElement signUpLink;
 
@@ -137,7 +140,7 @@ public class HeaderComponent extends BaseComponent {
     }
 
     public SignInModal clickSignIn() {
-        clickElement(signInLink);
+        clickElement(signInIcon);
         return new SignInModal(driver);
     }
 
