@@ -47,7 +47,7 @@ public class NewsDetailsPage extends BasePage {
     @FindBy(css = "button.delete-news-button")
     private WebElement deleteButton;
 
-    @FindBy(css = "app-warning-pop-up button.primary-global-button")
+    @FindBy(css = "app-dialog-pop-up button.primary-global-button")
     private WebElement confirmDeleteButton;
 
     @FindBy(css = "div.news-title")
@@ -161,9 +161,13 @@ public class NewsDetailsPage extends BasePage {
         return new CreateNewsPage(driver);
     }
 
+    @Step("Delete news")
     public EcoNewsPage deleteNews() {
         clickElement(deleteButton);
         clickElement(confirmDeleteButton);
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.urlMatches(".*/greenCity/news/?$"));
+        waitForPageToLoad();
         return new EcoNewsPage(driver);
     }
 
