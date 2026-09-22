@@ -84,6 +84,12 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".submit-buttons button.primary-global-button")
     private WebElement publishButton;
 
+    @FindBy(css = ".source-block .field-info.warning")
+    private WebElement sourceWarning;
+
+    @FindBy(xpath = "//h3[normalize-space()='Content']/following-sibling::*[contains(@class,'field-info')]")
+    private WebElement contentInfo;
+
     @FindBy(css = "app-warning-pop-up .warning-title")
     private WebElement cancelWarningTitle;
 
@@ -352,6 +358,54 @@ public class CreateNewsPage extends BasePage {
 
     public boolean isPublishButtonEnabled() {
         return publishButton.isEnabled();
+    }
+
+    public boolean isTitleCounterDisplayed() {
+        return isElementDisplayed(titleCounter);
+    }
+
+    public boolean isTitleCounterWarning() {
+        return classContains(titleCounter, "warning");
+    }
+
+    public boolean isTitleInvalid() {
+        return classContains(titleInput, "ng-invalid");
+    }
+
+    public String getTitleText() {
+        return getTitleValue();
+    }
+
+    public CreateNewsPage focusTitleField() {
+        clickElement(titleInput);
+        return this;
+    }
+
+    public CreateNewsPage focusSourceField() {
+        clickElement(sourceInput);
+        return this;
+    }
+
+    public boolean isSourceWarningDisplayed() {
+        return isElementDisplayed(sourceWarning);
+    }
+
+    public String getSourceWarningText() {
+        waitUntilElementVisible(sourceWarning);
+        return getElementText(sourceWarning).trim();
+    }
+
+    public boolean isSourceWarningRed() {
+        return classContains(sourceWarning, "warning");
+    }
+
+    public boolean isContentInfoWarning() {
+        return classContains(contentInfo, "warning");
+    }
+
+    private boolean classContains(WebElement element, String className) {
+        String cssClass = element.getDomAttribute("class");
+        return cssClass != null && cssClass.contains(className);
     }
 
     public List<String> getVisibleFieldOrder() {
