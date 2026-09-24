@@ -117,11 +117,6 @@ public class CreateNewsPage extends BasePage {
         return this;
     }
 
-    //    public CreateNewsPage selectTag(String tagName) {
-//        clickBy(By.xpath("//button[contains(@class,'tag-button')]//span[normalize-space()="
-//                + xpathLiteral(tagName) + "]"));
-//        return this;
-//    }
     public CreateNewsPage selectTag(String tagName) {
         clickElement(tagButton);
         return this;
@@ -137,6 +132,7 @@ public class CreateNewsPage extends BasePage {
                 .map(this::getElementText)
                 .collect(Collectors.toList());
     }
+
 
     public int getTagsCount() {
         return tagButtons.size();

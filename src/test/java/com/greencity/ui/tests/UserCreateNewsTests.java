@@ -1,5 +1,6 @@
 package com.greencity.ui.tests;
 
+import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.econews.CreateNewsPage;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
@@ -11,14 +12,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+import static com.greencity.ui.locale.UiMessage.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     private static final List<String> EXPECTED_TAGS =
-            List.of("News", "Events", "Education", "Initiatives", "Ads");
+            List.of(NEWS_TAG_NEWS.text(),
+                    NEWS_TAG_EVENTS.text(),
+                    NEWS_TAG_EDUCATION.text(),
+                    NEWS_TAG_INITIATIVES.text(),
+                    NEWS_TAG_ADS.text());
 
     private CreateNewsPage createNewsPage;
+    private String correctNewsTitle = "Coffee takeaway with 20% discount";
+    private String correctNewsContent = "This is a valid content string with more than twenty characters.";
 
     @BeforeEach
     void beforeCreateNewsTest() {
@@ -52,9 +60,9 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     @Test
     void titleFieldShouldHaveCorrectPlaceholderAndCharacterCounter() {
-        assertEquals("e.g. Coffee takeaway with 20% discount", createNewsPage.getTitlePlaceholder(),
+        assertEquals(CREATE_NEWS_TITLE_FIELD_PLACEHOLDER.text(), createNewsPage.getTitlePlaceholder(),
                 "Title placeholder text is incorrect");
-        assertEquals("0/170", createNewsPage.getTitleCounterText().trim(), "Title character counter should start at 0/170");
+        assertEquals(UiMessage.CREATE_NEWS_TITLE_FIELD_INFO.text(), createNewsPage.getTitleCounterText().trim(), "Title character counter should start at 0/170");
     }
 
 
@@ -67,24 +75,23 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     @Test
     void tagsSectionShouldDisplayThreeTagsLimitHint() {
-        assertEquals("Only 3 tags can be added", createNewsPage.getTagsLimitHintText().trim(), "Tags limit hint text is incorrect or missing");
+        assertEquals(CREATE_NEWS_TAGS_INFO.text(), createNewsPage.getTagsLimitHintText().trim(), "Tags limit hint text is incorrect or missing");
     }
 
 
     @Test
     void contentFieldShouldHaveCorrectPlaceholderAndCounterHint() {
-        assertEquals("e.g. Short description of news, agenda for event",
+        assertEquals(UiMessage.CREATE_NEWS_MAIN_CONTENT_PLACEHOLDER.text(),
                 createNewsPage.getContentPlaceholder(), "Content placeholder text is incorrect");
-        assertEquals("Must be minimum 20 and maximum 63 206 symbols",
+        assertEquals(UiMessage.CREATE_NEWS_MAIN_CONTENT_HINT.text(),
                 createNewsPage.getContentCounterHintText().trim(), "Content length hint text is incorrect");
     }
 
 
     @Test
     void sourceFieldShouldHaveCorrectPlaceholderAndHintText() {
-        assertEquals("Link to external source", createNewsPage.getSourcePlaceholder(), "Source placeholder text is incorrect");
-        assertEquals("Please add the link of original article/news/post. Link must start with http(s)://",
-                createNewsPage.getSourceHintText().trim(), "Source hint text is incorrect");
+        assertEquals(CREATE_NEWS_SOURCE_PLACEHOLDER.text(), createNewsPage.getSourcePlaceholder(), "Source placeholder text is incorrect");
+        assertEquals(CREATE_NEWS_SOURCE_HINT.text(), createNewsPage.getSourceHintText().trim(), "Source hint text is incorrect");
     }
 
 
@@ -112,7 +119,7 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     @Test
     void pictureUploadAreaShouldDisplayFileRequirementsWarning() {
-        assertEquals("Upload only PNG or JPG. File size must be less than 10MB",
+        assertEquals(UiMessage.CREATE_NEWS_PICTURE_UPLOAD_REQUIREMENT.text(),
                 createNewsPage.getPictureWarningText().trim(), "Picture upload requirements text is incorrect");
         assertTrue(createNewsPage.isBrowseLinkVisible(), "'browse' link should be visible");
     }
@@ -124,9 +131,9 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     @Test
     void publishButtonShouldBeEnabledAfterFillingRequiredFields() {
-        createNewsPage.enterTitle("Coffee takeaway with 20% discount")
-                .selectTag("News")
-                .enterContent("This is a valid content string with more than twenty characters.");
+        createNewsPage.enterTitle(correctNewsTitle)
+                .selectTag(NEWS_TAG_NEWS)
+                .enterContent(correctNewsContent);
 
         assertTrue(createNewsPage.isPublishButtonEnabled(), "Publish button should become enabled once required fields are valid");
     }
