@@ -33,6 +33,107 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".submit-buttons button.primary-global-button")
     private WebElement publishButton;
 
+    @FindBy(css = ".title-block .title-wrapper .field-info")
+    private WebElement titleCounter;
+
+    @FindBy(css = ".quill-counter")
+    private WebElement contentCounter;
+
+    @FindBy(css = ".source-block .field-info.warning")
+    private WebElement sourceWarning;
+
+    @FindBy(xpath = "//h3[normalize-space()='Content']/following-sibling::*[contains(@class,'field-info')]")
+    private WebElement contentInfo;
+
+    @FindBy(css = "p.warning.warning-color")
+    private WebElement imageWarning;
+
+    public boolean isPublishButtonEnabled() {
+        return publishButton.isEnabled();
+    }
+
+    public boolean isImageFieldInvalid() {
+        return pictureUploadInput.getAttribute("class").contains("invalid");
+    }
+
+    public String getImageWarningText() {
+        return getElementText(imageWarning).trim();
+    }
+
+    public boolean isImageWarningDisplayed() {
+        return imageWarning.isDisplayed();
+    }
+
+    public boolean isImageWarningRed() {
+        return imageWarning.getAttribute("class").contains("warning-color");
+    }
+    public CreateNewsPage uploadPicture(String filePath) {
+        pictureUploadInput.sendKeys(filePath);
+        return this;
+    }
+
+
+    public String getContentInfoText() {
+        return getElementText(contentInfo).trim();
+    }
+
+    public boolean isContentInfoWarning() {
+        return contentInfo.getAttribute("class").contains("warning");
+    }
+
+    public CreateNewsPage focusSourceField() {
+        clickElement(sourceInput);
+        return this;
+    }
+
+    public String getSourceWarningText() {
+        return getElementText(sourceWarning).trim();
+    }
+
+    public boolean isSourceWarningDisplayed() {
+        return sourceWarning.isDisplayed();
+    }
+
+    public boolean isSourceWarningRed() {
+        return sourceWarning.getAttribute("class").contains("warning");
+    }
+
+    public CreateNewsPage focusTitleField() {
+        clickElement(titleInput);
+        return this;
+    }
+
+    public String getContentText() {
+        return contentEditor.getText();
+    }
+
+
+    public String getTitleCounterText() {
+        return getElementText(titleCounter).trim();
+    }
+
+    public boolean isTitleCounterDisplayed() {
+        return titleCounter.isDisplayed();
+    }
+
+    public boolean isTitleCounterWarning() {
+        return titleCounter.getAttribute("class").contains("warning");
+    }
+
+    public boolean isTitleInvalid() {
+        return titleInput.getAttribute("class").contains("ng-invalid");
+    }
+
+
+    public String getTitleText() {
+        return titleInput.getAttribute("value");
+    }
+
+    public String getContentCounterText() {
+        return getElementText(contentCounter).trim();
+    }
+
+
     public CreateNewsPage(WebDriver driver) {
         super(driver);
     }
@@ -52,10 +153,7 @@ public class CreateNewsPage extends BasePage {
         return this;
     }
 
-    public CreateNewsPage uploadPicture(String filePath) {
-        pictureUploadInput.sendKeys(filePath);
-        return this;
-    }
+
 
     public CreateNewsPage selectTag(String tagName) {
         clickBy(By.xpath("//button[contains(@class,'tag-button')]//span[normalize-space()="
