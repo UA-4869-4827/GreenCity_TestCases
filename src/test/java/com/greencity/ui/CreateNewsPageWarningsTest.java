@@ -5,6 +5,7 @@ import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
 import org.junit.jupiter.api.Test;
 
+
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
