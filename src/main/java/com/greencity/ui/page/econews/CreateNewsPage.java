@@ -3,9 +3,11 @@ package com.greencity.ui.page.econews;
 import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -58,6 +60,33 @@ public class CreateNewsPage extends BasePage {
     public CreateNewsPage enterTitle(String title) {
         typeText(titleInput, title);
         return this;
+    }
+
+    public CreateNewsPage clearTitle() {
+        waitUntilElementVisible(titleInput);
+        titleInput.clear();
+        titleInput.sendKeys(Keys.TAB);
+        return this;
+    }
+
+    public boolean isTitleBorderRed() {
+        return wait.until(d -> "solid".equals(titleInput.getCssValue("border-top-style"))
+                && "1px".equals(titleInput.getCssValue("border-top-width"))
+                && "#ff0000".equalsIgnoreCase(
+                        Color.fromString(titleInput.getCssValue("border-top-color")).asHex()));
+    }
+
+    public boolean isEditButtonDisabled() {
+        return !publishButton.isEnabled();
+    }
+
+    public CreateNewsPage attemptEdit() {
+        publishButton.click();
+        return this;
+    }
+
+    public String getFormUrl() {
+        return driver.getCurrentUrl();
     }
 
     public CreateNewsPage enterSource(String url) {
@@ -129,39 +158,3 @@ public class CreateNewsPage extends BasePage {
         } catch (TimeoutException e) {
             return false;
         }
-    }
-
-    public String getAuthorLabelText() {
-        return getElementText(authorLabel);
-    }
-
-    public String getDateLabelText() {
-        return getElementText(dateLabel);
-    }
-
-    public boolean isAuthorEditable() {
-        return !authorLabel.findElements(
-                By.cssSelector("input, textarea, select, [contenteditable='true']")).isEmpty();
-    }
-
-    public boolean isDateEditable() {
-        return !dateLabel.findElements(
-                By.cssSelector("input, textarea, select, [contenteditable='true']")).isEmpty();
-    }
-
-    public String getPageHeadingText() {
-        return getElementText(pageHeading);
-    }
-
-    public List<String> getSelectedTags() {
-        return selectedTags.stream()
-                .map(this::getElementText)
-                .toList();
-    }
-
-    public String getSourceValue() {
-        waitUntilElementVisible(sourceInput);
-        String value = sourceInput.getDomProperty("value");
-        return value == null ? "" : value;
-    }
-}
