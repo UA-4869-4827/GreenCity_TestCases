@@ -140,7 +140,9 @@ public class HeaderComponent extends BaseComponent {
     }
 
     public SignInModal clickSignIn() {
-        clickElement(signInIcon);
+        wait.until(d -> isElementDisplayed(signInLink) || isElementDisplayed(signInIcon));
+        WebElement visibleSignIn = isElementDisplayed(signInLink) ? signInLink : signInIcon;
+        clickElement(visibleSignIn);
         return new SignInModal(driver);
     }
 
