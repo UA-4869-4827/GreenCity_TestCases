@@ -158,3 +158,39 @@ public class CreateNewsPage extends BasePage {
         } catch (TimeoutException e) {
             return false;
         }
+    }
+
+    public String getAuthorLabelText() {
+        return getElementText(authorLabel);
+    }
+
+    public String getDateLabelText() {
+        return getElementText(dateLabel);
+    }
+
+    public boolean isAuthorEditable() {
+        return !authorLabel.findElements(
+                By.cssSelector("input, textarea, select, [contenteditable='true']")).isEmpty();
+    }
+
+    public boolean isDateEditable() {
+        return !dateLabel.findElements(
+                By.cssSelector("input, textarea, select, [contenteditable='true']")).isEmpty();
+    }
+
+    public String getPageHeadingText() {
+        return getElementText(pageHeading);
+    }
+
+    public List<String> getSelectedTags() {
+        return selectedTags.stream()
+                .map(this::getElementText)
+                .toList();
+    }
+
+    public String getSourceValue() {
+        waitUntilElementVisible(sourceInput);
+        String value = sourceInput.getDomProperty("value");
+        return value == null ? "" : value;
+    }
+}
