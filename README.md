@@ -108,8 +108,10 @@ src/main/java/com/greencity/
 src/main/resources/i18n/               # messages_en.properties, messages_uk.properties
 
 src/test/java/com/greencity/
-├── ui/testrunners/BaseTestRunner.java # Chrome, locale, HomePage
-├── ui/BaseTest.java                   # sample test
+├── ui/testrunners/BaseTestRunner.java              # guest Chrome, locale, HomePage
+├── ui/testrunners/AuthenticatedBaseTestRunner.java # UI sign-in before each test
+├── ui/BaseTest.java                                # sample guest test
+├── ui/AuthenticatedSessionTest.java                # sample logged-in test
 ├── api/testRunners/ApiTestRunner.java
 ├── cucumber/
 └── utils/TestValueProvider.java
@@ -117,11 +119,48 @@ src/test/java/com/greencity/
 
 `BaseTestRunner` always starts a **guest** session on Home, applies `locale` via `localStorage.language`, and sets implicit wait to zero.
 
+## Authenticated UI tests
+
+For TCs that need a logged-in user, **do not** inject tokens into `localStorage`. Sign in through the UI:
+
+1. Put real credentials in `config.properties` (`user.email`, `user.password`) or env `USER_EMAIL` / `USER_PASSWORD`.
+2. Extend `AuthenticatedBaseTestRunner` instead of `BaseTestRunner`.
+3. Use `profilePage` (already signed in) and navigate via header/POM as usual.
+
+```java
+package com.greencity.ui;
+
+import com.greencity.ui.page.econews.EcoNewsPage;
+import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class CreateNewsTest extends AuthenticatedBaseTestRunner {
+
+    @Test
+    void userCanOpenEcoNewsWhileLoggedIn() {
+        EcoNewsPage news = profilePage.getHeader().openEcoNews();
+        assertTrue(news.getHeader().isLoggedIn());
+    }
+}
+```
+
+One-off login inside a mostly-guest class:
+
+```java
+ProfilePage profile = loginAsUser(ProfilePage.class);
+```
+
+`AuthenticatedBaseTestRunner` is tagged `@Tag("auth")`. Without real credentials those tests are **skipped** (JUnit Assumption), not failed.
+
+Do **not** use `…AsGuest()` after login — those methods expect the Sign in modal.
+
 ## How to add a UI test
 
 1. Open the GitHub issue for your TC and follow its steps / expected.
 2. Create a class under `src/test/java/com/greencity/ui/` (group by area: header, home, news, events, …).
-3. Extend `BaseTestRunner`.
+3. Extend `BaseTestRunner` (guest) or `AuthenticatedBaseTestRunner` (logged-in).
 4. Use JUnit 5 (`@Test`, assertions).
 
 ```java
@@ -131,7 +170,6 @@ import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.testrunners.BaseTestRunner;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HeaderGuestTest extends BaseTestRunner {
@@ -144,7 +182,7 @@ public class HeaderGuestTest extends BaseTestRunner {
 }
 ```
 
-Do not add a `SignInPage`. Auth is `homePage.getHeader().clickSignIn()`.
+Do not add a `SignInPage`. Auth is `homePage.getHeader().clickSignIn()` (or `loginAsUser(...)` / `AuthenticatedBaseTestRunner`).
 
 ## Allure
 
