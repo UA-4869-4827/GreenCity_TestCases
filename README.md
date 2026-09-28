@@ -152,7 +152,7 @@ One-off login inside a mostly-guest class:
 ProfilePage profile = loginAsUser(ProfilePage.class);
 ```
 
-`AuthenticatedBaseTestRunner` is tagged `@Tag("auth")`. Without real credentials those tests are **skipped** (JUnit Assumption), not failed.
+`AuthenticatedBaseTestRunner` is tagged `@Tag("auth")`. Without real credentials those tests are **skipped** (JUnit Assumption) *before* Chrome starts — not failed.
 
 Do **not** use `…AsGuest()` after login — those methods expect the Sign in modal.
 

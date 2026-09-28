@@ -29,10 +29,20 @@ public class BaseTestRunner {
 
     @BeforeEach
     void setUp() {
+        assumeReadyToStartBrowser();
         initDriver();
         driver.get(testValueProvider.getBaseUIUrl());
         LocaleSupport.apply(driver, testValueProvider.getLocale());
         homePage = new HomePage(driver);
+    }
+
+    /**
+     * Hook for subclasses to abort before Chrome starts (e.g. missing auth credentials).
+     * Throwing a failed {@link org.junit.jupiter.api.Assumptions Assumption} skips the test
+     * without launching a browser.
+     */
+    protected void assumeReadyToStartBrowser() {
+        // Guest tests always proceed.
     }
 
     @Step("init ChromeDriver")
