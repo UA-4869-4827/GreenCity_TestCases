@@ -3,9 +3,14 @@ package com.greencity.ui.page.econews;
 import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class CreateNewsPage extends BasePage {
 
@@ -91,5 +96,25 @@ public class CreateNewsPage extends BasePage {
     public EcoNewsPage publish() {
         clickElement(publishButton);
         return new EcoNewsPage(driver);
+    }
+
+    public String getTitleValue() {
+        waitUntilElementVisible(titleInput);
+        String value = titleInput.getDomProperty("value");
+        return value == null ? "" : value;
+    }
+
+    public String getContentText() {
+        return getElementText(contentEditor);
+    }
+
+    public boolean isFormDisplayed() {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.visibilityOf(titleInput));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 }
