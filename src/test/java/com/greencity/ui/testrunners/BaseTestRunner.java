@@ -2,6 +2,7 @@ package com.greencity.ui.testrunners;
 
 import com.greencity.ui.locale.LocaleContext;
 import com.greencity.ui.locale.LocaleSupport;
+import com.greencity.ui.page.BasePage;
 import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.utils.TestValueProvider;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -28,10 +29,20 @@ public class BaseTestRunner {
 
     @BeforeEach
     void setUp() {
+        assumeReadyToStartBrowser();
         initDriver();
         driver.get(testValueProvider.getBaseUIUrl());
         LocaleSupport.apply(driver, testValueProvider.getLocale());
         homePage = new HomePage(driver);
+    }
+
+    /**
+     * Hook for subclasses to abort before Chrome starts (e.g. missing auth credentials).
+     * Throwing a failed {@link org.junit.jupiter.api.Assumptions Assumption} skips the test
+     * without launching a browser.
+     */
+    protected void assumeReadyToStartBrowser() {
+        // Guest tests always proceed.
     }
 
     @Step("init ChromeDriver")
@@ -48,6 +59,32 @@ public class BaseTestRunner {
         driver.manage().timeouts().implicitlyWait(Duration.ZERO);
         driver.manage().timeouts().pageLoadTimeout(testValueProvider.getPageLoadTimeout());
         driver.manage().timeouts().scriptTimeout(testValueProvider.getScriptTimeout());
+    }
+
+    /**
+     * UI sign-in with credentials from config / env ({@code user.email}, {@code user.password}).
+     * Prefer {@link AuthenticatedBaseTestRunner} when the whole class needs a logged-in session.
+     */
+    @Step("Sign in as configured user")
+    protected <P extends BasePage> P loginAsUser(Class<P> pageClass) {
+        return homePage.getHeader()
+                .clickSignIn()
+                .signIn(
+                        testValueProvider.getUserEmail(),
+                        testValueProvider.getUserPassword(),
+                        pageClass);
+    }
+
+    protected boolean hasConfiguredUserCredentials() {
+        String email = testValueProvider.getUserEmail();
+        String password = testValueProvider.getUserPassword();
+        return isRealCredential(email) && isRealCredential(password)
+                && !"your.user@example.com".equalsIgnoreCase(email.trim())
+                && !"your_password".equals(password);
+    }
+
+    private static boolean isRealCredential(String value) {
+        return value != null && !value.isBlank();
     }
 
     @AfterEach
