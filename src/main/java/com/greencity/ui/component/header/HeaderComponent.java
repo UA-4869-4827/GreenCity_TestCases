@@ -71,11 +71,12 @@ public class HeaderComponent extends BaseComponent {
     }
 
     public boolean isLogoDisplayed() {
+        waitUntilElementVisible(logo);
         return isElementDisplayed(logo);
     }
 
     public boolean isSignInDisplayed() {
-        return isElementDisplayed(signInLink);
+        return isElementDisplayed(signInIcon);
     }
 
     public boolean isSignUpDisplayed() {
