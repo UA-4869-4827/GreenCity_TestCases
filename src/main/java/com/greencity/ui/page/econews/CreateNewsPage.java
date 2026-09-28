@@ -118,7 +118,8 @@ public class CreateNewsPage extends BasePage {
     }
 
     public boolean isCancelConfirmationDisplayed() {
-        return isElementDisplayed(cancelWarningTitle);
+        waitUntilElementVisible(cancelWarningTitle);
+        return cancelWarningTitle.isDisplayed();
     }
 
     public EcoNewsPage confirmCancel() {
