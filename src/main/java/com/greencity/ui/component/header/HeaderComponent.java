@@ -140,7 +140,7 @@ public class HeaderComponent extends BaseComponent {
     }
 
     public SignInModal clickSignIn() {
-        clickElement(signInIcon);
+        clickElement(signInLink);
         return new SignInModal(driver);
     }
 
