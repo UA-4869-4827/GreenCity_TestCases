@@ -10,6 +10,7 @@ import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.ui.testrunners.BaseTestRunner;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("smoke")
 public class GuestHeaderTests extends BaseTestRunner {
 
     @Test

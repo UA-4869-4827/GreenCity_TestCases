@@ -3,6 +3,7 @@ package com.greencity.ui;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.econews.NewsDetailsPage;
 import com.greencity.ui.testrunners.BaseTestRunner;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("smoke")
 public class NewsDetailsTest extends BaseTestRunner {
 
     private static final String FIXTURE_NEWS_TITLE = "News for comment testing";

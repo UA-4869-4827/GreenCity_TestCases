@@ -4,6 +4,7 @@ import com.greencity.ui.component.footer.FooterComponent;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.ui.testrunners.BaseTestRunner;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("smoke")
 public class FooterTest extends BaseTestRunner {
 
     @Test

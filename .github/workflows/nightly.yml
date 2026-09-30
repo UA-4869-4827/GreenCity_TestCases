@@ -1,0 +1,142 @@
+name: Nightly
+
+on:
+  schedule:
+    # 02:00 UTC daily ≈ 05:00 Kyiv (EET) / 04:00 (EEST)
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: nightly-${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Checkstyle + compile
+        run: mvn -B -DskipTests validate test-compile
+
+  ui-smoke:
+    name: ui-smoke
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      HEADLESS: "true"
+      LOCALE: en
+      IMPLICITWAIT: "0"
+      EXPLICITWAIT: "15"
+      PAGELOADTIMEOUT: "60"
+      SCRIPTTIMEOUT: "30"
+      BASE_UI_URL: https://www.greencity.cx.ua/#/greenCity
+      BASE_API_URL: https://api-greencity.azurewebsites.net/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run guest smoke UI tests
+        run: mvn -B -Psmoke test
+
+      - name: Upload Surefire reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports-nightly-smoke
+          path: target/surefire-reports/
+          if-no-files-found: ignore
+
+      - name: Upload Allure results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-nightly-smoke
+          path: target/allure-results/
+          if-no-files-found: ignore
+
+  ui-auth:
+    name: ui-auth
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      HEADLESS: "true"
+      LOCALE: en
+      IMPLICITWAIT: "0"
+      EXPLICITWAIT: "15"
+      PAGELOADTIMEOUT: "60"
+      SCRIPTTIMEOUT: "30"
+      BASE_UI_URL: https://www.greencity.cx.ua/#/greenCity
+      BASE_API_URL: https://api-greencity.azurewebsites.net/
+      USER_EMAIL: ${{ secrets.USER_EMAIL }}
+      USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+      USER_NAME: ${{ secrets.USER_NAME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Decide whether to run auth suite
+        id: creds
+        run: |
+          if [ -z "$USER_EMAIL" ] || [ -z "$USER_PASSWORD" ]; then
+            echo "No USER_EMAIL/USER_PASSWORD secrets — auth suite skipped"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Java 21
+        if: steps.creds.outputs.run == 'true'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Set up Chrome
+        if: steps.creds.outputs.run == 'true'
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run auth-tagged UI tests
+        if: steps.creds.outputs.run == 'true'
+        run: mvn -B -Pauth test
+
+      - name: Upload Surefire reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports-nightly-auth
+          path: target/surefire-reports/
+          if-no-files-found: ignore
+
+      - name: Upload Allure results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-nightly-auth
+          path: target/allure-results/
+          if-no-files-found: ignore

@@ -4,6 +4,7 @@ import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.ubscourier.UbsCourierPage;
 import com.greencity.ui.testrunners.BaseTestRunner;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Tag("smoke")
 public class GuestHomePageTest extends BaseTestRunner {
 
 //    TC-P0-HOME-01 – Hero copy and Start forming a habit gate the guest #42

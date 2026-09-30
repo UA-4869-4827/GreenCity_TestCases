@@ -156,4 +156,39 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- Guest/UI smoke suite for PR CI: mvn test -Psmoke -->
+        <profile>
+            <id>smoke</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <groups>smoke</groups>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- Logged-in suite: tag tests with @Tag("auth"), run mvn test -Pauth -->
+        <profile>
+            <id>auth</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <groups>auth</groups>
+                            <!-- Nightly may run before any @Tag("auth") tests exist -->
+                            <failIfNoTests>false</failIfNoTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
