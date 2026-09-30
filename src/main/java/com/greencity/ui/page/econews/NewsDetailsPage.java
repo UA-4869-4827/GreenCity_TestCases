@@ -50,6 +50,17 @@ public class NewsDetailsPage extends BasePage {
     @FindBy(css = "app-dialog-pop-up button.primary-global-button")
     private WebElement confirmDeleteButton;
 
+    @FindBy(css = "app-dialog-pop-up button.secondary-global-button")
+    private WebElement cancelDeleteButton;
+
+    @Step("Cancel deleting news")
+    public NewsDetailsPage cancelDelete() {
+        clickElement(deleteButton);
+        waitUntilElementVisible(cancelDeleteButton);
+        clickElement(cancelDeleteButton);
+        return this;
+    }
+
     @FindBy(css = "div.news-title")
     private WebElement title;
 
@@ -64,6 +75,7 @@ public class NewsDetailsPage extends BasePage {
 
     @FindBy(css = "app-eco-news-widget div.wrapper")
     private WebElement relatedNewsRoot;
+
 
     @Getter
     private final CommentsComponent comments;
@@ -82,7 +94,6 @@ public class NewsDetailsPage extends BasePage {
         waitUntilElementVisible(title);
         return this;
     }
-
 
     public long getNewsId() {
         String url = driver.getCurrentUrl();
@@ -155,7 +166,6 @@ public class NewsDetailsPage extends BasePage {
         return new EcoNewsPage(driver);
     }
 
-
     @Step("Open edit news form")
     public CreateNewsPage editNews() {
         clickElement(editNewsButton);
@@ -196,5 +206,5 @@ public class NewsDetailsPage extends BasePage {
     public NewsCardComponent getRelatedNewsCard(int index) {
         return new NewsCardComponent(driver, getVisibleItem(relatedNewsList, index));
     }
-
+  
 }

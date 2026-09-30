@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.TimeoutException;
 
 import java.util.List;
 
@@ -56,6 +57,9 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "div.list-gallery")
     private List<WebElement> newsCards;
 
+    @FindBy(css = "div[matsnackbarlabel]")
+    private WebElement newsNotFoundMessage;
+
     @FindBy(id = "create-button")
     private WebElement createNewsButton;
 
@@ -83,6 +87,11 @@ public class EcoNewsPage extends BasePage {
     public NewsDetailsPage openNewsById(long newsId) {
         open(ECO_NEWS_HASH + "/" + newsId);
         return new NewsDetailsPage(driver);
+    }
+
+    public EcoNewsPage openDeletedNewsUrl(long newsId) {
+        open(ECO_NEWS_HASH + "/" + newsId);
+        return this;
     }
 
     public EcoNewsPage filterBy(NewsTag tag) {
@@ -190,4 +199,22 @@ public class EcoNewsPage extends BasePage {
     public void waitForHeading(String expectedText) {
         wait.until(ExpectedConditions.textToBePresentInElement(pageHeading, expectedText));
     }
+
+    public boolean isNewsNotFoundMessageDisplayed() {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(newsNotFoundMessage));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean isNewsDisplayedByTitle(String title) {
+        By newsTitle = By.xpath(
+                "//app-news-list-gallery-view//h3[normalize-space()="
+                        + xpathLiteral(title) + "]");
+
+        return !driver.findElements(newsTitle).isEmpty();
+    }
+
 }
