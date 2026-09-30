@@ -2,9 +2,9 @@
 # config.properties is gitignored — do not commit passwords.
 
 base.ui.url=https://www.greencity.cx.ua/#/greenCity
-base.api.url=https://api-greencity.azurewebsites.net/
+base.api.url=https://greencity.greencity.cx.ua/
 # Auth (sign-in) lives on the User service, not on base.api.url
-base.user.api.url=https://greencity-user.azurewebsites.net/
+base.user.api.url=https://greencity-user.greencity.cx.ua/
 
 # Selenium waits. implicitWait MUST stay 0 when using explicit waits in the POM.
 implicitWait=0

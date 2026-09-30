@@ -169,8 +169,8 @@ Two backends:
 
 | Config key | Default | Used for |
 | --- | --- | --- |
-| `base.api.url` | `https://api-greencity.azurewebsites.net/` | Eco news, events, comments, ... |
-| `base.user.api.url` | `https://greencity-user.azurewebsites.net/` | `POST /ownSecurity/signIn` (JWT) |
+| `base.api.url` | `https://greencity.greencity.cx.ua/` | Eco news, events, comments, ... |
+| `base.user.api.url` | `https://greencity-user.greencity.cx.ua/` | `POST /ownSecurity/signIn` (JWT) |
 
 Guest / public API test:
 
