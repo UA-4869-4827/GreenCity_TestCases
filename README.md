@@ -11,7 +11,8 @@ The **Page Object Model is already in place**. Student work is to implement the 
 - **Selenium WebDriver 4**
 - **Maven**
 - **Allure**
-- **Cucumber** / **Rest Assured** — available, not required for the first UI wave
+- **Rest Assured** - API starter (clients + smoke tests)
+- **Cucumber** - available, optional
 
 ## Quick start
 
@@ -100,10 +101,12 @@ src/main/java/com/greencity/
 ├── ui/
 │   ├── Base.java                      # clicks, types, explicit waits
 │   ├── locale/                        # UiLocale, UiMessage, LocaleSupport
-│   ├── page/                          # Home, Eco news, Events, Places, About us, …
+│   ├── page/                          # Home, Eco news, Events, Places, About us, ...
 │   ├── component/                     # header, footer, cards, gallery toggle, comments
 │   └── modal/                         # Sign in, Sign up, Forgot password, Add place
-└── api/clients/BaseClient.java
+└── api/
+    ├── clients/                       # BaseClient, AuthClient, EcoNewsClient
+    └── models/                        # SignIn*, EcoNewsDto, ...
 
 src/main/resources/i18n/               # messages_en.properties, messages_uk.properties
 
@@ -112,7 +115,11 @@ src/test/java/com/greencity/
 ├── ui/testrunners/AuthenticatedBaseTestRunner.java # UI sign-in before each test
 ├── ui/BaseTest.java                                # sample guest test
 ├── ui/AuthenticatedSessionTest.java                # sample logged-in test
-├── api/testRunners/ApiTestRunner.java
+├── api/testRunners/ApiTestRunner.java              # guest/public API
+├── api/testRunners/AuthenticatedApiTestRunner.java # JWT via User service
+├── api/support/ApiAuth.java
+├── api/EcoNewsApiSmokeTest.java                    # sample GET /eco-news
+├── api/AuthenticatedApiSmokeTest.java              # sample sign-in
 ├── cucumber/
 └── utils/TestValueProvider.java
 ```
@@ -155,6 +162,45 @@ ProfilePage profile = loginAsUser(ProfilePage.class);
 `AuthenticatedBaseTestRunner` is tagged `@Tag("auth")`. Without real credentials those tests are **skipped** (JUnit Assumption) *before* Chrome starts — not failed.
 
 Do **not** use `…AsGuest()` after login — those methods expect the Sign in modal.
+
+## API starter
+
+Two backends:
+
+| Config key | Default | Used for |
+| --- | --- | --- |
+| `base.api.url` | `https://api-greencity.azurewebsites.net/` | Eco news, events, comments, ... |
+| `base.user.api.url` | `https://greencity-user.azurewebsites.net/` | `POST /ownSecurity/signIn` (JWT) |
+
+Guest / public API test:
+
+```java
+public class MyApiTest extends ApiTestRunner {
+    @Test
+    void listNews() {
+        assertEquals(200, ecoNewsClient.getAll(0, 5).statusCode());
+    }
+}
+```
+
+Authenticated API test (needs real `user.email` / `user.password`):
+
+```java
+public class MyAuthApiTest extends AuthenticatedApiTestRunner {
+    @Test
+    void deleteOwnNews() {
+        // accessToken and authorized ecoNewsClient are ready
+        assertEquals(200, ecoNewsClient.delete(newsId).statusCode());
+    }
+}
+```
+
+Add a client under `api/clients/` (extend `BaseClient`), DTOs under `api/models/`, tests under `api/`.
+Tag: `@Tag("api")`. Auth API tests also inherit `@Tag("auth")` and are skipped without credentials.
+
+```bash
+mvn -Dtest=EcoNewsApiSmokeTest,AuthenticatedApiSmokeTest test
+```
 
 ## How to add a UI test
 

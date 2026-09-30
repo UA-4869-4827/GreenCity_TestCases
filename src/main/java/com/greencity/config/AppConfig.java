@@ -37,6 +37,13 @@ public final class AppConfig {
         return get("base.api.url", "https://api-greencity.azurewebsites.net/");
     }
 
+    /**
+     * GreenCity User service (sign-in / ownSecurity). Separate from {@link #baseApiUrl()}.
+     */
+    public String baseUserApiUrl() {
+        return get("base.user.api.url", "https://greencity-user.azurewebsites.net/");
+    }
+
     public Duration implicitWait() {
         return Duration.ofSeconds(getInt("implicitWait", getInt("implicitlyWait", 0)));
     }
