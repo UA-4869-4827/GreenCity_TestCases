@@ -21,6 +21,9 @@ user.email=your.user@example.com
 user.name=Your User Name
 user.password=your_password
 
+second.user.email=second.user@example.com
+second.user.password=second.user_password
+
 admin.email=admin@example.com
 admin.name=Admin Name
 admin.password=admin_password

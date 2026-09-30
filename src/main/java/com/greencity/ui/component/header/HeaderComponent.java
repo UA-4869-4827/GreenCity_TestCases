@@ -167,7 +167,7 @@ public class HeaderComponent extends BaseComponent {
     public HeaderComponent signOut() {
         openUserMenu();
         clickElement(signOutLink);
-        waitUntilElementVisible(signInLink);
+        waitUntilElementVisible(signInIcon);
         return this;
     }
 

@@ -87,6 +87,7 @@ public class EcoNewsPage extends BasePage {
 
     public EcoNewsPage filterBy(NewsTag tag) {
         clickBy(By.xpath("//button[.//span[normalize-space()=" + xpathLiteral(tag.getText()) + "]]"));
+        waitForPageToLoad();
         return this;
     }
 

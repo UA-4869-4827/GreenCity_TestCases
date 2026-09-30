@@ -2,11 +2,7 @@ package com.greencity.ui.page.econews;
 
 import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.BasePage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -73,7 +69,7 @@ public class CreateNewsPage extends BasePage {
         return wait.until(d -> "solid".equals(titleInput.getCssValue("border-top-style"))
                 && "1px".equals(titleInput.getCssValue("border-top-width"))
                 && "#ff0000".equalsIgnoreCase(
-                        Color.fromString(titleInput.getCssValue("border-top-color")).asHex()));
+                Color.fromString(titleInput.getCssValue("border-top-color")).asHex()));
     }
 
     public boolean isEditButtonDisabled() {
@@ -137,6 +133,7 @@ public class CreateNewsPage extends BasePage {
 
     public EcoNewsPage publish() {
         clickElement(publishButton);
+        wait.until(ExpectedConditions.urlMatches(".*/greenCity/news/?$"));
         return new EcoNewsPage(driver);
     }
 

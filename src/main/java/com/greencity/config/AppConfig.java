@@ -81,6 +81,14 @@ public final class AppConfig {
         return get("user.password", "");
     }
 
+    public String secondUserEmail() {
+        return get("second.user.email", "");
+    }
+
+    public String secondUserPassword() {
+        return get("second.user.password", "");
+    }
+
     public String adminEmail() {
         return get("admin.email", "");
     }

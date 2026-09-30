@@ -15,10 +15,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import java.util.List;
 
 public class NewsDetailsPage extends BasePage {
 
@@ -31,6 +30,9 @@ public class NewsDetailsPage extends BasePage {
 
     @FindBy(css = "app-eco-news-detail .back-button a")
     private WebElement backToNewsButton;
+
+    @FindBy(css = ".tags")
+    private List<WebElement> tags;
 
     @FindBy(css = "app-eco-news-widget app-news-list-gallery-view")
     private List<WebElement> relatedNewsList;
@@ -81,6 +83,12 @@ public class NewsDetailsPage extends BasePage {
         open(NEWS_HASH + "/" + newsId);
         waitUntilElementVisible(title);
         return this;
+    }
+
+    public List<String> getTagsText() {
+        return tags.stream()
+                .map(WebElement::getText)
+                .toList();
     }
 
 
@@ -144,6 +152,10 @@ public class NewsDetailsPage extends BasePage {
 
     public boolean isEditDisplayed() {
         return isElementDisplayed(editNewsButton);
+    }
+
+    public boolean isEditNewsButtonPresent() {
+        return !driver.findElements(By.cssSelector("div.edit-news")).isEmpty();
     }
 
     @Step("Click 'Back to news'")

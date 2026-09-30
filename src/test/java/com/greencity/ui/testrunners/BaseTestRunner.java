@@ -65,6 +65,16 @@ public class BaseTestRunner {
                         pageClass);
     }
 
+    @Step("Sign in as second user")
+    protected <P extends BasePage> P loginAsSecondUser(Class<P> pageClass) {
+        return homePage.getHeader()
+                .clickSignIn()
+                .signIn(
+                        testValueProvider.getSecondUserEmail(),
+                        testValueProvider.getSecondUserPassword(),
+                        pageClass);
+    }
+
     protected boolean hasConfiguredUserCredentials() {
         String email = testValueProvider.getUserEmail();
         String password = testValueProvider.getUserPassword();

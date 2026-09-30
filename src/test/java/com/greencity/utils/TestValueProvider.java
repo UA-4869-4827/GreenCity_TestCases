@@ -64,6 +64,14 @@ public class TestValueProvider {
         return config.userPassword();
     }
 
+    public String getSecondUserEmail() {
+        return config.secondUserEmail();
+    }
+
+    public String getSecondUserPassword() {
+        return config.secondUserPassword();
+    }
+
     public String getAdminEmail() {
         return config.adminEmail();
     }
