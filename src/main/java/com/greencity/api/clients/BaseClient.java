@@ -6,40 +6,56 @@ import io.restassured.specification.RequestSpecification;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Shared Rest Assured request setup for GreenCity API clients.
+ * Subclasses set resource paths and call {@link #preparedRequest()}.
+ */
 public class BaseClient {
-    protected final String baseAPIUrl;
+
+    protected final String baseApiUrl;
     protected final ContentType contentType;
+
     @Getter
     @Setter
     protected String token;
 
-
     public BaseClient(String baseUrl) {
-        this.baseAPIUrl = baseUrl;
-        contentType = ContentType.JSON;
+        this.baseApiUrl = normalizeBaseUrl(baseUrl);
+        this.contentType = ContentType.JSON;
     }
 
     public BaseClient(String baseUrl, ContentType contentType) {
-        this.baseAPIUrl = baseUrl;
+        this.baseApiUrl = normalizeBaseUrl(baseUrl);
         this.contentType = contentType;
     }
 
     public BaseClient(String baseUrl, String contentType) {
-        this.baseAPIUrl = baseUrl;
+        this.baseApiUrl = normalizeBaseUrl(baseUrl);
         this.contentType = ContentType.valueOf(contentType);
     }
 
-
     protected RequestSpecification preparedRequest() {
         RequestSpecification request = RestAssured.given()
-//                .log()
-//                .body()
-                .baseUri(baseAPIUrl)
+                .baseUri(baseApiUrl)
+                .accept(ContentType.JSON)
                 .contentType(contentType);
-        if (token != null) {
-            request.header("Authorization", "Bearer " + token);
+        if (token != null && !token.isBlank()) {
+            request.header("Authorization", bearer(token));
         }
         return request;
     }
 
+    protected static String bearer(String accessToken) {
+        if (accessToken.startsWith("Bearer ")) {
+            return accessToken;
+        }
+        return "Bearer " + accessToken;
+    }
+
+    private static String normalizeBaseUrl(String baseUrl) {
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new IllegalArgumentException("API base URL must not be blank");
+        }
+        return baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+    }
 }
