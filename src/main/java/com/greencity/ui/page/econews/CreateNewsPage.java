@@ -24,6 +24,9 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = "[formcontrolname='content'] .ql-editor")
     private WebElement contentEditor;
 
+    @FindBy(css = "app-create-edit-news .textarea-wrapper .title-wrapper p.field-info")
+    private WebElement contentLengthHint;
+
     @FindBy(id = "upload")
     private WebElement pictureUploadInput;
 
@@ -68,6 +71,33 @@ public class CreateNewsPage extends BasePage {
     public CreateNewsPage enterContent(String text) {
         typeText(contentEditor, text);
         return this;
+    }
+
+    public boolean isContentLengthErrorDisplayed() {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.attributeContains(contentLengthHint, "class", "warning"));
+            return contentLengthHint.isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public String getContentLengthHintText() {
+        return getElementText(contentLengthHint);
+    }
+
+    public boolean isSubmitDisabled() {
+        return !publishButton.isEnabled();
+    }
+
+    public CreateNewsPage attemptSubmit() {
+        publishButton.click();
+        return this;
+    }
+
+    public String getFormUrl() {
+        return driver.getCurrentUrl();
     }
 
     public CreateNewsPage uploadPicture(String filePath) {
