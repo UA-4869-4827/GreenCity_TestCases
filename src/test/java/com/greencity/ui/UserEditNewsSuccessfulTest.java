@@ -37,8 +37,6 @@ public class UserEditNewsSuccessfulTest extends AuthenticatedBaseTestRunner {
         newsPublished = true;
 
         return new EcoNewsPage(driver)
-                .filterByEvents()
-                .filterByNews()
                 .openSearch()
                 .searchNews(NEWS_TITLE)
                 .openNewsByTitle(NEWS_TITLE);
@@ -53,8 +51,6 @@ public class UserEditNewsSuccessfulTest extends AuthenticatedBaseTestRunner {
         String titleToDelete = newsEdited ? EDITED_TITLE : NEWS_TITLE;
         new EcoNewsPage(driver)
                 .open()
-                .filterByEvents()
-                .filterByNews()
                 .openSearch()
                 .searchNews(titleToDelete)
                 .openNewsByTitle(titleToDelete)
