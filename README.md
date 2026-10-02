@@ -4,6 +4,15 @@ UI test project for [GreenCity](https://www.greencity.cx.ua/#/greenCity).
 
 The **Page Object Model is already in place**. Student work is to implement the GitHub test cases (issues) as JUnit tests that go through those page objects — not to rebuild the POM, and not to use raw Selenium in tests.
 
+## Documentation
+
+Full architecture and testing guides live in **[`docs/`](docs/README.md)**:
+
+- [Architecture](docs/architecture.md)
+- [UI testing](docs/ui-testing.md)
+- [API testing](docs/api-testing.md)
+- [Configuration](docs/configuration.md)
+
 ## Technologies
 
 - **Java 21**
