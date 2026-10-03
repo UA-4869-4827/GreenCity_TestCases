@@ -33,8 +33,23 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".submit-buttons button.primary-global-button")
     private WebElement publishButton;
 
+    @FindBy(css = "p.warning.warning-color")
+    private WebElement imageSizeError;
+
     public CreateNewsPage(WebDriver driver) {
         super(driver);
+    }
+
+
+    public boolean isImageSizeErrorDisplayed() {
+        return isElementDisplayed(imageSizeError);
+    }
+    public String getTitleValue() {
+        return titleInput.getDomProperty("value");
+    }
+
+    public String getContentText() {
+        return getElementText(contentEditor);
     }
 
     public CreateNewsPage enterTitle(String title) {
