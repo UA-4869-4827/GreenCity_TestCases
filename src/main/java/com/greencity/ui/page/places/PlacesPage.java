@@ -62,6 +62,10 @@ public class PlacesPage extends BasePage {
         return this;
     }
 
+    public boolean isOpened() {
+        return getCurrentUrl().contains(PLACES_HASH);
+    }
+
     public PlacesPage searchForPlace(String query) {
         typeText(searchInput, query);
         return this;
