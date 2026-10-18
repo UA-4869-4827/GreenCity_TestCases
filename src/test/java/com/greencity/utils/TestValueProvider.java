@@ -17,6 +17,17 @@ public class TestValueProvider {
         return config.baseApiUrl();
     }
 
+    public String getBaseUserApiUrl() {
+        return config.baseUserApiUrl();
+    }
+
+    public boolean hasConfiguredUserCredentials() {
+        return getUserEmail() != null && !getUserEmail().isBlank()
+                && getUserPassword() != null && !getUserPassword().isBlank()
+                && !getUserEmail().contains("example.com")
+                && !"your_password".equals(getUserPassword());
+    }
+
     /**
      * Implicit wait must stay zero when the POM uses explicit waits.
      */
