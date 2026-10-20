@@ -1,6 +1,7 @@
 package com.greencity.api.testRunners;
 
 import com.greencity.api.clients.EcoNewsClient;
+import com.greencity.api.clients.EventsClient;
 import com.greencity.utils.TestValueProvider;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
@@ -16,6 +17,7 @@ public abstract class ApiTestRunner {
 
     protected static TestValueProvider testValueProvider;
     protected static EcoNewsClient ecoNewsClient;
+    protected static EventsClient eventsClient;
 
     @BeforeAll
     static void setUpApi() {
@@ -23,5 +25,6 @@ public abstract class ApiTestRunner {
         RestAssured.registerParser("application/problem+json", Parser.JSON);
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         ecoNewsClient = new EcoNewsClient(testValueProvider.getBaseAPIUrl());
+        eventsClient = new EventsClient(testValueProvider.getBaseAPIUrl());
     }
 }
