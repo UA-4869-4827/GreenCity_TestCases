@@ -31,8 +31,9 @@ public class BaseTestRunner {
     void setUp() {
         assumeReadyToStartBrowser();
         initDriver();
-        driver.get(testValueProvider.getBaseUIUrl());
-        LocaleSupport.apply(driver, testValueProvider.getLocale());
+        String baseUrl = testValueProvider.getBaseUIUrl();
+        driver.get(baseUrl);
+        LocaleSupport.apply(driver, testValueProvider.getLocale(), baseUrl);
         homePage = new HomePage(driver);
     }
 
@@ -50,6 +51,9 @@ public class BaseTestRunner {
         ChromeOptions options = new ChromeOptions();
         if (testValueProvider.isHeadless()) {
             options.addArguments("--headless=new");
+            // maximize() is a no-op in headless Chrome, and the default window
+            // collapses the header so Sign in and the nav links are not clickable.
+            options.addArguments("--window-size=1920,1080");
         }
 
         driver = new ChromeDriver(options);

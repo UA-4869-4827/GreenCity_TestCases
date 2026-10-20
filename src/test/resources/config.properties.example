@@ -19,7 +19,7 @@ browser=chrome
 headless=false
 window.maximize=true
 
-user.email=your.user@example.com
+user.email=your_user_email@example.com
 user.name=Your User Name
 user.password=your_password
 
