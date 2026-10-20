@@ -25,4 +25,9 @@ public class EventsClient extends BaseClient {
         return preparedRequest()
                 .get(EVENTS + "/{eventId}", eventId);
     }
+
+    public Response delete(long eventId) {
+        return preparedRequest()
+                .delete(EVENTS + "/{eventId}", eventId);
+    }
 }
