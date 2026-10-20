@@ -18,6 +18,7 @@ import java.util.List;
 public class EcoNewsPage extends BasePage {
 
     private static final String ECO_NEWS_HASH = "/#/greenCity/news";
+    private static final String CREATE_NEWS_HASH = "/#/greenCity/news/create-news";
 
     @Getter
     public enum NewsTag {
@@ -65,8 +66,8 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "h1")
     private WebElement pageTitle;
 
-    //@FindBy(css = "app-remaining-count h2")
-    //private WebElement itemsFoundCounter;
+    @FindBy(css = "app-remaining-count h2")
+    private WebElement itemsFoundCounter;
 
     @Getter
     private final ViewModeToggleComponent viewModeToggle;
@@ -221,9 +222,14 @@ public class EcoNewsPage extends BasePage {
         return getElementText(pageTitle);
     }
 
-    //public boolean isItemsFoundCounterDisplayed() {
-    //    return isElementDisplayed(itemsFoundCounter);
-    //}
+    public boolean isItemsFoundCounterDisplayed() {
+        return isElementDisplayed(itemsFoundCounter);
+    }
+
+    public boolean isNewsCardDisplayed() {
+        waitUntilAllElementsVisible(newsCards);
+        return !newsCards.isEmpty();
+    }
 
     public String getPageUrl() {
         return getCurrentUrl();
