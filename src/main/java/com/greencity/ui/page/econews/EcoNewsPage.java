@@ -57,6 +57,9 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "div.list-gallery")
     private List<WebElement> newsCards;
 
+    @FindBy(css = "li.list-view-li-active")
+    private List<WebElement> newsCardsListView;
+
     @FindBy(id = "create-button")
     private WebElement createNewsButton;
 
@@ -286,5 +289,19 @@ public class EcoNewsPage extends BasePage {
 
     public boolean isGalleryViewSelected() {
         return viewModeToggle.isTableViewPressed();
+    }
+
+    public boolean isListViewSelected() {
+        return viewModeToggle.isListViewPressed();
+    }
+
+    public int getNewsCardsCount() {
+        wait.until(d -> !newsCards.isEmpty());
+        return newsCards.size();
+    }
+
+    public int getNewsCardsCountInListView() {
+        wait.until(d -> !newsCardsListView.isEmpty());
+        return newsCardsListView.size();
     }
 }

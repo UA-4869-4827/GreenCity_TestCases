@@ -2,12 +2,12 @@ package com.greencity.ui.component;
 
 import com.greencity.ui.modal.SignInModal;
 import com.greencity.ui.page.econews.NewsDetailsPage;
-
-import java.util.List;
-
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.List;
 
 public class NewsCardComponent extends BaseComponent {
 
@@ -34,6 +34,9 @@ public class NewsCardComponent extends BaseComponent {
 
     @FindBy(xpath = ".//p[img[@alt='comments']]/span[@class='numerosity']")
     private WebElement commentsCounter;
+
+    @FindBy(css = "img.list-image-content, img.eco-news-list-view-img")
+    private WebElement cardImage;
 
     public NewsCardComponent(WebDriver driver, WebElement rootElement) {
         super(driver, rootElement);
@@ -67,6 +70,40 @@ public class NewsCardComponent extends BaseComponent {
 
     public String getCommentsCount() {
         return getElementText(commentsCounter);
+    }
+
+    public boolean isImageDisplayed() {
+        return isElementDisplayed(cardImage);
+    }
+
+    public boolean isBookmarkDisplayed() {
+        List<WebElement> flags = rootElement.findElements(By.xpath(
+                "./ancestor::li[1]//span[contains(@class,'flag')]"));
+        return !flags.isEmpty() && flags.get(0).isDisplayed();
+    }
+
+    public boolean isTitleDisplayed() {
+        return isElementDisplayed(title);
+    }
+
+    public boolean isAuthorDisplayed() {
+        return isElementDisplayed(author);
+    }
+
+    public boolean isDateDisplayed() {
+        return isElementDisplayed(date);
+    }
+
+    public boolean isLikesCounterDisplayed() {
+        return isElementDisplayed(likesCounter);
+    }
+
+    public boolean isCommentsCounterDisplayed() {
+        return isElementDisplayed(commentsCounter);
+    }
+
+    public boolean isTagDisplayed() {
+        return tags.stream().anyMatch(this::isElementDisplayed);
     }
 
     public NewsDetailsPage openNews() {
