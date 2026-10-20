@@ -77,11 +77,9 @@ public class NewsCardComponent extends BaseComponent {
     }
 
     public boolean isBookmarkDisplayed() {
-        js.executeScript(
-                "arguments[0].dispatchEvent(new MouseEvent('mouseenter', {bubbles:true}));"
-                        + "arguments[0].dispatchEvent(new MouseEvent('mouseover', {bubbles:true}));",
-                rootElement);
-        return !rootElement.findElements(By.xpath(".//span[contains(@class,'flag')]")).isEmpty();
+        List<WebElement> flags = rootElement.findElements(By.xpath(
+                "./ancestor::li[1]//span[contains(@class,'flag')]"));
+        return !flags.isEmpty() && flags.get(0).isDisplayed();
     }
 
     public boolean isTitleDisplayed() {
