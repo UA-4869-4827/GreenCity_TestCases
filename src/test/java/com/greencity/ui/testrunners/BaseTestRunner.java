@@ -35,6 +35,7 @@ public class BaseTestRunner {
         driver.get(baseUrl);
         LocaleSupport.apply(driver, testValueProvider.getLocale(), baseUrl);
         homePage = new HomePage(driver);
+        homePage.open();
     }
 
     /**

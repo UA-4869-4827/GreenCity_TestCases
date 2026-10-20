@@ -300,4 +300,5 @@ public abstract class Base {
     public void waitForBodyToBePresent() {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
     }
+
 }

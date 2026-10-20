@@ -11,7 +11,6 @@ import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.events.EventsPage;
 import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.ui.page.places.PlacesPage;
-import com.greencity.ui.page.profile.ProfilePage;
 import com.greencity.ui.page.ubscourier.UbsCourierPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -110,27 +109,31 @@ public class HeaderComponent extends BaseComponent {
 
     public EcoNewsPage openEcoNews() {
         clickElement(ecoNewsLink);
+        waitUntilUrlContains("#/greenCity/news");
         return new EcoNewsPage(driver);
     }
 
     public EventsPage openEvents() {
         clickElement(eventsLink);
+        //waitUntilUrlContains("#/greenCity/events");
         return new EventsPage(driver);
     }
 
     public PlacesPage openPlaces() {
         clickElement(placesLink);
+        waitUntilUrlContains("#/greenCity/places");
         return new PlacesPage(driver);
     }
 
     public AboutUsPage openAboutUs() {
         clickElement(aboutUsLink);
+        waitUntilUrlContains("#/greenCity/about");
         return new AboutUsPage(driver);
     }
 
-    public ProfilePage openMySpace() {
+    public HeaderComponent clickMySpace() {
         clickElement(mySpaceLink);
-        return new ProfilePage(driver);
+        return this;
     }
 
     public SignInModal openMySpaceAsGuest() {
@@ -202,6 +205,11 @@ public class HeaderComponent extends BaseComponent {
         LocaleContext.set(locale);
         waitForPageToLoad();
         wait.until(ExpectedConditions.textToBePresentInElement(signUpLink, UiMessage.SIGN_UP.text()));
+        return this;
+    }
+
+    public HeaderComponent clickUbsCourier() {
+        clickElement(ubsCourierLink);
         return this;
     }
 }

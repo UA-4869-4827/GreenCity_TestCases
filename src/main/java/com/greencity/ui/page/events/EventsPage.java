@@ -17,6 +17,9 @@ public class EventsPage extends BasePage {
 
     private static final String EVENTS_HASH = "/#/greenCity/events";
 
+    @FindBy(css = "p.main-header")
+    private WebElement pageHeading;
+
     @FindBy(css = "div.create button")
     private WebElement createEventButton;
 
@@ -123,5 +126,8 @@ public class EventsPage extends BasePage {
                 + "]/following-sibling::mat-select"));
         clickBy(By.xpath("//mat-option[contains(normalize-space(.), " + xpathLiteral(value) + ")]"));
         return this;
+    }
+    public boolean isPageHeadingDisplayed() {
+        return isElementDisplayed(pageHeading);
     }
 }

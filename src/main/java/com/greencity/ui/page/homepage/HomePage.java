@@ -331,4 +331,8 @@ public class HomePage extends BasePage {
         return isElementDisplayed(errorSubscriptionMessage);
     }
 
+    public boolean isMainTitleDisplayed() {
+        return isElementDisplayed(heroTitle);
+    }
+
 }
