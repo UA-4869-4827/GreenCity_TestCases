@@ -11,7 +11,6 @@ import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.page.events.EventsPage;
 import com.greencity.ui.page.homepage.HomePage;
 import com.greencity.ui.page.places.PlacesPage;
-import com.greencity.ui.page.profile.ProfilePage;
 import com.greencity.ui.page.ubscourier.UbsCourierPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
