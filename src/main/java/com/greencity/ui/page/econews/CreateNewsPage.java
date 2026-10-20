@@ -11,7 +11,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CreateNewsPage extends BasePage {
@@ -63,10 +66,10 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = ".source-block .field-info")
     private WebElement sourceHint;
 
-    @FindBy(xpath = "//span[normalize-space()='Date:']")
+    @FindBy(xpath = "//app-create-edit-news//p[contains(., 'Date')]")
     private WebElement dateLabel;
 
-    @FindBy(xpath = "//span[normalize-space()='Author:']")
+    @FindBy(xpath = "//app-create-edit-news//p[contains(., 'Author')]")
     private WebElement authorLabel;
 
     @FindBy(css = ".date p:nth-of-type(1) span:nth-of-type(2)")
@@ -74,9 +77,6 @@ public class CreateNewsPage extends BasePage {
 
     @FindBy(css = ".date p:nth-of-type(2) span:nth-of-type(2)")
     private WebElement authorValue;
-
-    @FindBy(xpath = "//button[normalize-space()='Cancel']")
-    private WebElement cancelButton;
 
     @FindBy(css = ".submit-buttons button.secondary-global-button")
     private WebElement previewButton;
@@ -128,9 +128,9 @@ public class CreateNewsPage extends BasePage {
     }
 
     public CreateNewsPage selectTag(String tagName) {
-        clickElement(tagButton);
+        clickBy(By.xpath("//button[contains(@class,'tag-button')]//span[normalize-space()="
+                + xpathLiteral(tagName) + "]"));
         return this;
-
     }
 
     public CreateNewsPage selectTag(UiMessage tag) {
@@ -289,7 +289,9 @@ public class CreateNewsPage extends BasePage {
     }
 
     public boolean isCancelButtonVisible() {
-        return isElementDisplayed(cancelButton);
+        return isElementDisplayed(By.xpath(
+                "//button[contains(@class,'tertiary-global-button') and normalize-space()="
+                        + xpathLiteral(UiMessage.CREATE_NEWS_CANCEL.text()) + "]"));
     }
 
     public boolean isPreviewButtonVisible() {
@@ -302,6 +304,33 @@ public class CreateNewsPage extends BasePage {
 
     public boolean isPublishButtonEnabled() {
         return publishButton.isEnabled();
+    }
+
+    public List<String> getVisibleFieldOrder() {
+        Map<WebElement, String> fields = new LinkedHashMap<>();
+        fields.put(titleInput, "Title");
+        fields.put(tagButton, "Tag");
+        fields.put(browseLink, "Add Image");
+        fields.put(contentEditor, "Content");
+        fields.put(authorLabel, "Author");
+        fields.put(dateLabel, "Date");
+        fields.put(sourceInput, "Source");
+        fields.put(driver.findElement(By.xpath(
+                "//button[contains(@class,'tertiary-global-button') and normalize-space()="
+                        + xpathLiteral(UiMessage.CREATE_NEWS_CANCEL.text()) + "]")), "Cancel");
+        fields.put(previewButton, "Preview");
+        fields.put(publishButton, "Publish");
+        return fields.entrySet().stream()
+                .sorted(Comparator.comparingInt(entry -> documentIndex(entry.getKey())))
+                .map(Map.Entry::getValue)
+                .toList();
+    }
+
+    private int documentIndex(WebElement element) {
+        Object index = js.executeScript(
+                "return Array.prototype.indexOf.call(document.querySelectorAll('*'), arguments[0]);",
+                element);
+        return index instanceof Number number ? number.intValue() : Integer.MAX_VALUE;
     }
 
     public boolean isAuthorFieldEditable() {

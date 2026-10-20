@@ -12,17 +12,30 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
-import static com.greencity.ui.locale.UiMessage.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     private static final List<String> EXPECTED_TAGS =
-            List.of(NEWS_TAG_NEWS.text(),
-                    NEWS_TAG_EVENTS.text(),
-                    NEWS_TAG_EDUCATION.text(),
-                    NEWS_TAG_INITIATIVES.text(),
-                    NEWS_TAG_ADS.text());
+            List.of(UiMessage.NEWS_TAG_NEWS.text(),
+                    UiMessage.NEWS_TAG_EVENTS.text(),
+                    UiMessage.NEWS_TAG_EDUCATION.text(),
+                    UiMessage.NEWS_TAG_INITIATIVES.text(),
+                    UiMessage.NEWS_TAG_ADS.text());
+
+    private static final List<String> EXPECTED_FIELD_ORDER = List.of(
+            "Title",
+            "Tag",
+            "Source",
+            "Add Image",
+            "Content",
+            "Date",
+            "Author",
+            "Cancel",
+            "Preview",
+            "Publish");
 
     private CreateNewsPage createNewsPage;
     private String correctNewsTitle = "Coffee takeaway with 20% discount";
@@ -56,13 +69,23 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
         assertTrue(createNewsPage.isPreviewButtonVisible(), "Preview button is not visible");
 
         assertTrue(createNewsPage.isPublishButtonVisible(), "Publish button is not visible");
+
+        assertEquals(
+                EXPECTED_FIELD_ORDER,
+                createNewsPage.getVisibleFieldOrder(),
+                "Create News fields should follow the form order");
     }
 
     @Test
     void titleFieldShouldHaveCorrectPlaceholderAndCharacterCounter() {
-        assertEquals(CREATE_NEWS_TITLE_FIELD_PLACEHOLDER.text(), createNewsPage.getTitlePlaceholder(),
+        assertEquals(
+                UiMessage.CREATE_NEWS_TITLE_FIELD_PLACEHOLDER.text(),
+                createNewsPage.getTitlePlaceholder(),
                 "Title placeholder text is incorrect");
-        assertEquals(UiMessage.CREATE_NEWS_TITLE_FIELD_INFO.text(), createNewsPage.getTitleCounterText().trim(), "Title character counter should start at 0/170");
+        assertEquals(
+                UiMessage.CREATE_NEWS_TITLE_FIELD_INFO.text(),
+                createNewsPage.getTitleCounterText().trim(),
+                "Title character counter should start at 0/170");
     }
 
 
@@ -75,7 +98,10 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     @Test
     void tagsSectionShouldDisplayThreeTagsLimitHint() {
-        assertEquals(CREATE_NEWS_TAGS_INFO.text(), createNewsPage.getTagsLimitHintText().trim(), "Tags limit hint text is incorrect or missing");
+        assertEquals(
+                UiMessage.CREATE_NEWS_TAGS_INFO.text(),
+                createNewsPage.getTagsLimitHintText().trim(),
+                "Tags limit hint text is incorrect or missing");
     }
 
 
@@ -90,8 +116,14 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     @Test
     void sourceFieldShouldHaveCorrectPlaceholderAndHintText() {
-        assertEquals(CREATE_NEWS_SOURCE_PLACEHOLDER.text(), createNewsPage.getSourcePlaceholder(), "Source placeholder text is incorrect");
-        assertEquals(CREATE_NEWS_SOURCE_HINT.text(), createNewsPage.getSourceHintText().trim(), "Source hint text is incorrect");
+        assertEquals(
+                UiMessage.CREATE_NEWS_SOURCE_PLACEHOLDER.text(),
+                createNewsPage.getSourcePlaceholder(),
+                "Source placeholder text is incorrect");
+        assertEquals(
+                UiMessage.CREATE_NEWS_SOURCE_HINT.text(),
+                createNewsPage.getSourceHintText().trim(),
+                "Source hint text is incorrect");
     }
 
 
@@ -103,9 +135,12 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
 
     @Test
     void authorFieldShouldMatchRegisteredUserFullName() {
-        String expectedFullName = testValueProvider.getUserName();
+        String expectedFullName = homePage.getHeader().getUserName().trim();
         String actualAuthorText = createNewsPage.getAuthorValueText();
-        assertEquals(expectedFullName, actualAuthorText, "Author field should display the registered user's full name ('" + expectedFullName + "'), but was: '" + actualAuthorText + "'");
+        assertEquals(
+                expectedFullName,
+                actualAuthorText,
+                "Author field should display the registered user's full name");
     }
 
 
@@ -132,7 +167,7 @@ public class UserCreateNewsTests extends AuthenticatedBaseTestRunner {
     @Test
     void publishButtonShouldBeEnabledAfterFillingRequiredFields() {
         createNewsPage.enterTitle(correctNewsTitle)
-                .selectTag(NEWS_TAG_NEWS)
+                .selectTag(UiMessage.NEWS_TAG_NEWS)
                 .enterContent(correctNewsContent);
 
         assertTrue(createNewsPage.isPublishButtonEnabled(), "Publish button should become enabled once required fields are valid");

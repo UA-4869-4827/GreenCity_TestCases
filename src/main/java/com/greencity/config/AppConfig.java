@@ -78,7 +78,7 @@ public final class AppConfig {
     }
 
     public String userName() {
-        return get("test.user.name", "");
+        return get("user.name", "");
     }
 
     public String userPassword() {
