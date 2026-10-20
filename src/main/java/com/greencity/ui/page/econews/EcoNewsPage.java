@@ -137,7 +137,15 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage searchNews(String text) {
-        typeText(locateSearchInput(), text);
+        WebElement input = locateSearchInput();
+        waitUntilElementVisible(input);
+        js.executeScript(
+                "const input = arguments[0];"
+                        + "input.focus();"
+                        + "input.value = arguments[1];"
+                        + "input.dispatchEvent(new Event('input', {bubbles: true}));",
+                input,
+                text);
         return this;
     }
 
@@ -234,7 +242,10 @@ public class EcoNewsPage extends BasePage {
                         + "]");
 
         waitUntilElementPresent(locator);
-        return driver.findElement(locator);
+        return driver.findElements(locator).stream()
+                .filter(WebElement::isDisplayed)
+                .findFirst()
+                .orElseGet(() -> driver.findElement(locator));
     }
 
     public List<String> getFilterLabels() {
