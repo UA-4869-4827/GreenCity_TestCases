@@ -93,7 +93,9 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage filterBy(NewsTag tag) {
-        clickBy(By.xpath("//button[.//span[normalize-space()=" + xpathLiteral(tag.getText()) + "]]"));
+        clickBy(By.xpath(
+                "//button[.//span[normalize-space()="
+                        + xpathLiteral(tag.getText()) + "]]"));
         return this;
     }
 
@@ -135,7 +137,15 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage searchNews(String text) {
-        typeText(locateSearchInput(), text);
+        WebElement input = locateSearchInput();
+        waitUntilElementVisible(input);
+        js.executeScript(
+                "const input = arguments[0];"
+                        + "input.focus();"
+                        + "input.value = arguments[1];"
+                        + "input.dispatchEvent(new Event('input', {bubbles: true}));",
+                input,
+                text);
         return this;
     }
 
@@ -188,15 +198,54 @@ public class EcoNewsPage extends BasePage {
         return new NewsCardComponent(driver, getVisibleItem(newsCards, index));
     }
 
-    //public boolean isNewsCardDisplayed() {
-    //    return !newsCards.isEmpty() && isElementDisplayed(newsCards.get(0));
-    //}
+    public String getItemsFoundCount() {
+        return getElementText(itemsFoundCounter);
+    }
+
+    public String waitForItemsFoundCountToChange(String previousCount) {
+        By itemsFoundCountLocator = By.cssSelector("app-remaining-count h2");
+
+        return wait.until(driver -> {
+            String currentCount = driver.findElement(itemsFoundCountLocator)
+                    .getText()
+                    .trim();
+            return !currentCount.equals(previousCount) ? currentCount : null;
+        });
+    }
+
+    public List<NewsCardComponent> getVisibleNewsCards() {
+        return newsCards.stream()
+                .map(element -> new NewsCardComponent(driver, element))
+                .toList();
+    }
+
+    public void waitUntilNewsCardsAreDisplayed() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div.list-gallery")));
+    }
+
+    public void waitUntilSearchResultIsDisplayed(String searchQuery) {
+        By resultTitle = By.xpath(
+                "//div[contains(@class,'list-gallery')]"
+                        + "//h3[contains(normalize-space(), "
+                        + xpathLiteral(searchQuery)
+                        + ")]");
+
+        waitUntilElementPresent(resultTitle);
+    }
 
     private WebElement locateSearchInput() {
-        By locator = By.xpath("//input[@placeholder="
-                + xpathLiteral(UiMessage.NEWS_SEARCH_PLACEHOLDER.text()) + "]");
+        By locator = By.xpath(
+                "//input[@placeholder="
+                        + xpathLiteral(
+                                UiMessage.NEWS_SEARCH_PLACEHOLDER.text())
+                        + "]");
+
         waitUntilElementPresent(locator);
-        return driver.findElement(locator);
+        return driver.findElements(locator).stream()
+                .filter(WebElement::isDisplayed)
+                .findFirst()
+                .orElseGet(() -> driver.findElement(locator));
     }
 
     public List<String> getFilterLabels() {
