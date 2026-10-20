@@ -51,6 +51,9 @@ public class BaseTestRunner {
         ChromeOptions options = new ChromeOptions();
         if (testValueProvider.isHeadless()) {
             options.addArguments("--headless=new");
+            // maximize() is a no-op in headless Chrome, and the default window
+            // collapses the header so Sign in and the nav links are not clickable.
+            options.addArguments("--window-size=1920,1080");
         }
 
         driver = new ChromeDriver(options);
