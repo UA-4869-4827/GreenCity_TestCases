@@ -26,6 +26,13 @@ public class EventsClient extends BaseClient {
                 .get(EVENTS + "/{eventId}", eventId);
     }
 
+    public Response create(String addEventDtoRequest) {
+        return preparedRequest()
+                .contentType(ContentType.MULTIPART)
+                .multiPart("addEventDtoRequest", addEventDtoRequest, "application/json")
+                .post(EVENTS);
+    }
+
     public Response delete(long eventId) {
         return preparedRequest()
                 .delete(EVENTS + "/{eventId}", eventId);
