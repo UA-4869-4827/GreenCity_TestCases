@@ -205,6 +205,21 @@ public class CreateNewsPage extends BasePage {
         return getElementText(contentCounterHint);
     }
 
+    public boolean isContentLengthErrorDisplayed() {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(5))
+                    .until(d -> {
+                        String className = contentCounterHint.getAttribute("class");
+                        return className != null
+                                && className.contains("warning")
+                                && contentCounterHint.isDisplayed();
+                    });
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
     public String getSourcePlaceholder() {
         return getElementAttribute(sourceInput, "placeholder");
     }
