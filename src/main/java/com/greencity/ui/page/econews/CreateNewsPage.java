@@ -3,9 +3,11 @@ package com.greencity.ui.page.econews;
 import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -117,7 +119,7 @@ public class CreateNewsPage extends BasePage {
     }
 
     public String getTitleCounterText() {
-        return getElementText(titleCounter);
+        return getElementText(titleCounter).trim();
     }
 
     public CreateNewsPage enterSource(String url) {
@@ -126,8 +128,37 @@ public class CreateNewsPage extends BasePage {
     }
 
     public CreateNewsPage enterContent(String text) {
+        if (text.length() > 1_000) {
+            replaceContentInOneInput(text);
+            return this;
+        }
         typeText(contentEditor, text);
         return this;
+    }
+
+    private void replaceContentInOneInput(String text) {
+        waitUntilElementVisible(contentEditor);
+        clickElement(contentEditor);
+        js.executeScript(
+                "const editor = arguments[0];"
+                        + "editor.focus();"
+                        + "document.execCommand('selectAll', false, null);",
+                contentEditor);
+        contentEditor.sendKeys(Keys.BACK_SPACE);
+        if (driver instanceof ChromeDriver chromeDriver) {
+            chromeDriver.executeCdpCommand("Input.insertText", Map.of("text", text));
+        } else {
+            js.executeScript(
+                    "const editor = arguments[0];"
+                            + "const data = new DataTransfer();"
+                            + "data.setData('text/plain', arguments[1]);"
+                            + "editor.dispatchEvent(new ClipboardEvent('paste', "
+                            + "{bubbles: true, cancelable: true, clipboardData: data}));",
+                    contentEditor,
+                    text);
+        }
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(d -> getContentText().length() > 1_000);
     }
 
     public String getPictureWarningText() {
@@ -352,6 +383,59 @@ public class CreateNewsPage extends BasePage {
 
     public boolean isPublishButtonEnabled() {
         return publishButton.isEnabled();
+    }
+
+    public boolean isTitleCounterDisplayed() {
+        return isElementDisplayed(titleCounter);
+    }
+
+    public boolean isTitleCounterWarning() {
+        return classContains(titleCounter, "warning");
+    }
+
+    public boolean isTitleInvalid() {
+        return classContains(titleInput, "ng-invalid") && classContains(titleInput, "ng-touched");
+    }
+
+    public String getTitleText() {
+        return getTitleValue();
+    }
+
+    public CreateNewsPage focusTitleField() {
+        clickElement(titleInput);
+        return this;
+    }
+
+    public CreateNewsPage focusSourceField() {
+        clickElement(sourceInput);
+        return this;
+    }
+
+    public boolean isSourceWarningDisplayed() {
+        return classContains(sourceHint, "warning");
+    }
+
+    public String getSourceWarningText() {
+        waitUntilElementVisible(sourceHint);
+        return getElementText(sourceHint).trim();
+    }
+
+    public boolean isSourceWarningRed() {
+        return classContains(sourceHint, "warning");
+    }
+
+    public String getContentInfoText() {
+        waitUntilElementVisible(contentCounterHint);
+        return getElementText(contentCounterHint).trim();
+    }
+
+    public boolean isContentInfoWarning() {
+        return classContains(contentCounterHint, "warning");
+    }
+
+    private boolean classContains(WebElement element, String className) {
+        String cssClass = element.getDomAttribute("class");
+        return cssClass != null && cssClass.contains(className);
     }
 
     public List<String> getVisibleFieldOrder() {
