@@ -87,6 +87,12 @@ public class CreateNewsPage extends BasePage {
     @FindBy(css = "app-warning-pop-up .warning-title")
     private WebElement cancelWarningTitle;
 
+    @FindBy(css = "app-warning-pop-up .warning-subtitle")
+    private WebElement cancelWarningSubtitle;
+
+    @FindBy(css = "app-warning-pop-up button.secondary-global-button")
+    private WebElement continueEditingButton;
+
     @FindBy(css = "app-warning-pop-up button.primary-global-button")
     private WebElement confirmCancelButton;
 
@@ -209,8 +215,34 @@ public class CreateNewsPage extends BasePage {
     }
 
     public boolean isCancelConfirmationDisplayed() {
+        return isElementDisplayed(By.cssSelector("app-warning-pop-up .warning-title"));
+    }
+
+    public String getCancelWarningTitleText() {
         waitUntilElementVisible(cancelWarningTitle);
-        return cancelWarningTitle.isDisplayed();
+        return getElementText(cancelWarningTitle).trim();
+    }
+
+    public String getCancelWarningSubtitleText() {
+        waitUntilElementVisible(cancelWarningSubtitle);
+        return getElementText(cancelWarningSubtitle).trim();
+    }
+
+    public String getContinueEditingButtonText() {
+        waitUntilElementVisible(continueEditingButton);
+        return getElementText(continueEditingButton).trim();
+    }
+
+    public String getConfirmCancelButtonText() {
+        waitUntilElementVisible(confirmCancelButton);
+        return getElementText(confirmCancelButton).trim();
+    }
+
+    public CreateNewsPage continueEditing() {
+        clickElement(continueEditingButton);
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                d -> d.findElements(By.cssSelector("app-warning-pop-up .warning-title")).isEmpty());
+        return this;
     }
 
     public EcoNewsPage confirmCancel() {
