@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -120,6 +121,38 @@ public class CreateNewsPage extends BasePage {
         return getElementText(titleCounter);
     }
 
+    public CreateNewsPage clearTitle() {
+        waitUntilElementVisible(titleInput);
+        js.executeScript(
+                "const input = arguments[0];"
+                        + "input.focus();"
+                        + "input.value = '';"
+                        + "input.dispatchEvent(new Event('input', {bubbles: true}));"
+                        + "input.dispatchEvent(new Event('blur', {bubbles: true}));",
+                titleInput);
+        return this;
+    }
+
+    public boolean isTitleBorderRed() {
+        return wait.until(d -> "solid".equals(titleInput.getCssValue("border-top-style"))
+                && "1px".equals(titleInput.getCssValue("border-top-width"))
+                && "#ff0000".equalsIgnoreCase(
+                        Color.fromString(titleInput.getCssValue("border-top-color")).asHex()));
+    }
+
+    public boolean isEditButtonDisabled() {
+        return !publishButton.isEnabled();
+    }
+
+    public CreateNewsPage attemptEdit() {
+        publishButton.click();
+        return this;
+    }
+
+    public String getFormUrl() {
+        return driver.getCurrentUrl();
+    }
+
     public CreateNewsPage enterSource(String url) {
         typeText(sourceInput, url);
         return this;
@@ -211,6 +244,7 @@ public class CreateNewsPage extends BasePage {
 
     public EcoNewsPage publish() {
         clickElement(publishButton);
+        wait.until(ExpectedConditions.urlMatches(".*/greenCity/news/?$"));
         return new EcoNewsPage(driver);
     }
 

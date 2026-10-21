@@ -135,6 +135,8 @@ public class EcoNewsPage extends BasePage {
     // }
 
     public EcoNewsPage openSearch() {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("div.cdk-overlay-backdrop")));
         clickElement(searchButton);
         return this;
     }
