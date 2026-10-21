@@ -48,6 +48,11 @@ public class EditNewsEmptyTitleTest extends AuthenticatedBaseTestRunner {
         assertEquals(editFormUrl, editForm.getFormUrl(), "The edit form was submitted");
         assertTrue(editForm.isFormDisplayed(), "The edit form closed after clicking the disabled button");
 
+        editForm.cancel();
+        if (editForm.isCancelConfirmationDisplayed()) {
+            editForm.confirmCancel();
+        }
+
         NewsDetailsPage reloadedArticle = new NewsDetailsPage(driver).open(createdNewsId);
         assertEquals(newsTitle, reloadedArticle.getTitleText(), "The news title changed despite invalid input");
     }

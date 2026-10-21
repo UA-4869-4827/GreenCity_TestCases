@@ -3,7 +3,6 @@ package com.greencity.ui.page.econews;
 import com.greencity.ui.locale.UiMessage;
 import com.greencity.ui.page.BasePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -124,8 +123,13 @@ public class CreateNewsPage extends BasePage {
 
     public CreateNewsPage clearTitle() {
         waitUntilElementVisible(titleInput);
-        titleInput.clear();
-        titleInput.sendKeys(Keys.TAB);
+        js.executeScript(
+                "const input = arguments[0];"
+                        + "input.focus();"
+                        + "input.value = '';"
+                        + "input.dispatchEvent(new Event('input', {bubbles: true}));"
+                        + "input.dispatchEvent(new Event('blur', {bubbles: true}));",
+                titleInput);
         return this;
     }
 
@@ -240,6 +244,7 @@ public class CreateNewsPage extends BasePage {
 
     public EcoNewsPage publish() {
         clickElement(publishButton);
+        wait.until(ExpectedConditions.urlMatches(".*/greenCity/news/?$"));
         return new EcoNewsPage(driver);
     }
 
