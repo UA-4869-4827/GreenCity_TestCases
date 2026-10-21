@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NewsPreviewTest extends AuthenticatedBaseTestRunner {
 
@@ -59,6 +61,7 @@ public class NewsPreviewTest extends AuthenticatedBaseTestRunner {
                         "Preview shows different tags"));
     }
 
+    // known-bug #171: Back to editing leaves an empty page and drops the entered data.
     @Test
     void backToEditingReturnsFilledForm() {
         CreateNewsPage form = openFilledCreateForm()
