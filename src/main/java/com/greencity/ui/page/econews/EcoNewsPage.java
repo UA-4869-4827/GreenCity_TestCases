@@ -57,6 +57,9 @@ public class EcoNewsPage extends BasePage {
     @FindBy(css = "div.list-gallery")
     private List<WebElement> newsCards;
 
+    @FindBy(css = "div[matsnackbarlabel]")
+    private WebElement newsNotFoundMessage;
+
     @FindBy(css = "li.list-view-li-active")
     private List<WebElement> newsCardsListView;
 
@@ -197,6 +200,22 @@ public class EcoNewsPage extends BasePage {
 
     public boolean isNewsListOpened() {
         return driver.getCurrentUrl().matches(".*/greenCity/news/?$");
+    }
+
+    public EcoNewsPage openDeletedNewsUrl(long newsId) {
+        open(ECO_NEWS_HASH + "/" + newsId);
+        return this;
+    }
+
+    public boolean isNewsDisplayedByTitle(String title) {
+        By newsTitle = By.xpath(
+                "//app-news-list-gallery-view//h3[normalize-space()=" + xpathLiteral(title) + "]");
+        return !driver.findElements(newsTitle).isEmpty();
+    }
+
+    public String getNewsNotFoundMessageText() {
+        wait.until(ExpectedConditions.visibilityOf(newsNotFoundMessage));
+        return getElementText(newsNotFoundMessage).trim();
     }
 
     public NewsCardComponent getNewsCard(int index) {

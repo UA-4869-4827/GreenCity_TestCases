@@ -50,6 +50,9 @@ public class NewsDetailsPage extends BasePage {
     @FindBy(css = "app-dialog-pop-up button.primary-global-button")
     private WebElement confirmDeleteButton;
 
+    @FindBy(css = "app-dialog-pop-up button.secondary-global-button")
+    private WebElement cancelDeleteButton;
+
     @FindBy(css = "div.news-title")
     private WebElement title;
 
@@ -167,12 +170,35 @@ public class NewsDetailsPage extends BasePage {
 
     @Step("Delete news")
     public EcoNewsPage deleteNews() {
+        openDeleteConfirmation();
+        return confirmDelete();
+    }
+
+    @Step("Open the delete confirmation")
+    public NewsDetailsPage openDeleteConfirmation() {
         clickElement(deleteButton);
+        waitUntilElementVisible(confirmDeleteButton);
+        return this;
+    }
+
+    public boolean isDeleteConfirmationDisplayed() {
+        return isElementDisplayed(By.cssSelector("app-dialog-pop-up"));
+    }
+
+    @Step("Confirm deleting news")
+    public EcoNewsPage confirmDelete() {
         clickElement(confirmDeleteButton);
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(ExpectedConditions.urlMatches(".*/greenCity/news/?$"));
         waitForPageToLoad();
         return new EcoNewsPage(driver);
+    }
+
+    @Step("Cancel deleting news")
+    public NewsDetailsPage cancelDelete() {
+        waitUntilElementVisible(cancelDeleteButton);
+        clickElement(cancelDeleteButton);
+        return this;
     }
 
     @Step("Open related news at index {index}")
