@@ -20,4 +20,12 @@ public final class ApiAuth {
     public static String accessTokenForConfiguredUser(TestValueProvider values) {
         return signInAsConfiguredUser(values).getAccessToken();
     }
+
+    public static SignInResponse signInAsSecondUser(TestValueProvider values) {
+        AuthClient authClient = new AuthClient(values.getBaseUserApiUrl());
+        return authClient.signIn(
+                values.getSecondUserEmail(),
+                values.getSecondUserPassword());
+    }
+
 }
