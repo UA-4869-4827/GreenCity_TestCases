@@ -1,5 +1,6 @@
 package com.greencity.ui.testrunners;
 
+import com.greencity.logging.TestRunLoggingExtension;
 import com.greencity.ui.locale.LocaleContext;
 import com.greencity.ui.locale.LocaleSupport;
 import com.greencity.ui.page.BasePage;
@@ -10,13 +11,20 @@ import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
+@ExtendWith(TestRunLoggingExtension.class)
 public class BaseTestRunner {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BaseTestRunner.class);
+
     protected WebDriver driver;
     protected static TestValueProvider testValueProvider;
     protected HomePage homePage;
@@ -50,6 +58,7 @@ public class BaseTestRunner {
     @Step("init ChromeDriver")
     public void initDriver() {
         ChromeOptions options = new ChromeOptions();
+        LOG.debug("Starting Chrome, headless={}", testValueProvider.isHeadless());
         if (testValueProvider.isHeadless()) {
             options.addArguments("--headless=new");
             // maximize() is a no-op in headless Chrome, and the default window
@@ -72,6 +81,7 @@ public class BaseTestRunner {
      */
     @Step("Sign in as configured user")
     protected <P extends BasePage> P loginAsUser(Class<P> pageClass) {
+        LOG.info("Signing in as the configured user");
         return homePage.getHeader()
                 .clickSignIn()
                 .signIn(

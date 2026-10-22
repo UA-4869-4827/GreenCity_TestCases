@@ -12,6 +12,7 @@ Full architecture and testing guides live in **[`docs/`](docs/README.md)**:
 - [UI testing](docs/ui-testing.md)
 - [API testing](docs/api-testing.md)
 - [Configuration](docs/configuration.md)
+- [Logging](docs/logging.md)
 
 ## Technologies
 

@@ -9,5 +9,6 @@
 | [api-testing.md](api-testing.md) | API / Rest Assured, auth, еталонні тести |
 | [implement-api-tc.md](implement-api-tc.md) | Як реалізувати API TC крок за кроком |
 | [configuration.md](configuration.md) | `config.properties`, URL, credentials, env |
+| [logging.md](logging.md) | Журнал прогону, рівні логів і де їх писати |
 
 Швидкий старт і команди запуску лишаються в кореневому [README.md](../README.md).
