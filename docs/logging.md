@@ -48,3 +48,71 @@ LOG.debug("Filtering Eco news by {}", tag);
 ```
 
 Поле має називатися `LOG`: Checkstyle вважає `static final` константою.
+
+`TestRunLoggingExtension` на базові ранери вдруге не вішати. Старт і підсумок тесту вже пишуться самі.
+
+## Куди додати по аналогії
+
+Той самий поділ, що в `EcoNewsPage`, `NewsDetailsPage`, `DeleteNewsTest` і `DeleteNonExistentEventApiTest`.
+
+Сторінка або клієнт логує дію. Тест логує сценарій і підсумок, а не кожен клік повторно. Гетери, `is…` і текст помилки валідації не логувати: це читання екрана, не крок.
+
+| Зразок | Рівень | Що писати |
+| --- | --- | --- |
+| `EcoNewsPage.open`, `NewsDetailsPage.open` | INFO | Відкрили екран або запис за id |
+| `EcoNewsPage.searchNews` | INFO | Пошук, без пароля й email |
+| `NewsDetailsPage.openDeleteConfirmation`, `confirmDelete`, `cancelDelete` | INFO | Діалог, підтвердження, скасування |
+| `EcoNewsPage.filterBy` | DEBUG | Який фільтр чи другорядний перемикач |
+| `DeleteNewsTest` | INFO | Назва сценарію на початку методу |
+| `DeleteNonExistentEventApiTest` | INFO | Метод і шлях, потім статус відповіді. Тіло відповіді не писати |
+| Той самий API-тест | DEBUG | Клієнт підготовлено, без токена |
+
+### Сторінки
+
+`CreateNewsPage` — як видалення новини:
+
+- INFO: `publish`, `preview`, `cancel`, `confirmCancel`, `continueEditing`, `attemptEdit`
+- DEBUG: `enterTitle`, `clearTitle`, `enterContent`, `enterSource`, `selectTag`, `uploadPicture`
+
+`EventsPage` — як список eco-news:
+
+- INFO: `open`, `createEvent`, `openEventById`, `openEventByIndex`
+- DEBUG: `filterByEventTime`, `filterByLocation`, `filterByStatus`, `filterByType`, `setDateRange`, `resetAllFilters`
+
+`CreateEventPage` — як форма новини:
+
+- INFO: `publish`, `preview`, `cancel`
+- DEBUG: `setTitle`, `setDescription`, `selectDay`, `setOnlineLink`, `setLocation`, `uploadImage`
+
+`EventDetailsPage` — як картка новини:
+
+- INFO: `editEvent`, `goBackToEvents`, `joinEvent`, `saveEvent`
+
+`HomePage` — лише переходи:
+
+- INFO: `open`, `openAllNews`, `openEcoBagsPlaces`, `openCupDiscountPlaces`
+- `enterNewsletterEmail` і `subscribe` не логувати: у них email
+
+`HeaderComponent` — як відкриття розділу:
+
+- INFO: `openEcoNews`, `openEvents`, `openPlaces`, `openAboutUs`, `clickSignIn`, `clickSignUp`, `signOut`, `switchLanguage`
+- `clickSignIn` без email і пароля. Текст кнопки й `isLoggedIn` не логувати
+
+`SignInModal` — INFO лише на `clickSignInButton`, `openSignUp`, `openForgotPassword`. `enterPassword` і `unsuccessfulSignIn` не логувати.
+
+### Тести
+
+INFO однією фразою на початку тестового методу, як `DeleteNewsTest`.
+
+- Форма новини: `CreateNewsTest`, `EditNewsTest`, `EditNewsEmptyTitleTest`, `EditNewsShortContentTest`, `NewsPreviewTest`
+- Список і фільтри: `EcoNewsFilterTest`, `EcoNewsViewTest`, `NewsDetailsTest`
+- Події, коли з’являться UI-тести на `EventsPage` / `CreateEventPage`
+
+API, як `DeleteNonExistentEventApiTest`: INFO перед викликом (`POST /eco-news`, `DELETE /events/{id}`) і INFO зі статусом після відповіді. DEBUG лише «клієнт підготовлено».
+
+- `CreateEcoNewsApiTest`
+- `EcoNewsDeleteApiTest`, `EcoNewsDeleteUnauthorizedApiTest`
+- `DeleteEventApiTest`, `DeleteEventAuthorizedApiTest`
+- `EventsReadApiTest`, `EcoNewsApiSmokeTest`, `GuestCreateEventsApiSmokeTests`
+
+`AuthenticatedApiSmokeTest` не логувати: кейс про отримання токена. У `AuthClient.signInRaw` нічого не додавати.
