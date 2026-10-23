@@ -3,6 +3,7 @@ package com.greencity.api.clients;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greencity.api.models.events.AddEventRequestDto;
+import com.greencity.api.models.events.UpdateEventRequestDto;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -43,20 +44,42 @@ public class EventsClient extends BaseClient {
     }
 
     public Response createV2(AddEventRequestDto event) {
-        String eventJson;
-        try {
-            eventJson = OBJECT_MAPPER.writeValueAsString(event);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Cannot serialize event request", e);
-        }
         return preparedRequest()
                 .contentType(ContentType.MULTIPART)
-                .multiPart("addEventDtoRequest", eventJson, "application/json")
+                .multiPart("addEventDtoRequest", toJson(event), "application/json")
                 .post(EVENTS + "/createV2");
+    }
+
+    /**
+     * Legacy multipart PUT. Path id must equal {@code request.id}.
+     */
+    public Response update(long eventId, UpdateEventRequestDto request) {
+        return preparedRequest()
+                .contentType(ContentType.MULTIPART)
+                .multiPart("eventDto", toJson(request), "application/json")
+                .put(EVENTS + "/{eventId}", eventId);
+    }
+
+    /**
+     * Alternative update endpoint with the same multipart DTO.
+     */
+    public Response updateV2(long eventId, UpdateEventRequestDto request) {
+        return preparedRequest()
+                .contentType(ContentType.MULTIPART)
+                .multiPart("eventDto", toJson(request), "application/json")
+                .put(EVENTS + "/updateV2/{eventId}", eventId);
     }
 
     public Response delete(long eventId) {
         return preparedRequest()
                 .delete(EVENTS + "/{eventId}", eventId);
+    }
+
+    private static String toJson(Object value) {
+        try {
+            return OBJECT_MAPPER.writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Cannot serialize event request", e);
+        }
     }
 }
