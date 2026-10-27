@@ -17,6 +17,7 @@
         <junit.version>5.11.4</junit.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
         <allure.version>2.24.0</allure.version>
+        <allure.maven.version>2.18.0</allure.maven.version>
         <aspectj.version>1.9.22.1</aspectj.version>
         <cucumber.version>7.21.1</cucumber.version>
         <checkstyle.version>10.21.2</checkstyle.version>
@@ -130,6 +131,14 @@
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>${allure.maven.version}</version>
+                <configuration>
+                    <reportVersion>${allure.version}</reportVersion>
                 </configuration>
             </plugin>
             <plugin>

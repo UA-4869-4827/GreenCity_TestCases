@@ -80,7 +80,10 @@ public class MyAuthApiTest extends AuthenticatedApiTestRunner {
 ```bash
 mvn -Dtest=EcoNewsApiSmokeTest,AuthenticatedApiSmokeTest test
 mvn -Dtest=CreateEcoNewsApiTest test
+mvn allure:serve
 ```
+
+Allure annotations: [allure.md](allure.md). `EcoNewsApiSmokeTest` is the annotated API sample.
 
 ## Smoke samples
 

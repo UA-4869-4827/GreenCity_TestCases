@@ -12,6 +12,7 @@ Full architecture and testing guides live in **[`docs/`](docs/README.md)**:
 - [UI testing](docs/ui-testing.md)
 - [API testing](docs/api-testing.md)
 - [Configuration](docs/configuration.md)
+- [Allure](docs/allure.md)
 
 ## Technologies
 
@@ -241,9 +242,13 @@ Do not add a `SignInPage`. Auth is `homePage.getHeader().clickSignIn()` (or `log
 
 ## Allure
 
+Annotations, `@Step`, and report commands: [docs/allure.md](docs/allure.md).
+
+Reference tests: `BaseTest` (UI), `EcoNewsApiSmokeTest` (API).
+
 ```bash
-mvn test
-allure serve target/allure-results
+mvn clean test
+mvn allure:serve
 ```
 
 ## Requirements
