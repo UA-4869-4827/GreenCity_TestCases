@@ -1,11 +1,12 @@
 package com.greencity.api.testRunners;
 
+import com.greencity.api.clients.CommentsClient;
 import com.greencity.api.clients.EcoNewsClient;
 import com.greencity.api.models.auth.SignInResponse;
 import com.greencity.api.support.ApiAuth;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Assumptions;
 
 /**
  * Signs in once via User service ({@code base.user.api.url}) and exposes
@@ -34,5 +35,6 @@ public abstract class AuthenticatedApiTestRunner extends ApiTestRunner {
                 "Sign-in did not return accessToken");
 
         ecoNewsClient = new EcoNewsClient(testValueProvider.getBaseAPIUrl(), accessToken);
+        commentsClient = new CommentsClient(testValueProvider.getBaseAPIUrl(), accessToken);
     }
 }
