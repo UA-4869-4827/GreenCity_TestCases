@@ -40,6 +40,7 @@ public class EcoNewsViewTest extends BaseTestRunner {
         NewsCardComponent card = ecoNewsPage.getNewsCard(0);
         LOG.info("Checking elements of the first card: '{}'", card.getTitle());
 
+
         assertTrue(card.isTitleDisplayed(), "Title should be displayed");
         assertTrue(card.isAuthorDisplayed(), "Author should be displayed");
         assertTrue(card.isDateDisplayed(), "Date should be displayed");
