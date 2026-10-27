@@ -242,12 +242,15 @@ Do not add a `SignInPage`. Auth is `homePage.getHeader().clickSignIn()` (or `log
 
 ## Allure
 
-Annotations, `@Step`, and report commands: [docs/allure.md](docs/allure.md).
+Rules for annotations, `@Step`, and the report: [docs/allure.md](docs/allure.md).
 
-Reference tests: `BaseTest` (UI), `EcoNewsApiSmokeTest` (API).
+The example is on the existing sample tests, not a new class:
+
+- UI: `src/test/java/com/greencity/ui/BaseTest.java` — `@Epic("UI")`, `@Feature("Home")`, and `@Story`, `@Severity`, `@DisplayName`, `@Description` on the test
+- API: `src/test/java/com/greencity/api/EcoNewsApiSmokeTest.java` — `@Epic("API")`, `@Feature("Eco News")`, and the same method annotations
 
 ```bash
-mvn clean test
+mvn clean -Dtest=BaseTest,EcoNewsApiSmokeTest test
 mvn allure:serve
 ```
 

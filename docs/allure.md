@@ -2,10 +2,26 @@
 
 Allure вже підключений до цього репозиторію. Новий тест не потребує нових залежностей: на клас і метод ставляться анотації, на дію в page object або API-клієнті — `@Step`. Звіт збирається з `target/allure-results`.
 
-Живі приклади:
+## Де лежить приклад
 
-- UI: `src/test/java/com/greencity/ui/BaseTest.java`
-- API: `src/test/java/com/greencity/api/EcoNewsApiSmokeTest.java`
+Окремого класу під Allure немає. Анотації стоять на двох зразкових тестах, які вже були в репозиторії.
+
+UI — `src/test/java/com/greencity/ui/BaseTest.java`:
+
+- на класі: `@Epic("UI")`, `@Feature("Home")`, `@DisplayName("Home page")`
+- на тесті: `@Story`, `@Severity(SeverityLevel.NORMAL)`, `@DisplayName`, `@Description`
+
+API — `src/test/java/com/greencity/api/EcoNewsApiSmokeTest.java`:
+
+- на класі: `@Epic("API")`, `@Feature("Eco News")`, `@DisplayName("Eco news API")`
+- на тесті: `@Story`, `@Severity(SeverityLevel.CRITICAL)`, `@DisplayName`, `@Description`
+
+Звіт з цих тестів збирає плагін `allure-maven` у `pom.xml`:
+
+```bash
+mvn clean -Dtest=BaseTest,EcoNewsApiSmokeTest test
+mvn allure:serve
+```
 
 ## Як додати Allure до тесту
 
@@ -79,6 +95,28 @@ allure.link.issue.pattern=https://github.com/UA-4869-4827/GreenCity_TestCases/is
 ```
 
 `{}` замінюється на значення `@Issue`. Якщо issues ведуться в іншому репозиторії, міняється лише цей рядок.
+
+### Приклад API
+
+Так само зроблено в `EcoNewsApiSmokeTest`:
+
+```java
+@Epic("API")
+@Feature("Eco News")
+@DisplayName("Eco news API")
+public class EcoNewsApiSmokeTest extends ApiTestRunner {
+
+    @Test
+    @Story("Guest lists eco news")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("GET /eco-news returns a page of news")
+    @Description("Public GET /eco-news returns HTTP 200 and a non-empty page.")
+    void getEcoNewsListReturnsOk() {
+        Response response = ecoNewsClient.getAll(0, 5);
+        assertEquals(200, response.statusCode());
+    }
+}
+```
 
 ### `@Step`
 
