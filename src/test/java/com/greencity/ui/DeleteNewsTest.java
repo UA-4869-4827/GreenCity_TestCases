@@ -6,6 +6,8 @@ import com.greencity.ui.page.econews.NewsDetailsPage;
 import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -13,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DeleteNewsTest extends AuthenticatedBaseTestRunner {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteNewsTest.class);
     private static final String NOT_FOUND_MESSAGE = "The Eco-news was not found";
 
     private long createdNewsId;
@@ -20,6 +23,7 @@ public class DeleteNewsTest extends AuthenticatedBaseTestRunner {
     @Test
     void userShouldBeAbleToDeleteOwnNews() {
         String title = "Delete News Test " + System.nanoTime();
+        LOG.info("Deleting own news");
         NewsDetailsPage newsDetailsPage = publishNews(title, "Test content for news deletion");
         long newsId = newsDetailsPage.getNewsId();
         createdNewsId = newsId;
@@ -47,6 +51,7 @@ public class DeleteNewsTest extends AuthenticatedBaseTestRunner {
     @Test
     void userShouldBeAbleToCancelNewsDeletion() {
         String title = "Cancel Delete News Test " + System.nanoTime();
+        LOG.info("Cancelling deletion of own news");
         NewsDetailsPage newsDetailsPage = publishNews(title, "Test content for cancelling news deletion");
         createdNewsId = newsDetailsPage.getNewsId();
 

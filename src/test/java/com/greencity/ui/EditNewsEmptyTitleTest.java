@@ -7,12 +7,14 @@ import com.greencity.ui.page.econews.NewsDetailsPage;
 import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EditNewsEmptyTitleTest extends AuthenticatedBaseTestRunner {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EditNewsEmptyTitleTest.class);
     private static final String NEWS_CONTENT =
             "A news article created for the empty title validation test. Its title must stay unchanged.";
 
@@ -21,6 +23,7 @@ public class EditNewsEmptyTitleTest extends AuthenticatedBaseTestRunner {
 
     @Test
     void authorCannotSubmitNewsWithoutTitle() {
+        LOG.info("Editing own news with an empty title");
         new EcoNewsPage(driver)
                 .open()
                 .createNews()

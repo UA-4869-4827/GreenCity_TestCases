@@ -13,6 +13,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.regex.Matcher;
@@ -22,6 +24,7 @@ import java.util.List;
 
 public class NewsDetailsPage extends BasePage {
 
+    private static final Logger LOG = LoggerFactory.getLogger(NewsDetailsPage.class);
     private static final String NEWS_HASH = "/#/greenCity/news";
     private static final Pattern NEWS_ID = Pattern.compile("/news/(\\d+)");
     private static final By SIGN_IN_MODAL = By.cssSelector("app-sign-in");
@@ -81,6 +84,7 @@ public class NewsDetailsPage extends BasePage {
 
     @Step("Open news article {newsId}")
     public NewsDetailsPage open(long newsId) {
+        LOG.info("Opening news {}", newsId);
         open(NEWS_HASH + "/" + newsId);
         waitUntilElementVisible(title);
         return this;
@@ -176,6 +180,7 @@ public class NewsDetailsPage extends BasePage {
 
     @Step("Open the delete confirmation")
     public NewsDetailsPage openDeleteConfirmation() {
+        LOG.info("Opening the delete confirmation");
         clickElement(deleteButton);
         waitUntilElementVisible(confirmDeleteButton);
         return this;
@@ -187,6 +192,7 @@ public class NewsDetailsPage extends BasePage {
 
     @Step("Confirm deleting news")
     public EcoNewsPage confirmDelete() {
+        LOG.info("Confirming news deletion");
         clickElement(confirmDeleteButton);
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(ExpectedConditions.urlMatches(".*/greenCity/news/?$"));
@@ -196,6 +202,7 @@ public class NewsDetailsPage extends BasePage {
 
     @Step("Cancel deleting news")
     public NewsDetailsPage cancelDelete() {
+        LOG.info("Cancelling news deletion");
         waitUntilElementVisible(cancelDeleteButton);
         clickElement(cancelDeleteButton);
         return this;

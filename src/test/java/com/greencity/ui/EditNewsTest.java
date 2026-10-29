@@ -7,7 +7,8 @@ import com.greencity.ui.page.econews.NewsDetailsPage;
 import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EditNewsTest extends AuthenticatedBaseTestRunner {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EditNewsTest.class);
     private static final String NEWS_CONTENT =
             "TestTest content for the edit news test, TestTest content for the edit news test.";
 
@@ -55,6 +57,7 @@ public class EditNewsTest extends AuthenticatedBaseTestRunner {
 
     @Test
     void editButtonIsVisibleToAuthor() {
+        LOG.info("Checking that the author sees the Edit button on own news");
         NewsDetailsPage news = createAndOpenNews();
 
         assertTrue(news.isEditDisplayed(), "Edit button is not visible to the author");
@@ -62,6 +65,7 @@ public class EditNewsTest extends AuthenticatedBaseTestRunner {
 
     @Test
     void editFormIsPreFilledWithNewsData() {
+        LOG.info("Opening the edit form of own news to check pre-filled data");
         CreateNewsPage editForm = createAndOpenNews().editNews();
 
         assertAll("Edit form is opened",

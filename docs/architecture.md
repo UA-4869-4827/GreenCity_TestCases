@@ -122,6 +122,7 @@ Legacy `*.azurewebsites.net` hosts no longer resolve - do not use them.
 - **Checkstyle** (`mvn checkstyle:check`) - includes test sources; AvoidStarImport etc.
 - **JUnit 5** tags: `smoke`, `auth`, `api` (as applied on runners/tests)
 - **Allure** results under `target/allure-results`
+- **Run journal** under `logs/`, split by level. See [logging.md](logging.md)
 
 ## Design principles
 
@@ -137,3 +138,4 @@ Legacy `*.azurewebsites.net` hosts no longer resolve - do not use them.
 - [UI testing](ui-testing.md)
 - [API testing](api-testing.md)
 - [Configuration](configuration.md)
+- [Logging](logging.md)
