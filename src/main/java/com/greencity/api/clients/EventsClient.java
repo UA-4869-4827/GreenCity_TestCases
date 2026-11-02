@@ -3,6 +3,7 @@ package com.greencity.api.clients;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greencity.api.models.events.AddEventRequestDto;
+import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -23,6 +24,7 @@ public class EventsClient extends BaseClient {
         setToken(accessToken);
     }
 
+    @Step("Get all events: page {page}, size {size}")
     public Response getAll(int page, int size) {
         return preparedRequest()
                 .queryParam("page", page)
@@ -30,11 +32,13 @@ public class EventsClient extends BaseClient {
                 .get(EVENTS);
     }
 
+    @Step("Get event by ID {eventId}")
     public Response getById(long eventId) {
         return preparedRequest()
                 .get(EVENTS + "/{eventId}", eventId);
     }
 
+    @Step("Create event")
     public Response create(String addEventDtoRequest) {
         return preparedRequest()
                 .contentType(ContentType.MULTIPART)
@@ -42,6 +46,7 @@ public class EventsClient extends BaseClient {
                 .post(EVENTS);
     }
 
+    @Step("Create event using createV2 endpoint")
     public Response createV2(AddEventRequestDto event) {
         String eventJson;
         try {
@@ -55,6 +60,7 @@ public class EventsClient extends BaseClient {
                 .post(EVENTS + "/createV2");
     }
 
+    @Step("Delete event with ID {eventId}")
     public Response delete(long eventId) {
         return preparedRequest()
                 .delete(EVENTS + "/{eventId}", eventId);

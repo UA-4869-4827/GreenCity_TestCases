@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greencity.api.models.econews.AddEcoNewsDtoRequest;
 import com.greencity.api.models.econews.EcoNewsDto;
+import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -27,6 +28,7 @@ public class EcoNewsClient extends BaseClient {
         setToken(accessToken);
     }
 
+    @Step("Get all eco news: page {page}, size {size}")
     public Response getAll(int page, int size) {
         return preparedRequest()
                 .queryParam("page", page)
@@ -34,11 +36,13 @@ public class EcoNewsClient extends BaseClient {
                 .get(ECO_NEWS);
     }
 
+    @Step("Get eco news by ID {ecoNewsId}")
     public Response getById(long ecoNewsId) {
         return preparedRequest()
                 .get(ECO_NEWS + "/{ecoNewsId}", ecoNewsId);
     }
 
+    @Step("Get eco news DTO by ID {ecoNewsId}")
     public EcoNewsDto getByIdAsDto(long ecoNewsId) {
         return getById(ecoNewsId)
                 .then()
@@ -51,6 +55,7 @@ public class EcoNewsClient extends BaseClient {
      * Creates eco news. Requires Authorization. Multipart part name:
      * {@code addEcoNewsDtoRequest} (JSON). Image part is optional.
      */
+    @Step("Create eco news")
     public Response create(AddEcoNewsDtoRequest request) {
         String json;
         try {
@@ -69,6 +74,7 @@ public class EcoNewsClient extends BaseClient {
         return spec.post(ECO_NEWS);
     }
 
+    @Step("Create eco news and deserialize response")
     public EcoNewsDto createAsDto(AddEcoNewsDtoRequest request) {
         return create(request)
                 .then()
@@ -77,6 +83,7 @@ public class EcoNewsClient extends BaseClient {
                 .as(EcoNewsDto.class);
     }
 
+    @Step("Delete eco news with ID {ecoNewsId}")
     public Response delete(long ecoNewsId) {
         return preparedRequest()
                 .delete(ECO_NEWS + "/{ecoNewsId}", ecoNewsId);

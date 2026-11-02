@@ -3,6 +3,7 @@ package com.greencity.api;
 import com.greencity.api.clients.EventsClient;
 import com.greencity.api.models.events.AddEventRequestDto;
 import com.greencity.api.testRunners.AuthenticatedApiTestRunner;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,9 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@Epic("API")
+@Feature("Events")
+@DisplayName("Authorized event deletion API tests")
 public class DeleteEventAuthorizedApiTest extends AuthenticatedApiTestRunner {
 
     private static final String DESCRIPTION = "Event created for the organizer delete API test.";
@@ -29,7 +33,16 @@ public class DeleteEventAuthorizedApiTest extends AuthenticatedApiTestRunner {
     }
 
     @Test
+    @Story("Organizer deletes an existing event")
+    @Severity(SeverityLevel.CRITICAL)
     @DisplayName("DELETE /events/{eventId} returns 200 and the event is gone")
+    @Description("""
+            Verify that an authenticated organizer can delete an existing event.
+            Expected result: event creation returns HTTP 201, deletion returns
+            HTTP 200, and a subsequent request to retrieve the deleted event
+            returns HTTP 404 Not Found.
+            """)
+    @Issue("153")
     void organizerSuccessfullyDeletesEvent() {
         EventsClient events = organizerClient();
         Response createResponse = events.createV2(validEvent());
