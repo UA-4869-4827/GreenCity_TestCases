@@ -102,9 +102,9 @@ public class SignUpTest extends BaseTestRunner {
         };
 
         assertAll(
-                () -> assertFalse(actualError.isBlank(), "Validation message is not shown"),
-                () -> assertFalse(modal.isSignUpButtonEnabled(), "Submit must stay disabled"),
-                () -> System.out.println("[" + caseName + "] actual: " + actualError)
+                () -> assertTrue(actualError.contains(expectedError),
+                        caseName + " expected [" + expectedError + "] but was [" + actualError + "]"),
+                () -> assertFalse(modal.isSignUpButtonEnabled(), "Submit must stay disabled")
         );
     }
 
