@@ -28,6 +28,13 @@ public class TestValueProvider {
                 && !"your_password".equals(getUserPassword());
     }
 
+    public boolean hasConfiguredSecondUserCredentials() {
+        return getSecondUserEmail() != null && !getSecondUserEmail().isBlank()
+                && getSecondUserPassword() != null && !getSecondUserPassword().isBlank()
+                && !getSecondUserEmail().contains("example.com")
+                && !"second.user_password".equals(getSecondUserPassword());
+    }
+
     /**
      * Implicit wait must stay zero when the POM uses explicit waits.
      */

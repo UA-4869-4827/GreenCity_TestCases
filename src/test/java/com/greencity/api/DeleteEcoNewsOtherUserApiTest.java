@@ -7,6 +7,7 @@ import com.greencity.api.support.ApiAuth;
 import com.greencity.api.testRunners.AuthenticatedApiTestRunner;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,10 +36,8 @@ class DeleteEcoNewsOtherUserApiTest extends AuthenticatedApiTestRunner {
     @Test
     @DisplayName("Other user cannot delete another user's news")
     void otherUserCannotDeleteNews() {
-        assertFalse(testValueProvider.getSecondUserEmail().isBlank(),
-                "Configure second.user.email in config.properties");
-        assertFalse(testValueProvider.getSecondUserPassword().isBlank(),
-                "Configure second.user.password in config.properties");
+        Assumptions.assumeTrue(testValueProvider.hasConfiguredSecondUserCredentials(),
+                "Configure second.user.email and second.user.password");
 
         String title = "API delete authorization " + UUID.randomUUID();
         AddEcoNewsDtoRequest request = AddEcoNewsDtoRequest.builder()
