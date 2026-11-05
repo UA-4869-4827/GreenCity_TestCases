@@ -4,7 +4,12 @@ import com.greencity.api.clients.EcoNewsClient;
 import com.greencity.api.models.econews.AddEcoNewsDtoRequest;
 import com.greencity.api.models.econews.EcoNewsDto;
 import com.greencity.api.testRunners.AuthenticatedApiTestRunner;
-import io.qameta.allure.*;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Reference API tests for creating eco news ({@code POST /eco-news}).
