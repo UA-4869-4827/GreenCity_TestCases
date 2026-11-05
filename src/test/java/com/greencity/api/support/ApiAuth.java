@@ -22,15 +22,6 @@ public final class ApiAuth {
     }
 
     public static SignInResponse signInAsSecondUser(TestValueProvider values) {
-        System.out.println(
-                "Second user API URL: "
-                        + values.getBaseUserApiUrl()
-        );
-        System.out.println(
-                "Second user email configured: "
-                        + (values.getSecondUserEmail() != null
-                        && !values.getSecondUserEmail().isBlank())
-        );
         AuthClient authClient = new AuthClient(values.getBaseUserApiUrl());
         return authClient.signIn(values.getSecondUserEmail(), values.getSecondUserPassword());
     }

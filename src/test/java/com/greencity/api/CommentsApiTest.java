@@ -7,6 +7,7 @@ import com.greencity.api.support.ApiAuth;
 import com.greencity.api.testRunners.AuthenticatedApiTestRunner;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommentsApiTest extends AuthenticatedApiTestRunner {
 
@@ -139,6 +144,8 @@ public class CommentsApiTest extends AuthenticatedApiTestRunner {
     @Test
     @DisplayName("135 - Second user cannot edit another user's comment")
     void secondUserCannotEditAnotherUsersComment() {
+        Assumptions.assumeTrue(testValueProvider.hasConfiguredSecondUserCredentials(),
+                "Configure second.user.email and second.user.password");
         String originalText = "Original comment for edit permission test.";
         long commentId = createCommentAndTrack(originalText);
 
@@ -179,6 +186,8 @@ public class CommentsApiTest extends AuthenticatedApiTestRunner {
     @Test
     @DisplayName("137 - Second user cannot delete another user's comment")
     void secondUserCannotDeleteAnotherUsersComment() {
+        Assumptions.assumeTrue(testValueProvider.hasConfiguredSecondUserCredentials(),
+                "Configure second.user.email and second.user.password");
         String originalText = "Original comment for delete permission test.";
         long commentId = createCommentAndTrack(originalText);
 
