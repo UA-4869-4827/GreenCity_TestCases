@@ -4,6 +4,12 @@ import com.greencity.api.clients.EcoNewsClient;
 import com.greencity.api.models.econews.AddEcoNewsDtoRequest;
 import com.greencity.api.models.econews.EcoNewsDto;
 import com.greencity.api.testRunners.AuthenticatedApiTestRunner;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +36,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * </ol>
  * Related US: Create news / post news (#86, #89).
  */
+@Epic("API")
+@Feature("Eco News")
+@DisplayName("Eco News API tests")
 public class CreateEcoNewsApiTest extends AuthenticatedApiTestRunner {
 
     private static final String MIN_CONTENT =
@@ -46,7 +55,16 @@ public class CreateEcoNewsApiTest extends AuthenticatedApiTestRunner {
     }
 
     @Test
+    @Story("Authorized user creates eco news")
+    @Severity(SeverityLevel.CRITICAL)
     @DisplayName("POST /eco-news - author creates news successfully")
+    @Description("""
+            Verify that an authenticated user can create eco news
+            with valid data.
+            Expected result: the API returns HTTP 201, the created news
+            has an ID, and the news can be retrieved by ID with the
+            expected title and published content.
+            """)
     void authorCanCreateEcoNews() {
         String title = uniqueTitle("API create");
         AddEcoNewsDtoRequest request = AddEcoNewsDtoRequest.builder()
@@ -75,7 +93,14 @@ public class CreateEcoNewsApiTest extends AuthenticatedApiTestRunner {
     }
 
     @Test
+    @Story("Guest cannot create eco news")
+    @Severity(SeverityLevel.CRITICAL)
     @DisplayName("POST /eco-news - without token returns 401")
+    @Description("""
+            Verify that a request to create eco news without an
+            authorization token is rejected.
+            Expected result: the API returns HTTP 401 Unauthorized.
+            """)
     void createWithoutTokenReturns401() {
         EcoNewsClient guestClient = new EcoNewsClient(testValueProvider.getBaseAPIUrl());
         AddEcoNewsDtoRequest request = AddEcoNewsDtoRequest.builder()
@@ -90,7 +115,14 @@ public class CreateEcoNewsApiTest extends AuthenticatedApiTestRunner {
     }
 
     @Test
+    @Story("Eco news creation validates minimum text length")
+    @Severity(SeverityLevel.NORMAL)
     @DisplayName("POST /eco-news - text shorter than 20 chars returns 400")
+    @Description("""
+            Verify that eco news cannot be created when the text
+            is shorter than the required minimum of 20 characters.
+            Expected result: the API returns HTTP 400 Bad Request.
+            """)
     void createWithTooShortTextReturns400() {
         AddEcoNewsDtoRequest request = AddEcoNewsDtoRequest.builder()
                 .title(uniqueTitle("API short text"))

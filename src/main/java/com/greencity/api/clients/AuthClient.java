@@ -2,6 +2,7 @@ package com.greencity.api.clients;
 
 import com.greencity.api.models.auth.SignInRequest;
 import com.greencity.api.models.auth.SignInResponse;
+import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -17,6 +18,7 @@ public class AuthClient extends BaseClient {
         super(userApiBaseUrl, ContentType.JSON);
     }
 
+    @Step("Send sign-in request")
     public Response signInRaw(String email, String password) {
         SignInRequest body = SignInRequest.builder()
                 .email(email)
@@ -28,6 +30,7 @@ public class AuthClient extends BaseClient {
                 .post(OWN_SECURITY + "/signIn");
     }
 
+    @Step("Sign in and extract authenticated user")
     public SignInResponse signIn(String email, String password) {
         return signInRaw(email, password)
                 .then()
