@@ -7,10 +7,20 @@ import com.greencity.ui.page.econews.NewsDetailsPage;
 import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Epic("UI")
+@Feature("Eco News")
+@DisplayName("Edit news - content length validation")
 public class EditNewsShortContentTest extends AuthenticatedBaseTestRunner {
 
     private static final String ORIGINAL_CONTENT =
@@ -21,6 +31,11 @@ public class EditNewsShortContentTest extends AuthenticatedBaseTestRunner {
     private long createdNewsId;
 
     @Test
+    @Story("Author cannot save news with content shorter than 20 characters")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Content shorter than 20 characters blocks submitting the edit form")
+    @Description("Entering content under the 20-character minimum shows the validation hint and disables Edit; the saved content stays unchanged.")
+    @Issue("109")
     void authorCannotSubmitNewsWithContentShorterThanTwentyCharacters() {
         new EcoNewsPage(driver)
                 .open()

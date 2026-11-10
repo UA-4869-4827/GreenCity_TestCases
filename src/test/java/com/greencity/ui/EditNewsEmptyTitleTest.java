@@ -7,10 +7,20 @@ import com.greencity.ui.page.econews.NewsDetailsPage;
 import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Epic("UI")
+@Feature("Eco News")
+@DisplayName("Edit news - empty title validation")
 public class EditNewsEmptyTitleTest extends AuthenticatedBaseTestRunner {
 
     private static final String NEWS_CONTENT =
@@ -20,6 +30,11 @@ public class EditNewsEmptyTitleTest extends AuthenticatedBaseTestRunner {
     private long createdNewsId;
 
     @Test
+    @Story("Author cannot save news with an empty title")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Empty title blocks submitting the edit form")
+    @Description("Clearing the title marks the field red and disables Edit; the saved news title stays unchanged.")
+    @Issue("108")
     void authorCannotSubmitNewsWithoutTitle() {
         new EcoNewsPage(driver)
                 .open()

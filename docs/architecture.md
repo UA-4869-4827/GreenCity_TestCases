@@ -137,3 +137,4 @@ Legacy `*.azurewebsites.net` hosts no longer resolve - do not use them.
 - [UI testing](ui-testing.md)
 - [API testing](api-testing.md)
 - [Configuration](configuration.md)
+- [Allure](allure.md)

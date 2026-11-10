@@ -9,12 +9,22 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Epic("UI")
+@Feature("Eco News")
+@DisplayName("Edit news")
 public class EditNewsTest extends AuthenticatedBaseTestRunner {
 
     private static final String NEWS_CONTENT =
@@ -54,6 +64,11 @@ public class EditNewsTest extends AuthenticatedBaseTestRunner {
     }
 
     @Test
+    @Story("Author sees the Edit button on own news")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Edit button is visible to the author")
+    @Description("The author of a published news article sees the Edit button on the news details page.")
+    @Issue("104")
     void editButtonIsVisibleToAuthor() {
         NewsDetailsPage news = createAndOpenNews();
 
@@ -61,6 +76,11 @@ public class EditNewsTest extends AuthenticatedBaseTestRunner {
     }
 
     @Test
+    @Story("Author opens the edit form of own news")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Edit form is pre-filled with the news data")
+    @Description("The edit form opens with the title, content and tags of the news; author and date are shown but not editable.")
+    @Issue("107")
     void editFormIsPreFilledWithNewsData() {
         CreateNewsPage editForm = createAndOpenNews().editNews();
 
