@@ -75,5 +75,7 @@ public class HeaderGuestTest extends BaseTestRunner {
 mvn -Dtest=BaseTest test
 mvn -Dtest=EditNewsTest test
 mvn test
-allure serve target/allure-results
+mvn allure:serve
 ```
+
+Allure annotations and report rules: [allure.md](allure.md). `BaseTest` is the annotated UI sample.
