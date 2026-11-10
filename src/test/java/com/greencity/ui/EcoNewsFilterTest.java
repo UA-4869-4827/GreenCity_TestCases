@@ -3,6 +3,14 @@ package com.greencity.ui;
 import com.greencity.ui.component.NewsCardComponent;
 import com.greencity.ui.page.econews.EcoNewsPage;
 import com.greencity.ui.testrunners.BaseTestRunner;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,127 +19,162 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Epic("Eco News")
+@Feature("News filter and search")
 class EcoNewsFilterTest extends BaseTestRunner {
 
     // TC-P1-NFL-01 – Single and combined tag filters update count and tags #57
     @Test
+    @DisplayName("TC-P1-NFL-01: Single and combined tag filters update count and tags")
+    @Story("Filter by tags")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Education filter and combined Education + Events filter "
+            + "change the items count and show cards with matching tags.")
     void educationFilterShouldUpdateCountAndShowEducationTag() {
 
-        EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
+        EcoNewsPage ecoNewsPage = Allure.step("Open Eco News page", () -> {
+            EcoNewsPage page = homePage.getHeader().openEcoNews();
+            page.waitUntilNewsCardsAreDisplayed();
+            return page;
+        });
 
-        ecoNewsPage.waitUntilNewsCardsAreDisplayed();
+        String initialCount = Allure.step("Read initial items count", () ->
+                ecoNewsPage.getItemsFoundCount());
 
-        String initialCount = ecoNewsPage.getItemsFoundCount();
+        Allure.step("Apply Education filter and verify items count changed", () -> {
+            ecoNewsPage.filterByEducation();
 
-        ecoNewsPage.filterByEducation();
+            String educationCount = ecoNewsPage.waitForItemsFoundCountToChange(initialCount);
 
-        String educationCount = ecoNewsPage.waitForItemsFoundCountToChange(initialCount);
+            assertNotEquals(
+                    initialCount,
+                    educationCount,
+                    "Items count should change after selecting Education filter");
+        });
 
-        assertNotEquals(
-                initialCount,
-                educationCount,
-                "Items count should change after selecting Education filter");
+        List<NewsCardComponent> educationCards = Allure.step("Get visible cards after Education filter", () -> {
+            ecoNewsPage.waitUntilNewsCardsAreDisplayed();
+            return ecoNewsPage.getVisibleNewsCards();
+        });
 
-        ecoNewsPage.waitUntilNewsCardsAreDisplayed();
-
-        List<NewsCardComponent> educationCards = ecoNewsPage.getVisibleNewsCards();
-
-        assertTrue(
-                !educationCards.isEmpty(),
-                "News cards should be displayed after applying Education filter");
-
-        for (NewsCardComponent card : educationCards) {
-
+        Allure.step("Verify every card has Education tag", () -> {
             assertTrue(
-                    card.getTags().stream()
-                            .anyMatch(tag -> tag.equalsIgnoreCase(
-                                    EcoNewsPage.NewsTag.EDUCATION.getText())),
-                    "Card '" + card.getTitle()
-                            + "' should contain Education tag. Actual tags: "
-                            + card.getTags());
-        }
+                    !educationCards.isEmpty(),
+                    "News cards should be displayed after applying Education filter");
 
-        String educationCountBeforeEvents = ecoNewsPage.getItemsFoundCount();
+            for (NewsCardComponent card : educationCards) {
 
-        ecoNewsPage.filterByEvents();
+                assertTrue(
+                        card.getTags().stream()
+                                .anyMatch(tag -> tag.equalsIgnoreCase(
+                                        EcoNewsPage.NewsTag.EDUCATION.getText())),
+                        "Card '" + card.getTitle()
+                                + "' should contain Education tag. Actual tags: "
+                                + card.getTags());
+            }
+        });
 
-        String combinedCount = ecoNewsPage.waitForItemsFoundCountToChange(
-                educationCountBeforeEvents);
+        String educationCountBeforeEvents = Allure.step("Read items count before adding Events filter", () ->
+                ecoNewsPage.getItemsFoundCount());
 
-        assertNotEquals(
-                educationCountBeforeEvents,
-                combinedCount,
-                "Items count should change after selecting Events together with Education");
+        Allure.step("Add Events filter and verify items count changed", () -> {
+            ecoNewsPage.filterByEvents();
 
-        ecoNewsPage.waitUntilNewsCardsAreDisplayed();
+            String combinedCount = ecoNewsPage.waitForItemsFoundCountToChange(
+                    educationCountBeforeEvents);
 
-        List<NewsCardComponent> combinedCards = ecoNewsPage.getVisibleNewsCards();
+            assertNotEquals(
+                    educationCountBeforeEvents,
+                    combinedCount,
+                    "Items count should change after selecting Events together with Education");
+        });
 
-        assertTrue(
-                !combinedCards.isEmpty(),
-                "News cards should be displayed after applying combined filters");
+        List<NewsCardComponent> combinedCards = Allure.step("Get visible cards after combined filters", () -> {
+            ecoNewsPage.waitUntilNewsCardsAreDisplayed();
+            return ecoNewsPage.getVisibleNewsCards();
+        });
 
-        for (NewsCardComponent card : combinedCards) {
-
-            boolean hasEducation = card.getTags().stream()
-                    .anyMatch(tag -> tag.equalsIgnoreCase(
-                            EcoNewsPage.NewsTag.EDUCATION.getText()));
-
-            boolean hasEvents = card.getTags().stream()
-                    .anyMatch(tag -> tag.equalsIgnoreCase(
-                            EcoNewsPage.NewsTag.EVENTS.getText()));
-
+        Allure.step("Verify every card has Education or Events tag", () -> {
             assertTrue(
-                    hasEducation || hasEvents,
-                    "Card '" + card.getTitle()
-                            + "' should contain Education or Events tag. Actual tags: "
-                            + card.getTags());
-        }
+                    !combinedCards.isEmpty(),
+                    "News cards should be displayed after applying combined filters");
+
+            for (NewsCardComponent card : combinedCards) {
+
+                boolean hasEducation = card.getTags().stream()
+                        .anyMatch(tag -> tag.equalsIgnoreCase(
+                                EcoNewsPage.NewsTag.EDUCATION.getText()));
+
+                boolean hasEvents = card.getTags().stream()
+                        .anyMatch(tag -> tag.equalsIgnoreCase(
+                                EcoNewsPage.NewsTag.EVENTS.getText()));
+
+                assertTrue(
+                        hasEducation || hasEvents,
+                        "Card '" + card.getTitle()
+                                + "' should contain Education or Events tag. Actual tags: "
+                                + card.getTags());
+            }
+        });
     }
 
     // TC-P1-NFL-02 – Search finds a known title and clear restores the list #58
     @Test
+    @DisplayName("TC-P1-NFL-02: Search finds a known title and clear restores the list")
+    @Story("Search news")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Searching a known title filters the list; clearing the search restores it.")
     void searchKnownTitleShouldFilterResultsAndClearShouldRestoreList() {
 
-        EcoNewsPage ecoNewsPage = homePage.getHeader().openEcoNews();
+        EcoNewsPage ecoNewsPage = Allure.step("Open Eco News page", () -> {
+            EcoNewsPage page = homePage.getHeader().openEcoNews();
+            page.waitUntilNewsCardsAreDisplayed();
+            return page;
+        });
 
-        ecoNewsPage.waitUntilNewsCardsAreDisplayed();
-
-        String initialCount = ecoNewsPage.getItemsFoundCount();
+        String initialCount = Allure.step("Read initial items count", () ->
+                ecoNewsPage.getItemsFoundCount());
 
         String searchQuery = "News for comment testing";
 
-        ecoNewsPage.openSearch();
-        ecoNewsPage.searchNews(searchQuery);
+        String searchCount = Allure.step("Search news: " + searchQuery, () -> {
+            ecoNewsPage.openSearch();
+            ecoNewsPage.searchNews(searchQuery);
 
-        String searchCount = ecoNewsPage.waitForItemsFoundCountToChange(initialCount);
+            String count = ecoNewsPage.waitForItemsFoundCountToChange(initialCount);
 
-        assertNotEquals(
-                initialCount,
-                searchCount,
-                "Items count should change after searching for a known title");
+            assertNotEquals(
+                    initialCount,
+                    count,
+                    "Items count should change after searching for a known title");
+            return count;
+        });
 
-        ecoNewsPage.waitUntilSearchResultIsDisplayed(searchQuery);
+        Allure.step("Verify the searched news is displayed in results", () -> {
+            ecoNewsPage.waitUntilSearchResultIsDisplayed(searchQuery);
 
-        assertTrue(
-                ecoNewsPage.getVisibleNewsCards().stream()
-                        .anyMatch(card -> card.getTitle()
-                                .trim()
-                                .equalsIgnoreCase(searchQuery)),
-                "Expected news '" + searchQuery
-                        + "' should be displayed in search results");
+            assertTrue(
+                    ecoNewsPage.getVisibleNewsCards().stream()
+                            .anyMatch(card -> card.getTitle()
+                                    .trim()
+                                    .equalsIgnoreCase(searchQuery)),
+                    "Expected news '" + searchQuery
+                            + "' should be displayed in search results");
+        });
 
-        ecoNewsPage.clearSearch();
+        Allure.step("Clear search and verify the list is restored", () -> {
+            ecoNewsPage.clearSearch();
 
-        String restoredCount = ecoNewsPage.waitForItemsFoundCountToChange(searchCount);
+            String restoredCount = ecoNewsPage.waitForItemsFoundCountToChange(searchCount);
 
-        assertEquals(
-                initialCount,
-                restoredCount,
-                "Clear search should restore the initial count");
+            assertEquals(
+                    initialCount,
+                    restoredCount,
+                    "Clear search should restore the initial count");
 
-        assertTrue(
-                !ecoNewsPage.getVisibleNewsCards().isEmpty(),
-                "News cards should be displayed after clearing search");
+            assertTrue(
+                    !ecoNewsPage.getVisibleNewsCards().isEmpty(),
+                    "News cards should be displayed after clearing search");
+        });
     }
 }

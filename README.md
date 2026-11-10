@@ -12,6 +12,7 @@ Full architecture and testing guides live in **[`docs/`](docs/README.md)**:
 - [UI testing](docs/ui-testing.md)
 - [API testing](docs/api-testing.md)
 - [Configuration](docs/configuration.md)
+- [Allure](docs/allure.md)
 
 ## Technologies
 
@@ -241,9 +242,16 @@ Do not add a `SignInPage`. Auth is `homePage.getHeader().clickSignIn()` (or `log
 
 ## Allure
 
+Rules for annotations, `@Step`, and the report: [docs/allure.md](docs/allure.md).
+
+The example is on the existing sample tests, not a new class:
+
+- UI: `src/test/java/com/greencity/ui/BaseTest.java` — `@Epic("UI")`, `@Feature("Home")`, and `@Story`, `@Severity`, `@DisplayName`, `@Description` on the test
+- API: `src/test/java/com/greencity/api/EcoNewsApiSmokeTest.java` — `@Epic("API")`, `@Feature("Eco News")`, and the same method annotations
+
 ```bash
-mvn test
-allure serve target/allure-results
+mvn clean -Dtest=BaseTest,EcoNewsApiSmokeTest test
+mvn allure:serve
 ```
 
 ## Requirements
