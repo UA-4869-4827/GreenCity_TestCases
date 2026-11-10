@@ -1,5 +1,6 @@
 package com.greencity.api.testRunners;
 
+import com.greencity.api.clients.CommentsClient;
 import com.greencity.api.clients.EcoNewsClient;
 import com.greencity.api.clients.EventsClient;
 import com.greencity.utils.TestValueProvider;
@@ -18,6 +19,7 @@ public abstract class ApiTestRunner {
     protected static TestValueProvider testValueProvider;
     protected static EcoNewsClient ecoNewsClient;
     protected static EventsClient eventsClient;
+    protected static CommentsClient commentsClient;
 
     @BeforeAll
     static void setUpApi() {
@@ -26,5 +28,6 @@ public abstract class ApiTestRunner {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         ecoNewsClient = new EcoNewsClient(testValueProvider.getBaseAPIUrl());
         eventsClient = new EventsClient(testValueProvider.getBaseAPIUrl());
+        commentsClient = new CommentsClient(testValueProvider.getBaseAPIUrl());
     }
 }
