@@ -12,10 +12,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class EcoNewsPage extends BasePage {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EcoNewsPage.class);
 
     private static final String ECO_NEWS_HASH = "/#/greenCity/news";
     private static final String CREATE_NEWS_HASH = "/#/greenCity/news/create-news";
@@ -84,6 +88,7 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage open() {
+        LOG.info("Opening Eco news list");
         open(ECO_NEWS_HASH);
         return this;
     }
@@ -99,6 +104,7 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage filterBy(NewsTag tag) {
+        LOG.debug("Filtering Eco news by {}", tag);
         clickBy(By.xpath(
                 "//button[.//span[normalize-space()="
                         + xpathLiteral(tag.getText()) + "]]"));
@@ -145,6 +151,7 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage searchNews(String text) {
+        LOG.info("Searching Eco news for '{}'", text);
         WebElement input = locateSearchInput();
         waitUntilElementVisible(input);
         js.executeScript(
@@ -203,6 +210,7 @@ public class EcoNewsPage extends BasePage {
     }
 
     public EcoNewsPage openDeletedNewsUrl(long newsId) {
+        LOG.info("Opening a deleted news url, id {}", newsId);
         open(ECO_NEWS_HASH + "/" + newsId);
         return this;
     }

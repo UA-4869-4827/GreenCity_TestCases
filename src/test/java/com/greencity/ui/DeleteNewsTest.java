@@ -14,6 +14,8 @@ import io.qameta.allure.Story;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Feature("Delete News")
 public class DeleteNewsTest extends AuthenticatedBaseTestRunner {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteNewsTest.class);
     private static final String NOT_FOUND_MESSAGE = "The Eco-news was not found";
 
     private long createdNewsId;
@@ -35,6 +38,7 @@ public class DeleteNewsTest extends AuthenticatedBaseTestRunner {
             + "and the news is no longer available.")
     void userShouldBeAbleToDeleteOwnNews() {
         String title = "Delete News Test " + System.nanoTime();
+        LOG.info("Deleting own news");
         NewsDetailsPage newsDetailsPage = publishNews(title, "Test content for news deletion");
         long newsId = newsDetailsPage.getNewsId();
         createdNewsId = newsId;
@@ -73,6 +77,7 @@ public class DeleteNewsTest extends AuthenticatedBaseTestRunner {
     @Description("User opens the delete confirmation, cancels it, and the news stays available.")
     void userShouldBeAbleToCancelNewsDeletion() {
         String title = "Cancel Delete News Test " + System.nanoTime();
+        LOG.info("Cancelling deletion of own news");
         NewsDetailsPage newsDetailsPage = publishNews(title, "Test content for cancelling news deletion");
         createdNewsId = newsDetailsPage.getNewsId();
 

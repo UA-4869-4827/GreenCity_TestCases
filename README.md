@@ -13,6 +13,7 @@ Full architecture and testing guides live in **[`docs/`](docs/README.md)**:
 - [API testing](docs/api-testing.md)
 - [Configuration](docs/configuration.md)
 - [Allure](docs/allure.md)
+- [Logging](docs/logging.md)
 
 ## Technologies
 

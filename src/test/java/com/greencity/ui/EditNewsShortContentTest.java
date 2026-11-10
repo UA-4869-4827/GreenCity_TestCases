@@ -7,12 +7,14 @@ import com.greencity.ui.page.econews.NewsDetailsPage;
 import com.greencity.ui.testrunners.AuthenticatedBaseTestRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EditNewsShortContentTest extends AuthenticatedBaseTestRunner {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EditNewsShortContentTest.class);
     private static final String ORIGINAL_CONTENT =
             "Original article content is long enough to meet the minimum length requirement.";
     private static final String SHORT_CONTENT = "Too short";
@@ -22,6 +24,7 @@ public class EditNewsShortContentTest extends AuthenticatedBaseTestRunner {
 
     @Test
     void authorCannotSubmitNewsWithContentShorterThanTwentyCharacters() {
+        LOG.info("Editing own news with content shorter than 20 characters");
         new EcoNewsPage(driver)
                 .open()
                 .createNews()
